@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
+  ~
+  ~  WSO2 Inc. licenses this file to you under the Apache License,
+  ~  Version 2.0 (the "License"); you may not use this file except
+  ~  in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
+
+<wso2registry>
+
+    <!-- These are used to define the DB configuration and the basic parameters to be used for the registry -->
+
+    <currentDBConfig>wso2registry</currentDBConfig>
+    <readOnly>false</readOnly>
+    <enableCache>true</enableCache>
+    <registryRoot>/</registryRoot>
+
+    <!-- This defines the default database and its configuration of the registry -->
+
+    <dbConfig name="wso2registry">
+        <dataSource><%= @master_datasources[@local_reg_datasource]['jndi_config'] %></dataSource>
+    </dbConfig>
+
+    <handler class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyHandler">
+        <filter class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyMediaTypeMatcher">
+            <property name="mediaType">application/xacml-policy+xml</property>
+        </filter>
+    </handler>
+
+<%- @registry_mounts.each do |datasource_name, registry_mount| -%>
+    <dbConfig name="<%= @master_datasources[datasource_name]['name'] %>">
+        <dataSource><%= @master_datasources[datasource_name]['jndi_config'] %></dataSource>
+    </dbConfig>
+    <remoteInstance url="https://localhost:9443/registry">
+        <id><%= @master_datasources[datasource_name]['name'] %></id>
+        <dbConfig><%= @master_datasources[datasource_name]['name'] %></dbConfig>
+        <readOnly><%= registry_mount['read_only'] %></readOnly>
+        <registryRoot><%= registry_mount['registry_root'] %></registryRoot>
+        <enableCache><%= registry_mount['enable_cache'] %></enableCache>
+        <cacheId><%= @master_datasources[datasource_name]['username'] %>@<%= @master_datasources[datasource_name]['url'] %></cacheId>
+    </remoteInstance>
+    <mount path="<%= registry_mount['path'] %>" overwrite="virtual">
+        <instanceId><%= @master_datasources[datasource_name]['name'] %></instanceId>
+        <targetPath><%= registry_mount['target_path'] %></targetPath>
+    </mount>
+<%- end -%>
+
+
+    <!-- This static configuration is suppose to be modified before any data being loaded to the registry (i.e.: before the first startup) -->
+
+    <staticConfiguration>
+        <versioningProperties>true</versioningProperties>
+        <versioningComments>true</versioningComments>
+        <versioningTags>true</versioningTags>
+        <versioningRatings>true</versioningRatings>
+        <!-- Location you want to add service and default location will be /services/ -->
+        <servicePath>/trunk/services/</servicePath>
+    </staticConfiguration>
+
+    <!-- This enables auto-versioning of resources (non-collection). Whenever a resource is updated a new version will be created -->
+
+    <versionResourcesOnChange>false</versionResourcesOnChange>
+
+</wso2registry>

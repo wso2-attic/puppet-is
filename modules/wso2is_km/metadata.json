@@ -1,0 +1,19 @@
+{
+  "name": "wso2-wso2is_km",
+  "version": "2.1.0",
+  "author": "WSO2",
+  "license": "Apache-2.0",
+  "summary": "WSO2 Identity Server with API Manager Key Manager puppet module",
+  "source": "https://github.com/wso2/puppet-is.git",
+  "project_page": "http://wso2.com/products/identity-server/",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "12.04", "14.04" ]
+    }
+  ],
+  "tags" : ["wso2is_km", "5.1.0"],
+  "dependencies": [
+    { "name": "wso2/wso2base", "version_requirement": "2.1.0" }
+  ]
+}
