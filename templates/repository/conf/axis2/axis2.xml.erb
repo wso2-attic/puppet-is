@@ -1,17 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
 <!--
-  ~ Copyright (c) 2015 WSO2, Inc. (http://wso2.com)
+  ~  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
   ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
+  ~  WSO2 Inc. licenses this file to you under the Apache License,
+  ~  Version 2.0 (the "License"); you may not use this file except
+  ~  in compliance with the License.
+  ~  You may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
   -->
 
 <axisconfig name="AxisJava2.0">
@@ -73,10 +77,10 @@
     <parameter name="ModulesDirectory">axis2modules</parameter>
 
     <parameter name="userAgent" locked="true">
-        WSO2 Identity Server-5.1.0
+        WSO2 Identity Server-5.0.0
     </parameter>
     <parameter name="server" locked="true">
-        WSO2 Identity Server-5.1.0
+        WSO2 Identity Server-5.0.0
     </parameter>
 
     <!-- ========================================================================-->
@@ -382,8 +386,8 @@
     <!-- Out Transports -->
     <!-- ================================================= -->
 
-    <!--transportSender name="tcp"
-                     class="org.apache.axis2.transport.tcp.TCPTransportSender"/-->
+    <transportSender name="tcp"
+                     class="org.apache.axis2.transport.tcp.TCPTransportSender"/>
     <transportReceiver name="local"
                        class="org.wso2.carbon.core.transports.local.CarbonLocalTransportReceiver"/>
     <transportSender name="local"
@@ -669,7 +673,7 @@
         The TCP port used by this member. This is the port through which other nodes will
         contact this member
          -->
-            <parameter name="localMemberPort"><%= @clustering['local_member_port'] %></parameter>
+        <parameter name="localMemberPort"><%= @clustering['local_member_port'] %></parameter>
         <!--
             The bind port of this member. The difference between localMemberPort & localMemberBindPort
             is that localMemberPort is the one that is advertised by this member, while localMemberBindPort
@@ -687,17 +691,6 @@
             <property name="mgtConsoleURL" value="https://${hostName}:${httpsPort}/"/>
             <property name="subDomain" value="<%= @clustering['sub_domain'] %>"/>
         </parameter>
-
-        <!--
-        Uncomment the following section to load custom Hazelcast data serializers.
-        -->
-        <!--
-        <parameter name="hazelcastSerializers">
-            <serializer typeClass="java.util.TreeSet">org.wso2.carbon.hazelcast.serializer.TreeSetSerializer
-            </serializer>
-            <serializer typeClass="java.util.Map">org.wso2.carbon.hazelcast.serializer.MapSerializer</serializer>
-        </parameter>
-        -->
 
         <!--
            The list of static or well-known members. These entries will only be valid if the

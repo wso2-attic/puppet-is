@@ -16,6 +16,15 @@
  -->
 <ApplicationAuthentication xmlns="http://wso2.org/projects/carbon/application-authentication.xml">
 
+	<JDBCPersistenceManager>
+		<DataSource>
+			<!-- Include a data source name (jndiConfigName) from the set of data
+				sources defined in master-datasources.xml -->
+			<!--Name>jdbc/WSO2_IDP_DB</Name-->
+			<Name><%= @master_datasources[@usermgt_datasource]['jndi_config'] %></Name>
+		</DataSource>
+	</JDBCPersistenceManager>
+
 	<!--
 		ProxyMode allows framework to operate in either 'smart' mode
 		or 'dumb' mode.
@@ -29,7 +38,6 @@
 		the authentication related pages
 	-->
 	<AuthenticationEndpointURL>/authenticationendpoint/login.do</AuthenticationEndpointURL>
-	<AuthenticationEndpointRetryURL>/authenticationendpoint/retry.do</AuthenticationEndpointRetryURL>
 
 	<!--
 		Extensions allow extending the default behaviour of the authentication
@@ -75,15 +83,11 @@
 		</AuthenticatorConfig>
     -->
 	<AuthenticatorConfigs>
-		<AuthenticatorConfig name="BasicAuthenticator" enabled="true">
-			<!--Parameter name="UserNameAttributeClaimUri">http://wso2.org/claims/emailaddress</Parameter-->
-			<!--Parameter name="showAuthFailureReason">true</Parameter-->
-		</AuthenticatorConfig>
+		<AuthenticatorConfig name="BasicAuthenticator" enabled="true" />
 		<AuthenticatorConfig name="OAuthRequestPathAuthenticator" enabled="true" />
 		<AuthenticatorConfig name="BasicAuthRequestPathAuthenticator" enabled="true" />
  		<AuthenticatorConfig name="SAMLSSOAuthenticator" enabled="true">
-			<!--Parameter name="SignAuth2SAMLUsingSuperTenant">true</Parameter-->
-			<!--Parameter name="SAML2SSOManager">org.wso2.carbon.identity.application.authenticator.samlsso.manager.DefaultSAML2SSOManager</Parameter-->
+			<!--Parameter name="SAMLSSOManager">org.wso2.carbon.identity.application.authenticator.samlsso.manager.DefaultSAMLSSOManager</Parameter-->
 		</AuthenticatorConfig>
 		<AuthenticatorConfig name="OpenIDConnectAuthenticator" enabled="true">
 			<!--Parameter name="IDTokenHandler">org.wso2.carbon.identity.application.authenticator.oidc.DefaultIDTokenHandler</Parameter-->
@@ -95,29 +99,6 @@
 			<Parameter name="TrustStorePassword"><%= @key_stores['trust_store']['password'] %></Parameter>
 			<!--Parameter name="OpenIDManager">org.wso2.carbon.identity.application.authenticator.openid.manager.DefaultOpenIDManager</Parameter>
 			<Parameter name="AttributesRequestor">org.wso2.carbon.identity.application.authenticator.openid.manager.SampleAttributesRequestor</Parameter-->
-		</AuthenticatorConfig>
-		<AuthenticatorConfig name="GoogleOIDCAuthenticator" enabled="true">
-			<Parameter name="GoogleTokenEndpoint">https://accounts.google.com/o/oauth2/token</Parameter>
-			<Parameter name="GoogleAuthzEndpoint">https://accounts.google.com/o/oauth2/auth</Parameter>
-			<Parameter name="GoogleUserInfoEndpoint">https://www.googleapis.com/oauth2/v3/userinfo</Parameter>
-		</AuthenticatorConfig>
-		<AuthenticatorConfig name="MicrosoftWindowsLive" enabled="true">
-			<Parameter name="AuthTokenEndpoint">https://login.live.com/oauth20_token.srf</Parameter>
-			<Parameter name="AuthnEndpoint">https://login.live.com/oauth20_authorize.srf</Parameter>
-			<Parameter name="UserInfoEndpoint">https://apis.live.net/v5.0/me?access_token=</Parameter>
-		</AuthenticatorConfig>
-		<AuthenticatorConfig name="FacebookAuthenticator" enabled="true">
-			<Parameter name="AuthTokenEndpoint">https://graph.facebook.com/oauth/access_token</Parameter>
-			<Parameter name="AuthnEndpoint">http://www.facebook.com/dialog/oauth</Parameter>
-			<Parameter name="UserInfoEndpoint">https://graph.facebook.com/me</Parameter>
-		</AuthenticatorConfig>
-		<AuthenticatorConfig  name="FIDOAuthenticator" enabled="true">
-			<Parameter name="FidoAuth">/authenticationendpoint/fido-auth.jsp</Parameter>
-		</AuthenticatorConfig>
-		<AuthenticatorConfig name="YahooOAuth2Authenticator" enabled="true">
-			<Parameter name="YahooTokenEndpoint">https://api.login.yahoo.com/oauth2/get_token</Parameter>
-			<Parameter name="YahooOAuthzEndpoint">https://api.login.yahoo.com/oauth2/request_auth</Parameter>
-			<Parameter name="YahooUserInfoEndpoint">https://social.yahooapis.com/v1/user/</Parameter>
 		</AuthenticatorConfig>
 	</AuthenticatorConfigs>
 
@@ -136,26 +117,12 @@
 		</Sequence>
 	</Sequences>
 
-	<!--
-        	AuthenticationEndpointQueryParams are the request parameters
-        	that would be sent to the AuthenticationEndpoint.
-        	'action' defines the behaviour: if 'include', only the defined
-        	parameters would be included in the request.
-        	If 'exclude' specified, all the parameters received by the
-        	Authentication Framework would be sent in the request except
-        	the ones specified.
-        	'sessionDataKey', 'type', 'relyingParty', 'sp' and 'authenticators'
-        	parameters will be always sent. They should not be specified here.
-    	-->
-    	<AuthenticationEndpointQueryParams action="exclude">
-        	<AuthenticationEndpointQueryParam name="username"/>
-        	<AuthenticationEndpointQueryParam name="password"/>
-            <AuthenticationEndpointQueryParam name="SAMLRequest"/>
-        </AuthenticationEndpointQueryParams>
-
-	    <!--TenantDomainDropDownEnabled>true</TenantDomainDropDownEnabled>
-	    <TenantDataListenerURLs>
-		  <TenantDataListenerURL>/authenticationendpoint/tenantlistrefresher.do</TenantDataListenerURL>
-	    </TenantDataListenerURLs-->
+	<ServiceProvidersManagement>
+                <ApplicationDAO>org.wso2.carbon.identity.application.mgt.dao.impl.ApplicationDAOImpl</ApplicationDAO>
+                <OAuthOIDCClientDAO>org.wso2.carbon.identity.application.mgt.dao.impl.OAuthApplicationDAOImpl</OAuthOIDCClientDAO>
+                <SAMLClientDAO>org.wso2.carbon.identity.application.mgt.dao.impl.SAMLApplicationDAOImpl</SAMLClientDAO>
+                <SystemIDPDAO>org.wso2.carbon.identity.application.mgt.dao.impl.IdentityProviderDAOImpl</SystemIDPDAO>
+                <ClaimDialect>http://wso2.org/claims</ClaimDialect>
+        </ServiceProvidersManagement>
 
 </ApplicationAuthentication>

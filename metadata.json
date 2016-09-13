@@ -1,6 +1,6 @@
 {
   "name": "wso2-wso2is",
-  "version": "5.1.0",
+  "version": "5.0.0",
   "author": "WSO2",
   "license": "Apache-2.0",
   "summary": "WSO2 Identity Server Puppet module",

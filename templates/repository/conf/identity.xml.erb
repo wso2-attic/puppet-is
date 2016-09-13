@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-  ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-	~
-	~ WSO2 Inc. licenses this file to you under the Apache License,
-	~ Version 2.0 (the "License"); you may not use this file except
-	~ in compliance	with the License.
-	~ You may obtain a copy of the License at
-	~
-	~ http://www.apache.org/licenses/LICENSE-2.0
-	~
-	~ Unless required by applicable law or agreed to in writing,
-	~ software distributed under the License is distributed on an
-	~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	~ KIND, either express or implied. See the License for the
-	~ specific language governing permissions and limitations
-	~ under the License.
--->
+  ~  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
+  ~
+  ~  WSO2 Inc. licenses this file to you under the Apache License,
+  ~  Version 2.0 (the "License"); you may not use this file except
+  ~  in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
 
 <Server xmlns="http://wso2.org/projects/carbon/carbon.xml">
 
@@ -29,19 +29,7 @@
 			required to skip schema initialization during the server start up, set the
 			following property to "true". -->
 		<!-- <SkipDBSchemaCreation>false</SkipDBSchemaCreation> -->
-        <!--SessionDataPersist>
-            <Enable>true</Enable>
-            <EnableCleanUp>true</EnableCleanUp>
-            <Temporary>false</Temporary-->
-        <!--/SessionDataPersist-->
 	</JDBCPersistenceManager>
-
-    <TimeConfig>
-        <SessionIdleTimeout>120</SessionIdleTimeout><!-- Minutes -->
-        <RememberMeTimeout>20160</RememberMeTimeout><!-- Minutes -->
-        <PersistanceCleanUpTimeout>20160</PersistanceCleanUpTimeout><!-- Minutes -->
-        <PersistanceCleanUpPeriod>1140</PersistanceCleanUpPeriod><!-- Minutes -->
-    </TimeConfig>
 
 	<!-- Security configurations -->
 	<Security>
@@ -89,18 +77,14 @@
 	</OpenID>
 
 	<OAuth>
-        <AppInfoCacheTimeout>-1</AppInfoCacheTimeout>
-        <AuthorizationGrantCacheTimeout>-1</AuthorizationGrantCacheTimeout>
-        <SessionDataCacheTimeout>-1</SessionDataCacheTimeout>
-        <ClaimCacheTimeout>-1</ClaimCacheTimeout>
 		<RequestTokenUrl>https://localhost:9443/oauth/request-token</RequestTokenUrl>
 		<AccessTokenUrl>https://localhost:9443/oauth/access-token</AccessTokenUrl>
 		<AuthorizeUrl>https://localhost:9443/oauth/authorize-url</AuthorizeUrl>
 		<!-- Default validity period for Authorization Code in seconds -->
 		<AuthorizationCodeDefaultValidityPeriod>300</AuthorizationCodeDefaultValidityPeriod>
-		<!-- Default validity period for application access tokens in seconds -->
-		<AccessTokenDefaultValidityPeriod>3600</AccessTokenDefaultValidityPeriod>
 		<!-- Default validity period for user access tokens in seconds -->
+		<AccessTokenDefaultValidityPeriod>3600</AccessTokenDefaultValidityPeriod>
+		<!-- Default validity period for application access tokens in seconds -->
 		<UserAccessTokenDefaultValidityPeriod>3600</UserAccessTokenDefaultValidityPeriod>
 		<!-- Validity period for refresh token -->
 		<RefreshTokenValidityPeriod>84600</RefreshTokenValidityPeriod>
@@ -113,11 +97,9 @@
 		<!-- Process the token before storing it in database, e.g. encrypting -->
 		<TokenPersistenceProcessor>org.wso2.carbon.identity.oauth.tokenprocessor.PlainTextPersistenceProcessor</TokenPersistenceProcessor>
 		<!-- Supported Client Autnetication Methods -->
-        <ClientAuthHandlers>
-            <ClientAuthHandler Class="org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler">
-                <Property Name="StrictClientCredentialValidation">false</Property>
-            </ClientAuthHandler>
-        </ClientAuthHandlers>
+		<ClientAuthHandlers>
+		    <ClientAuthHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler</ClientAuthHandlerImplClass>
+		</ClientAuthHandlers>
 		<!-- Supported Response Types -->
 		<SupportedResponseTypes>
 		    <SupportedResponseType>
@@ -218,8 +200,6 @@
 	</MultifactorAuthentication>
 
 	<SSOService>
-        <PersistanceCacheTimeout>157680000</PersistanceCacheTimeout>
-        <SessionIndexCacheTimeout>157680000</SessionIndexCacheTimeout>
 		<EntityId>localhost</EntityId>
 		<%- if @ports['proxyPort'] and @ports['proxyPort']['https'] -%>
 		<IdentityProviderURL>https://<%= @hostname %>:<%= @ports['proxyPort']['https'] %>/samlsso</IdentityProviderURL>
@@ -235,7 +215,6 @@
                 <AttributesClaimDialect>http://wso2.org/claims</AttributesClaimDialect>
 		<AcceptOpenIDLogin>false</AcceptOpenIDLogin>
 		<ClaimsRetrieverImplClass>org.wso2.carbon.identity.sso.saml.builders.claims.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
-		<SAMLSSOAssertionBuilder>org.wso2.carbon.identity.sso.saml.builders.assertion.DefaultSAMLAssertionBuilder</SAMLSSOAssertionBuilder>
 		<SAMLSSOEncrypter>org.wso2.carbon.identity.sso.saml.builders.encryption.DefaultSSOEncrypter</SAMLSSOEncrypter>
                 <SAMLSSOSigner>org.wso2.carbon.identity.sso.saml.builders.signature.DefaultSSOSigner</SAMLSSOSigner>
                 <SAML2HTTPRedirectSignatureValidator>org.wso2.carbon.identity.sso.saml.validators.SAML2HTTPRedirectDeflateSignatureValidator</SAML2HTTPRedirectSignatureValidator>
@@ -243,7 +222,7 @@
 
 		<!-- SAML Token validity period in minutes -->
                 <SAMLResponseValidityPeriod>5</SAMLResponseValidityPeriod>
-                <UseAuthenticatedUserDomainCrypto>false</UseAuthenticatedUserDomainCrypto>
+                <UseAuthenticatedUserDomain>false</UseAuthenticatedUserDomain>
 	</SSOService>
 
 	<EntitlementSettings>
@@ -258,15 +237,13 @@
 			<Enable>true</Enable>
 		</AttributeCaching>
 		<ThirftBasedEntitlementConfig>
-            		<EnableThriftService><%= @enable_thrift_service %></EnableThriftService>
+			<EnableThriftService><%= @enable_thrift_service %></EnableThriftService>
 			<ReceivePort>${Ports.ThriftEntitlementReceivePort}</ReceivePort>
 			<ClientTimeout>10000</ClientTimeout>
-			<KeyStore>
-				<Location>${carbon.home}/<%= @key_stores['key_store']['location'] %></Location>
-				<Password><%= @key_stores['key_store']['password'] %></Password>
-			</KeyStore>
-			<!-- Enable this element to mention the host-name of your IS machine -->
-			<ThriftHostName>localhost</ThriftHostName>
+      <KeyStore>
+          <Location>${carbon.home}/<%= @key_stores['key_store']['location'] %></Location>
+          <Password><%= @key_stores['key_store']['password'] %></Password>
+      </KeyStore>
 		</ThirftBasedEntitlementConfig>
 	</EntitlementSettings>
 
@@ -282,8 +259,4 @@
 			<Property name="Password">admin</Property-->
 		</Authenticator>
 	</SCIMAuthenticators>
-	<!--SessionContextCache>
-		<Enable>true</Enable>
-		<Capacity>100000</Capacity>
-	</SessionContextCache-->
 </Server>
