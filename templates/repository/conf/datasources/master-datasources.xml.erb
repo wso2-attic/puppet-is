@@ -17,11 +17,12 @@
   -->
 
 <datasources-configuration xmlns:svns="http://org.wso2.securevault/configuration">
+  
     <providers>
         <provider>org.wso2.carbon.ndatasource.rdbms.RDBMSDataSourceReader</provider>
     </providers>
-
     <datasources>
+
         <%- @master_datasources.each do |datasource_name, datasource| -%>
         <datasource>
             <name><%= datasource['name'] %></name>
@@ -44,5 +45,6 @@
             </definition>
         </datasource>
         <%- end -%>
+
     </datasources>
 </datasources-configuration>

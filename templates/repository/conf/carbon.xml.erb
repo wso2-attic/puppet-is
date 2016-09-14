@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <!--
-  ~ Copyright (c) 2015 WSO2, Inc. (http://wso2.com)
+  ~  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
   ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
+  ~  WSO2 Inc. licenses this file to you under the Apache License,
+  ~  Version 2.0 (the "License"); you may not use this file except
+  ~  in compliance with the License.
+  ~  You may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
   -->
 
 <!--
@@ -30,11 +31,14 @@
     <Name>WSO2 Identity Server</Name>
 
     <!--
+       machine readable unique key to identify each product
+    -->
+    <ServerKey>IS</ServerKey>
+
+    <!--
        Product Version
     -->
-    <Version>5.0.0</Version>
-
-    <ServerKey>IS</ServerKey>
+    <Version>5.1.0</Version>
 
     <!--
        Host name or IP address of the machine hosting this server
@@ -56,8 +60,6 @@
 <%- else -%>
     <!--MgtHostName>mgt.wso2.org</MgtHostName-->
 <% end %>
-
-
     <!--
         The URL of the back end server. This is where the admin services are hosted and
         will be used by the clients in the front end server.
@@ -65,7 +67,7 @@
        -->
     <ServerURL>local:/${carbon.context}/services/</ServerURL>
     <!--
-    <ServerURL>https://${carbon.local.ip}:${carbon.management.port}${carbon.context}/services/</ServerURL>
+    <ServerURL>https://localhost:${carbon.management.port}${carbon.context}/services/</ServerURL>
     -->
      <!--
      The URL of the index page. This is where the user will be redirected after signing in to the
@@ -80,9 +82,8 @@
     Ex : <Role>.*</Role> means this server can act any role
     -->
     <ServerRoles>
-        <Role>APIManager</Role>
+        <Role>IdentityServer</Role>
     </ServerRoles>
-
 
     <!-- uncommnet this line to subscribe to a bam instance automatically -->
     <!--<BamServerURL>https://bamhost:bamport/services/</BamServerURL>-->
@@ -93,9 +94,23 @@
     <Package>org.wso2.carbon</Package>
 
     <!--
-       Webapp context root of WSO2 Carbon.
+       Webapp context root of WSO2 Carbon management console.
     -->
     <WebContextRoot>/</WebContextRoot>
+
+    <!--
+    	Proxy context path is a useful parameter to add a proxy path when a Carbon server is fronted by reverse proxy. In addtion
+        to the proxy host and proxy port this parameter allows you add a path component to external URLs. e.g.
+     		URL of the Carbon server -> https://10.100.1.1:9443/carbon
+   		URL of the reverse proxy -> https://prod.abc.com/appserver/carbon
+
+   	appserver - proxy context path. This specially required whenever you are generating URLs to displace in
+   	Carbon UI components.
+    -->
+    <!--
+    	<MgtProxyContextPath></MgtProxyContextPath>
+    	<ProxyContextPath></ProxyContextPath>
+    -->
 
     <!-- In-order to  get the registry http Port from the back-end when the default http transport is not the same-->
     <!--RegistryHttpPort>9763</RegistryHttpPort-->
@@ -118,6 +133,8 @@
          the define value + Offset.
          e.g. Offset=2 and HTTPS port=9443 will set the effective HTTPS port to 9445
          -->
+
+
 <%- if @ports['offset'] -%>
         <Offset><%= @ports['offset'] %></Offset>
 <%- else -%>
@@ -140,14 +157,6 @@
             <KDCServerPort>8000</KDCServerPort>
         </EmbeddedLDAP>
 
-	    <!-- Embedded Qpid broker ports -->
-        <EmbeddedQpid>
-	    <!-- Broker TCP Port -->
-            <BrokerPort>5672</BrokerPort>
-	    <!-- SSL Port -->
-            <BrokerSSLPort>8672</BrokerSSLPort>
-        </EmbeddedQpid>
-
 	<!--
              Override datasources JNDIproviderPort defined in bps.xml and datasources.properties files
 	-->
@@ -155,21 +164,24 @@
 	<!--Override receive port of thrift based entitlement service.-->
 	<ThriftEntitlementReceivePort>10500</ThriftEntitlementReceivePort>
 
+    <!--
+     This is the proxy port of the worker cluster. These need to be configured in a scenario where
+     manager node is not exposed through the load balancer through which the workers are exposed
+     therefore doesn't have a proxy port.
+    <WorkerHttpProxyPort>80</WorkerHttpProxyPort>
+    <WorkerHttpsProxyPort>443</WorkerHttpsProxyPort>
+    -->
+
     </Ports>
 
     <!--
         JNDI Configuration
     -->
     <JNDI>
-		<!--
-             If we use multiple usertsore with tenants, we might need to use following initialContextfactory implementation to do datasource lookup
-		 -->
-		<DefaultInitialContextFactory>org.wso2.carbon.tomcat.jndi.CarbonJavaURLContextFactory</DefaultInitialContextFactory>
-
         <!--
              The fully qualified name of the default initial context factory
         -->
-		<!--<DefaultInitialContextFactory>org.apache.naming.java.javaURLContextFactory</DefaultInitialContextFactory>-->
+        <DefaultInitialContextFactory>org.wso2.carbon.tomcat.jndi.CarbonJavaURLContextFactory</DefaultInitialContextFactory>
         <!--
              The restrictions that are done to various JNDI Contexts in a Multi-tenant environment
         -->
@@ -227,10 +239,51 @@
         because the Ghost Deployer works only with the HTTP/S transports. If you are using
         other transports, don't enable Ghost Deployer.
     -->
-    <EnableGhostDeployer>false</EnableGhostDeployer>
+    <GhostDeployment>
+        <Enabled>false</Enabled>
+    </GhostDeployment>
 
-    <!--Enable/Disable POXSecurityHandler -->
-    <EnablePoxSecurity>false</EnablePoxSecurity>
+
+    <!--
+        Eager loading or lazy loading is a design pattern commonly used in computer programming which
+        will initialize an object upon creation or load on-demand. In carbon, lazy loading is used to
+        load tenant when a request is received only. Similarly Eager loading is used to enable load
+        existing tenants after carbon server starts up. Using this feature, you will be able to include
+        or exclude tenants which are to be loaded when server startup.
+
+        We can enable only one LoadingPolicy at a given time.
+
+        1. Tenant Lazy Loading
+           This is the default behaviour and enabled by default. With this policy, tenants are not loaded at
+           server startup, but loaded based on-demand (i.e when a request is received for a tenant).
+           The default tenant idle time is 30 minutes.
+
+        2. Tenant Eager Loading
+           This is by default not enabled. It can be be enabled by un-commenting the <EagerLoading> section.
+           The eager loading configurations supported are as below. These configurations can be given as the
+           value for <Include> element with eager loading.
+                (i)Load all tenants when server startup             -   *
+                (ii)Load all tenants except foo.com & bar.com       -   *,!foo.com,!bar.com
+                (iii)Load only foo.com &  bar.com to be included    -   foo.com,bar.com
+    -->
+    <Tenant>
+        <LoadingPolicy>
+            <LazyLoading>
+                <IdleTime>30</IdleTime>
+            </LazyLoading>
+            <!-- <EagerLoading>
+                   <Include>*,!foo.com,!bar.com</Include>
+            </EagerLoading>-->
+        </LoadingPolicy>
+    </Tenant>
+
+    <!--
+     Caching related configurations
+    -->
+    <Cache>
+        <!-- Default cache timeout in minutes -->
+        <DefaultCacheTimeout>15</DefaultCacheTimeout>
+    </Cache>
 
     <!--
     Axis2 related configurations
@@ -308,7 +361,7 @@
         </Role>
     </ServiceUserRoles>
 
-	<!--
+    <!--
       Enable following config to allow Emails as usernames.
     -->
     <!--EnableEmailUserName>true</EnableEmailUserName-->
@@ -333,22 +386,6 @@
             <!-- Private Key password-->
             <KeyPassword><%= @key_stores['key_store']['key_password'] %></KeyPassword>
         </KeyStore>
-
-		 <!--
-			Encrypt Decrypt Store will be used for encrypting and decrypting
-		-->
-        <RegistryKeyStore>
-            <!-- Keystore file location-->
-            <Location>${carbon.home}/<%= @key_stores['registry_key_store']['location'] %></Location>
-            <!-- Keystore type (JKS/PKCS12 etc.)-->
-            <Type><%= @key_stores['registry_key_store']['type'] %></Type>
-            <!-- Keystore password-->
-            <Password><%= @key_stores['registry_key_store']['password'] %></Password>
-            <!-- Private Key alias-->
-            <KeyAlias><%= @key_stores['registry_key_store']['key_alias'] %></KeyAlias>
-            <!-- Private Key password-->
-            <KeyPassword><%= @key_stores['registry_key_store']['key_password'] %></KeyPassword>
-        </RegistryKeyStore>
 
         <!--
             System wide trust-store which is used to maintain the certificates of all
@@ -406,24 +443,31 @@
 
 	<!--Option to disable storing of tokens issued by STS-->
 	<DisableTokenStore>false</DisableTokenStore>
+
 	<!--
-	Token Persister configuration for non-volatile storage of SAML tokens issued by STS:
-	1. TokenPersister class
-	2. TokenStorage path
-	3. Maximum number of tokens in volatile storage
-	4. Any other custom properties
+	 Security token store class name. If this is not set, default class will be
+	 org.wso2.carbon.security.util.SecurityTokenStore
 	-->
-	<TokenPersister>
-		<Class>org.apache.rahas.impl.FSBasedRetiredTokenPersister</Class>
-		<StoragePath>${carbon.home}/repository/resources/security/tokenstore</StoragePath>
-		<InMemoryThreshold>500</InMemoryThreshold>
-		<!--Properties>
-			<Property>
-				<Name>propName</Name>
-				<Value>propValue</Value>
-			</Property>
-		</Properties-->
-	</TokenPersister>
+	<TokenStoreClassName>org.wso2.carbon.identity.sts.store.DBTokenStore</TokenStoreClassName>
+
+
+
+        <!-- Configurations to avoid Cross Site Request Forgery vulnerabilities -->
+        <CSRFPreventionConfig>
+            <!-- CSRFPreventionFilter configurations that adopts Synchronizer Token Pattern -->
+            <CSRFPreventionFilter>
+                <!-- Set below to true to enable the CSRFPreventionFilter -->
+                <Enabled>false</Enabled>
+                <!-- Url Pattern to skip application of CSRF protection-->
+                <SkipUrlPattern>(.*)(/images|/css|/js|/docs)(.*)</SkipUrlPattern>
+            </CSRFPreventionFilter>
+        </CSRFPreventionConfig>
+
+        <!-- Configuration to enable or disable CR and LF sanitization filter-->
+        <CRLFPreventionConfig>
+            <!--Set below to true to enable the CRLFPreventionFilter-->
+            <Enabled>true</Enabled>
+        </CRLFPreventionConfig>
     </Security>
 
     <!--
@@ -504,6 +548,12 @@
         </Mapping>
     </FileUploadConfig>
 
+    <!-- FileNameRegEx is used to validate the file input/upload/write-out names.
+    e.g.
+     <FileNameRegEx>^(?!(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.[^.])?$)[^&lt;&gt:"/\\|?*\x00-\x1F][^&lt;&gt:"/\\|?*\x00-\x1F\ .]$</FileNameRegEx>
+    -->
+    <!--<FileNameRegEx></FileNameRegEx>-->
+
     <!--
        Processors which process special HTTP GET requests such as ?wsdl, ?policy etc.
 
@@ -535,7 +585,7 @@
         </Processor>
     </HttpGetRequestProcessors>
 
-    <!-- Deployment Synchronizer Configuration. Uncomment the following section when running with "svn based" dep sync.
+    <!-- Deployment Synchronizer Configuration. t Enabled value to true when running with "svn based" dep sync.
 	In master nodes you need to set both AutoCommit and AutoCheckout to true
 	and in  worker nodes set only AutoCheckout to true.
     -->
@@ -549,7 +599,7 @@
         <SvnUser><%= @dep_sync['svn']['user'] -%></SvnUser>
         <SvnPassword><%= @dep_sync['svn']['password'] -%></SvnPassword>
         <SvnUrlAppendTenantId><%= @dep_sync['svn']['append_tenant_id'] -%></SvnUrlAppendTenantId>
-   <%- end -%>
+    <%- end -%>
     </DeploymentSynchronizer>
 
     <!-- Deployment Synchronizer Configuration. Uncomment the following section when running with "registry based" dep sync.
@@ -626,8 +676,8 @@
        Default Feature Repository of WSO2 Carbon.
     -->
     <FeatureRepository>
-	<RepositoryName>default repository</RepositoryName>
-	<RepositoryURL>http://dist.wso2.org/p2/carbon/releases/4.2.0/</RepositoryURL>
+	    <RepositoryName>default repository</RepositoryName>
+	    <RepositoryURL>http://product-dist.wso2.com/p2/carbon/releases/wilkes/</RepositoryURL>
     </FeatureRepository>
 
     <!--
@@ -638,7 +688,7 @@
 	<!--Uses the embedded API Manager by default. If you want to use an external
 	API Manager instance to manage APIs, configure below  externalAPIManager-->
 
-	<Enabled>false</Enabled>
+	<Enabled>true</Enabled>
 
 	<!--Uncomment and configure API Gateway and
 	Publisher URLs to use external API Manager instance-->
