@@ -25,8 +25,6 @@ class wso2is::params {
   if $::use_hieradata == 'true' {
 
     $am_datasources           = hiera('wso2::am_datasources')
-    $bps_datasources          = hiera('wso2::bps_datasources')
-    $metrics_datasources      = hiera('wso2::metrics_datasources')
     $is_datasource            = hiera('wso2::is_datasource')
     $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
     $enable_thrift_service    = hiera('wso2::enable_thrift_service')
@@ -102,43 +100,6 @@ class wso2is::params {
         validation_interval => '30000'
       }
     }
-    $bps_datasources       = {
-      bps_ds => {
-        name                    => 'BPS_DS',
-        description             => 'The datasource used for bps',
-        driver_class_name       => 'org.h2.Driver',
-        url                     => 'jdbc:h2:file:repository/database/jpadb;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE',
-        username                => 'wso2carbon',
-        password                => 'wso2carbon',
-        jndi_config             => 'bpsds',
-        max_active              => '50',
-        max_idle                => '20',
-        max_wait                => '60000',
-        test_on_borrow          => true,
-        use_datasource_factory  => false,
-        default_auto_commit     => false,
-        validation_query        => 'SELECT 1',
-        validation_interval     => '30000'
-      }
-    }
-    $metrics_datasources      = {
-      wso2_metrics_db => {
-        name                => 'WSO2_METRICS_DB',
-        description         => 'The default datasource used for WSO2 Carbon Metrics',
-        driver_class_name   => 'org.h2.Driver',
-        url                 => 'jdbc:h2:repository/database/WSO2METRICS_DB;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE',
-        username            => 'wso2carbon',
-        password            => 'wso2carbon',
-        jndi_config         => 'jdbc/WSO2MetricsDB',
-        datasource          => 'WSO2MetricsDB',
-        max_active          => '50',
-        max_wait            => '60000',
-        test_on_borrow      => true,
-        default_auto_commit => false,
-        validation_query    => 'SELECT 1',
-        validation_interval => '30000'
-      }
-    }
     $is_datasource            = 'wso2_carbon_db'
     $enable_thrift_service    = false
 
@@ -153,11 +114,9 @@ class wso2is::params {
     ]
 
     $template_list        = [
-      'repository/conf/datasources/bps-datasources.xml',
-      'repository/conf/datasources/metrics-datasources.xml',
       'repository/conf/identity.xml',
       'repository/conf/security/sso-idp-config.xml',
-      'repository/conf/identity/application-authentication.xml',
+      'repository/conf/security/application-authentication.xml',
       'repository/conf/datasources/am-datasources.xml',
       'repository/conf/carbon.xml',
       'repository/conf/user-mgt.xml',

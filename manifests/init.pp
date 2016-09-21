@@ -77,8 +77,6 @@ class wso2is (
 ) inherits wso2is::params {
 
   validate_hash($am_datasources)
-  validate_hash($bps_datasources)
-  validate_hash($metrics_datasources)
   validate_string($is_datasource)
   validate_bool($enable_thrift_service)
   if $sso_service_providers != undef {

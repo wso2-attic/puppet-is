@@ -26,11 +26,9 @@ wso2::file_list:
   - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
 
 wso2::template_list:
-  - repository/conf/datasources/bps-datasources.xml
-  - repository/conf/datasources/metrics-datasources.xml
   - repository/conf/identity.xml
   - repository/conf/security/sso-idp-config.xml
-  - repository/conf/identity/application-authentication.xml
+  - repository/conf/security/application-authentication.xml
   - repository/conf/datasources/am-datasources.xml
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/cipher-tool.properties
@@ -238,17 +236,7 @@ wso2::am_datasources:
 #    secret_alias: Carbon.Security.RegistryKeyStore.KeyPassword
 #    secret_alias_value: carbon.xml//Server/Security/RegistryKeyStore/KeyPassword,true
 #    password: "%{hiera('wso2::key_stores::registry_key_store::key_password')}"
-#
-#  bps_ds_db_password:
-#    secret_alias: Datasources.BPS_DS.Configuration.Password
-#    secret_alias_value: bps-datasources.xml//datasources-configuration/datasources/datasource[name='BPS_DS']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  wso2_metrics_db_password:
-#    secret_alias: Datasources.WSO2_METRICS_DB.Configuration.Password
-#    secret_alias_value: metrics-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_METRICS_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
+##
 #  wso2_config_db_password:
 #    secret_alias: Datasources.WSO2_CONFIG_DB.Configuration.Password
 #    secret_alias_value: master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_CONFIG_DB']/definition[@type='RDBMS']/configuration/password,false
@@ -259,7 +247,7 @@ wso2::am_datasources:
 #    secret_alias_value: master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_GOV_DB']/definition[@type='RDBMS']/configuration/password,false
 #    password: "%{hiera('wso2::datasources::mysql::password')}"
 #
-#  wso2user_db_password:
+#  wso2_user_db_password:
 #    secret_alias: Datasources.WSO2_USER_DB.Configuration.Password
 #    secret_alias_value: master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_USER_DB']/definition[@type='RDBMS']/configuration/password,false
 #    password: "%{hiera('wso2::datasources::mysql::password')}"

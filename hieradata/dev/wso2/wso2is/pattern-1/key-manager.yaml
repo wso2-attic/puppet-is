@@ -168,7 +168,7 @@ wso2::am_datasources:
 #    name: WSO2AM_DB
 #    description: The datasource used for API Manager database
 #    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-#    url: jdbc:mysql://192.168.100.1:3306/WSO2_CONFIG_DB?autoReconnect=true
+#    url: jdbc:mysql://192.168.100.1:3306/IS_DB?autoReconnect=true
 #    username: "%{hiera('wso2::datasources::mysql::username')}"
 #    password: "%{hiera('wso2::datasources::mysql::password')}"
 #    jndi_config: jdbc/WSO2AM_DB
