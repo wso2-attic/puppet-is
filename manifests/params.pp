@@ -290,7 +290,7 @@ class wso2is::params {
   }
 
   $product_name               = 'wso2is'
-  $product_version            = '5.1.0'
+  $product_version            = '5.3.0'
   $platform_version           = '4.4.0'
   $carbon_home                = "${install_dir}/${product_name}-${product_version}"
   $pack_file_abs_path         = "${pack_dir}/${pack_filename}"
