@@ -23,7 +23,7 @@
     </providers>
 
     <datasources>
-        <%- @metrics_datasources.each do |datasource_name, datasource| -%>
+        <%- scope.lookupvar('wso2is::metrics_datasources').each do |datasource_name, datasource| -%>
         <datasource>
             <name><%= datasource['name'] %></name>
             <description><%= datasource['description'] %></description>
