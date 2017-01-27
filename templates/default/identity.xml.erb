@@ -21,7 +21,7 @@
 		<DataSource>
 			<!-- Include a data source name (jndiConfigName) from the set of data
 				sources defined in master-datasources.xml -->
-			<Name><%= @master_datasources[@is_datasource]['jndi_config'] %></Name>
+			<Name><%= scope.lookupvar('wso2is::master_datasources')[scop.lookupvar('wso2is::is_datasource')]['jndi_config'] %></Name>
 		</DataSource>
 		<!-- If the identity database is created from another place and if it is
             required to skip schema initialization during the server start up, set the
@@ -52,13 +52,13 @@
 	<!-- Security configurations -->
 	<Security>
 		<UserTrustedRPStore>
-			<Location>${carbon.home}/<%= @key_stores['user_trusted_rp_store']['location'] %></Location>
+			<Location>${carbon.home}/<%= scope.lookupvar('wso2is::key_stores')['user_trusted_rp_store']['location'] %></Location>
 			<!-- Keystore type (JKS/PKCS12 etc.) -->
-			<Type><%= @key_stores['user_trusted_rp_store']['type'] %></Type>
+			<Type><%= scope.lookupvar('wso2is::key_stores')['user_trusted_rp_store']['type'] %></Type>
 			<!-- Keystore password -->
-			<Password><%= @key_stores['user_trusted_rp_store']['password'] %></Password>
+			<Password><%= scope.lookupvar('wso2is::key_stores')['user_trusted_rp_store']['password'] %></Password>
 			<!-- Private Key password -->
-			<KeyPassword><%= @key_stores['user_trusted_rp_store']['key_password'] %></KeyPassword>
+			<KeyPassword><%= scope.lookupvar('wso2is::key_stores')['user_trusted_rp_store']['key_password'] %></KeyPassword>
 		</UserTrustedRPStore>
 
 		<!-- The directory under which all other KeyStore files will be stored -->
