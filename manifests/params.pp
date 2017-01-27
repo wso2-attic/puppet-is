@@ -20,9 +20,10 @@ class wso2is::params {
   $vm_type                    = $::vm_type
   $ipaddress                  = $::ipaddress
   $fqdn                       = $::fqdn
-
+  $use_hieradata              = pick($::use_hierdata, 'true')
+  
   # use_hieradata facter flags whether parameter lookup should be done via Hiera
-  if $::use_hieradata == 'true' {
+  if $use_hieradata == 'true' {
 
     $am_datasources           = hiera('wso2::am_datasources')
     $bps_datasources          = hiera('wso2::bps_datasources')
