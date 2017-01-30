@@ -49,7 +49,6 @@ class wso2is::params {
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
-    $carbon_home_symlink      = hiera('wso2::carbon_home_symlink')
     $wso2_user                = hiera('wso2::user')
     $wso2_group               = hiera('wso2::group')
     $maintenance_mode         = hiera('wso2::maintenance_mode')
@@ -61,8 +60,6 @@ class wso2is::params {
 
     $install_dir              = hiera('wso2::install_dir')
     $pack_dir                 = hiera('wso2::pack_dir')
-    $pack_filename            = hiera('wso2::pack_filename')
-    $pack_extracted_dir       = hiera('wso2::pack_extracted_dir')
     $hostname                 = hiera('wso2::hostname')
     $mgt_hostname             = hiera('wso2::mgt_hostname')
     $worker_node              = hiera('wso2::worker_node')
@@ -294,6 +291,9 @@ class wso2is::params {
   $product_name               = 'wso2is'
   $product_version            = '5.3.0'
   $platform_version           = '4.4.0'
+  $pack_filename              = "${product_name}-${product_version}.zip"
+  $pack_extracted_dir         = "${product_name}-${product_version}"
   $carbon_home                = "${install_dir}/${product_name}-${product_version}"
+  $carbon_home_symlink        = "/mnt/${product_name}-${product_version}"
   $pack_file_abs_path         = "${pack_dir}/${pack_filename}"
 }
