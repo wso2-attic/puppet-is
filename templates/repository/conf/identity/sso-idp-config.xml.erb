@@ -64,8 +64,8 @@
       </AudiencesList>
     </ServiceProvider>
 
-<% if @sso_service_providers and !@sso_service_providers.empty? -%>
-    <%- @sso_service_providers.each do |server_name, server| -%>
+<% if scope.lookupvar('wso2is::sso_service_providers') and !scope.lookupvar('wso2is::sso_service_providers').empty? -%>
+    <%- scope.lookupvar('wso2is::sso_service_providers').each do |server_name, server| -%>
     <ServiceProvider>
           <Issuer><%= server_name %></Issuer>
           <AssertionConsumerServiceURLs>
