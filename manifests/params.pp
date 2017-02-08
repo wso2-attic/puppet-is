@@ -52,11 +52,8 @@ class wso2is::params {
     $wso2_user                = hiera('wso2::user')
     $wso2_group               = hiera('wso2::group')
     $maintenance_mode         = hiera('wso2::maintenance_mode')
-    $install_mode             = hiera('wso2::install_mode')
-
-    if $install_mode == 'file_repo' {
-      $remote_file_url        = hiera('remote_file_url')
-    }
+    $file_source              = hiera('file_source')
+    $file_proxy_url           = hiera('file_proxy_url', undef)
 
     $install_dir              = hiera('wso2::install_dir')
     $pack_dir                 = hiera('wso2::pack_dir')
@@ -198,7 +195,6 @@ class wso2is::params {
     $wso2_user                = 'wso2user'
     $wso2_group               = 'wso2'
     $maintenance_mode         = 'refresh'
-    $install_mode             = 'file_bucket'
     $install_dir              = "/mnt/${ipaddress}"
     $pack_dir                 = '/mnt/packs'
     $pack_filename            = "${product_name}-${product_version}.zip"
