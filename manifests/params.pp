@@ -289,7 +289,7 @@ class wso2is::params {
   }
 
   $product_name               = 'wso2is'
-  $product_version            = '5.3.0'
+  $product_version            = '5.2.0'
   $platform_version           = '4.4.0'
   $pack_filename              = "${product_name}-${product_version}.zip"
   $pack_extracted_dir         = "${product_name}-${product_version}"
