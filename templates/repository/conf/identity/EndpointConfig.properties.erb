@@ -18,17 +18,17 @@
 tenantListEnabled=false
 hostname.verification.enabled=true
 mutual.ssl.username=admin
-client.keyStore=<%= @key_stores['key_store']['location'] %>
-<%- if @enable_secure_vault -%>
+client.keyStore=<%= scope.lookupvar('wso2is::key_stores')['key_store']['location'] %>
+<%- if scope.lookupvar('wso2is::enable_secure_vault') -%>
 Carbon.Security.KeyStore.Password=secretAlias:Carbon.Security.KeyStore.Password
 <%- else -%>
-Carbon.Security.KeyStore.Password=<%= @key_stores['key_store']['password'] %>
+Carbon.Security.KeyStore.Password=<%= scope.lookupvar('wso2is::key_stores')['key_store']['password'] %>
 <%- end -%>
-client.trustStore=<%= @key_stores['trust_store']['location'] %>
-<%- if @enable_secure_vault -%>
+client.trustStore=<%= scope.lookupvar('wso2is::key_stores')['trust_store']['location'] %>
+<%- if scope.lookupvar('wso2is::enable_secure_vault') -%>
 Carbon.Security.TrustStore.Password=secretAlias:Carbon.Security.TrustStore.Password
 <%- else -%>
-Carbon.Security.TrustStore.Password=<%= @key_stores['trust_store']['password'] %>
+Carbon.Security.TrustStore.Password=<%= scope.lookupvar('wso2is::key_stores')['trust_store']['password'] %>
 <%- end -%>
 identity.server.host=localhost
 identity.server.port=9443
@@ -36,3 +36,4 @@ identity.server.serviceURL=/services/
 username.header=UserName
 key.manager.type=SunX509
 trust.manager.type=SunX509
+tls.protocol=TLSv1.2

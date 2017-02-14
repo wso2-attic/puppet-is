@@ -36,7 +36,7 @@
     <!--
        Product Version
     -->
-    <Version>5.3.0-beta</Version>
+    <Version><%= scope.lookupvar('wso2is::product_version') %></Version>
 
     <!--
        Host name or IP address of the machine hosting this server
@@ -44,8 +44,8 @@
        This is will become part of the End Point Reference of the
        services deployed on this server instance.
     -->
-<% if @hostname %>
-    <HostName><%= @hostname %></HostName>
+<% if scope.lookupvar('wso2is::hostname') %>
+    <HostName><%= scope.lookupvar('wso2is::hostname') %></HostName>
 <%- else -%>
     <!--HostName>www.wso2.org</HostName-->
 <% end %>
@@ -53,8 +53,8 @@
     <!--
     Host name to be used for the Carbon management console
     -->
-<% if @mgt_hostname %>
-    <MgtHostName><%= @mgt_hostname %></MgtHostName>
+<% if scope.lookupvar('wso2is::mgt_hostname') %>
+    <MgtHostName><%= scope.lookupvar('wso2is::mgt_hostname') %></MgtHostName>
 <%- else -%>
     <!--MgtHostName>mgt.wso2.org</MgtHostName-->
 <% end %>
@@ -133,8 +133,8 @@
          -->
 
 
-<%- if @ports['offset'] -%>
-        <Offset><%= @ports['offset'] %></Offset>
+<%- if scope.lookupvar('wso2is::ports')['offset'] -%>
+        <Offset><%= scope.lookupvar('wso2is::ports')['offset'] %></Offset>
 <%- else -%>
         <Offset>0</Offset>
 <%- end -%>
@@ -374,15 +374,15 @@
         -->
         <KeyStore>
             <!-- Keystore file location-->
-            <Location>${carbon.home}/<%= @key_stores['key_store']['location'] %></Location>
+            <Location>${carbon.home}/<%= scope.lookupvar('wso2is::key_stores')['key_store']['location'] %></Location>
             <!-- Keystore type (JKS/PKCS12 etc.)-->
-            <Type><%= @key_stores['key_store']['type'] %></Type>
+            <Type><%= scope.lookupvar('wso2is::key_stores')['key_store']['type'] %></Type>
             <!-- Keystore password-->
-            <Password><%= @key_stores['key_store']['password'] %></Password>
+            <Password><%= scope.lookupvar('wso2is::key_stores')['key_store']['password'] %></Password>
             <!-- Private Key alias-->
-            <KeyAlias><%= @key_stores['key_store']['key_alias'] %></KeyAlias>
+            <KeyAlias><%= scope.lookupvar('wso2is::key_stores')['key_store']['key_alias'] %></KeyAlias>
             <!-- Private Key password-->
-            <KeyPassword><%= @key_stores['key_store']['key_password'] %></KeyPassword>
+            <KeyPassword><%= scope.lookupvar('wso2is::key_stores')['key_store']['key_password'] %></KeyPassword>
         </KeyStore>
 
         <!--
@@ -391,11 +391,11 @@
         -->
         <TrustStore>
             <!-- trust-store file location -->
-            <Location>${carbon.home}/<%= @key_stores['trust_store']['location'] %></Location>
+            <Location>${carbon.home}/<%= scope.lookupvar('wso2is::key_stores')['trust_store']['location'] %></Location>
             <!-- trust-store type (JKS/PKCS12 etc.) -->
-            <Type><%= @key_stores['trust_store']['type'] %></Type>
+            <Type><%= scope.lookupvar('wso2is::key_stores')['trust_store']['type'] %></Type>
             <!-- trust-store password -->
-            <Password><%= @key_stores['trust_store']['password'] %></Password>
+            <Password><%= scope.lookupvar('wso2is::key_stores')['trust_store']['password'] %></Password>
         </TrustStore>
 
         <!--
@@ -582,15 +582,15 @@
 	and in  worker nodes set only AutoCheckout to true.
     -->
     <DeploymentSynchronizer>
-        <Enabled><%= @dep_sync['enabled'] %></Enabled>
-        <AutoCommit><%= @dep_sync['auto_commit'] %></AutoCommit>
-        <AutoCheckout><%= @dep_sync['auto_checkout'] %></AutoCheckout>
-        <RepositoryType><%= @dep_sync['repository_type'] %></RepositoryType>
-    <%- if @dep_sync['repository_type'] == "svn" -%>
-        <SvnUrl><%= @dep_sync['svn']['url'] -%></SvnUrl>
-        <SvnUser><%= @dep_sync['svn']['user'] -%></SvnUser>
-        <SvnPassword><%= @dep_sync['svn']['password'] -%></SvnPassword>
-        <SvnUrlAppendTenantId><%= @dep_sync['svn']['append_tenant_id'] -%></SvnUrlAppendTenantId>
+        <Enabled><%= scope.lookupvar('wso2is::dep_sync')['enabled'] %></Enabled>
+        <AutoCommit><%= scope.lookupvar('wso2is::dep_sync')['auto_commit'] %></AutoCommit>
+        <AutoCheckout><%= scope.lookupvar('wso2is::dep_sync')['auto_checkout'] %></AutoCheckout>
+        <RepositoryType><%= scope.lookupvar('wso2is::dep_sync')['repository_type'] %></RepositoryType>
+    <%- if scope.lookupvar('wso2is::dep_sync')['repository_type'] == "svn" -%>
+        <SvnUrl><%= scope.lookupvar('wso2is::dep_sync')['svn']['url'] -%></SvnUrl>
+        <SvnUser><%= scope.lookupvar('wso2is::dep_sync')['svn']['user'] -%></SvnUser>
+        <SvnPassword><%= scope.lookupvar('wso2is::dep_sync')['svn']['password'] -%></SvnPassword>
+        <SvnUrlAppendTenantId><%= scope.lookupvar('wso2is::dep_sync')['svn']['append_tenant_id'] -%></SvnUrlAppendTenantId>
     <%- end -%>
     </DeploymentSynchronizer>
 

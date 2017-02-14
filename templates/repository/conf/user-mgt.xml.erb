@@ -18,14 +18,14 @@
     <Realm>
         <Configuration>
 		<AddAdmin>true</AddAdmin>
-            <AdminRole><%= @user_management['admin_role'] %></AdminRole>
+            <AdminRole><%= scope.lookupvar('wso2is::user_management')['admin_role'] %></AdminRole>
             <AdminUser>
-                <UserName><%= @user_management['admin_username'] %></UserName>
-                <Password><%= @user_management['admin_password'] %></Password>
+                <UserName><%= scope.lookupvar('wso2is::user_management')['admin_username'] %></UserName>
+                <Password><%= scope.lookupvar('wso2is::user_management')['admin_password'] %></Password>
             </AdminUser>
             <EveryOneRoleName>everyone</EveryOneRoleName> <!-- By default users in this role sees the registry root -->
             <Property name="isCascadeDeleteEnabled">true</Property>
-            <Property name="dataSource"><%= @master_datasources[@usermgt_datasource]['jndi_config'] %></Property>
+            <Property name="dataSource"><%= scope.lookupvar('wso2is::master_datasources')[scope.lookupvar('wso2is::usermgt_datasource')]['jndi_config'] %></Property>
         </Configuration>
 
         <!-- Following is the configuration for internal JDBC user store. This user store manager is based on JDBC.

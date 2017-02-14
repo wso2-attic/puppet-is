@@ -21,7 +21,7 @@
         <DataSource>
             <!-- Include a data source name (jndiConfigName) from the set of data
                 sources defined in master-datasources.xml -->
-            <Name><%= @master_datasources[@is_datasource]['jndi_config'] %></Name>
+            <Name><%= scope.lookupvar('wso2is::master_datasources')[scope.lookupvar('wso2is::is_datasource')]['jndi_config'] %></Name>
         </DataSource>
         <!-- If the identity database is created from another place and if it is
             required to skip schema initialization during the server start up, set the
@@ -292,8 +292,8 @@
             https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/samlsso
             If that doesn't satisfy uncomment the following config and explicitly configure the value
         -->
-        <%- if @ports['proxyPort'] and @ports['proxyPort']['https'] -%>
-        <IdentityProviderURL>https://<%= @hostname %>:<%= @ports['proxyPort']['https'] %>/samlsso</IdentityProviderURL>
+        <%- if scope.lookupvar('wso2is::ports')['proxyPort'] and scope.lookupvar('wso2is::ports')['proxyPort']['https'] -%>
+        <IdentityProviderURL>https://<%= scope.lookupvar('wso2is::hostname') %>:<%= scope.lookupvar('wso2is::ports')['proxyPort']['https'] %>/samlsso</IdentityProviderURL>
         <%- else -%>
         <IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/samlsso</IdentityProviderURL>
         <%- end -%>
@@ -345,8 +345,8 @@
             <ReceivePort>${Ports.ThriftEntitlementReceivePort}</ReceivePort>
             <ClientTimeout>10000</ClientTimeout>
             <KeyStore>
-                <Location>${carbon.home}/<%= @key_stores['key_store']['location'] %></Location>
-				        <Password><%= @key_stores['key_store']['password'] %></Password>
+                <Location>${carbon.home}/<%= scope.lookupvar('wso2is::key_stores')['key_store']['location'] %></Location>
+				        <Password><%= scope.lookupvar('wso2is::key_stores')['key_store']['password'] %></Password>
             </KeyStore>
             <!-- Enable this element to mention the host-name of your IS machine -->
             <ThriftHostName>${carbon.host}</ThriftHostName>

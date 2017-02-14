@@ -601,7 +601,7 @@
     </phaseOrder>
 
     <clustering class="org.wso2.carbon.core.clustering.hazelcast.HazelcastClusteringAgent"
-                enable="<%= @clustering['enabled'] %>">
+                enable="<%= scope.lookupvar('wso2is::clustering')['enabled'] %>">
 
         <!--
            This parameter indicates whether the cluster has to be automatically initalized
@@ -623,8 +623,8 @@
                     is deemed to have left the cluster, it will be detected by the Group Membership
                     Service (GMS) using a TCP ping mechanism.
         -->
-        <parameter name="membershipScheme"><%= @clustering['membership_scheme'] %></parameter>
-        <%= scope.function_template(["wso2base/clustering/#{@clustering['membership_scheme']}.erb"]) %>
+        <parameter name="membershipScheme"><%= scope.lookupvar('wso2is::clustering')['membership_scheme'] %></parameter>
+        <%= scope.function_template(["wso2base/clustering/#{scope.lookupvar('wso2is::clustering')['membership_scheme']}.erb"]) %>
 
         <!--<parameter name="licenseKey">xxx</parameter>-->
         <!--<parameter name="mgtCenterURL">http://localhost:8081/mancenter/</parameter>-->
@@ -633,7 +633,7 @@
          The clustering domain/group. Nodes in the same group will belong to the same multicast
          domain. There will not be interference between nodes in different groups.
         -->
-        <parameter name="domain"><%= @clustering['domain'] %></parameter>
+        <parameter name="domain"><%= scope.lookupvar('wso2is::clustering')['domain'] %></parameter>
 
         <!-- The multicast address to be used -->
         <!--<parameter name="mcastAddress">228.0.0.4</parameter>-->
@@ -654,7 +654,7 @@
         -->
         <!-- The host name or IP address of this member -->
 
-        <parameter name="localMemberHost"><%= @clustering['local_member_host'] %></parameter>
+        <parameter name="localMemberHost"><%= scope.lookupvar('wso2is::clustering')['local_member_host'] %></parameter>
 
         <!--
             The bind adress of this member. The difference between localMemberHost & localMemberBindAddress
@@ -669,7 +669,7 @@
         The TCP port used by this member. This is the port through which other nodes will
         contact this member
          -->
-        <parameter name="localMemberPort"><%= @clustering['local_member_port']-%>
+        <parameter name="localMemberPort"><%= scope.lookupvar('wso2is::clustering')['local_member_port']-%>
         </parameter>
         <!--
             The bind port of this member. The difference between localMemberPort & localMemberBindPort
@@ -686,7 +686,7 @@
         <parameter name="properties">
             <property name="backendServerURL" value="https://${hostName}:${httpsPort}/services/"/>
             <property name="mgtConsoleURL" value="https://${hostName}:${httpsPort}/"/>
-            <property name="subDomain" value="<%= @clustering['sub_domain'] %>"/>
+            <property name="subDomain" value="<%= scope.lookupvar('wso2is::clustering')['sub_domain'] %>"/>
         </parameter>
 
         <!--
@@ -704,9 +704,9 @@
            The list of static or well-known members. These entries will only be valid if the
            "membershipScheme" above is set to "wka"
         -->
-        <%- if @clustering['membership_scheme'] == 'wka' -%>
+        <%- if scope.lookupvar('wso2is::clustering')['membership_scheme'] == 'wka' -%>
         <members>
-            <%- @clustering['wka']['members'].each do |member| -%>
+            <%- scope.lookupvar('wso2is::clustering')['wka']['members'].each do |member| -%>
             <member>
                 <hostName><%= member['hostname'] %>
                 </hostName>
