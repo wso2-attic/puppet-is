@@ -30,7 +30,6 @@
 		<%- if scope.lookupvar('wso2is::ports')['proxyPort'] and scope.lookupvar('wso2is::ports')['proxyPort']['http'] -%>
                 proxyPort="<%= scope.lookupvar('wso2is::ports')['proxyPort']['http'] %>"
                 <%- end -%>
-                redirectPort="9443"
                 bindOnInit="false"
                 maxHttpHeaderSize="8192"
                 acceptorThreadCount="2"

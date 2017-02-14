@@ -253,33 +253,33 @@ class wso2is::params {
 
     $key_stores               = {
       key_store              => {
-        location     => 'repository/resources/security/wso2carbon.jks',
+        location     => 'repository/resources/security/loginis-keyStore.jks',
         type         => 'JKS',
-        password     => 'wso2carbon',
-        key_alias    => 'wso2carbon',
-        key_password => 'wso2carbon'
+        password     => 'changeit',
+        key_alias    => 'login',
+        key_password => 'changeit'
       },
       registry_key_store     => {
-        location     => 'repository/resources/security/wso2carbon.jks',
+        location     => 'repository/resources/security/loginis-keyStore.jks',
         type         => 'JKS',
-        password     => 'wso2carbon',
-        key_alias    => 'wso2carbon',
-        key_password => 'wso2carbon'
+        password     => 'changeit',
+        key_alias    => 'login',
+        key_password => 'changeit'
       },
       trust_store            => {
-        location => 'repository/resources/security/client-truststore.jks',
+        location => 'repository/resources/security/loginis-trustStore.jks',
         type     => 'JKS',
-        password => 'wso2carbon'
+        password => 'changeit'
       },
       connector_key_store    => {
-        location => 'repository/resources/security/wso2carbon.jks',
-        password => 'wso2carbon'
+        location => 'repository/resources/security/loginis-keyStore.jks',
+        password => 'changeit'
       },
       user_trusted_rp_store  => {
-        location     => 'repository/resources/security/userRP.jks',
+        location     => 'repository/resources/security/loginis-trustStore.jks',
         type         => 'JKS',
-        password     => 'wso2carbon',
-        key_password => 'wso2carbon'
+        password     => 'changeit',
+        key_password => 'changeit'
       }
     }
   }
