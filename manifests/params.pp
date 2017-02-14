@@ -20,9 +20,10 @@ class wso2is::params {
   $vm_type                    = $::vm_type
   $ipaddress                  = $::ipaddress
   $fqdn                       = $::fqdn
-
+  $use_hieradata              = pick($::use_hierdata, 'true')
+  
   # use_hieradata facter flags whether parameter lookup should be done via Hiera
-  if $::use_hieradata == 'true' {
+  if $use_hieradata == 'true' {
 
     $am_datasources           = hiera('wso2::am_datasources')
     $bps_datasources          = hiera('wso2::bps_datasources')
@@ -39,6 +40,7 @@ class wso2is::params {
     $packages                 = hiera_array('packages', undef)
     $template_list            = hiera_array('wso2::template_list')
     $file_list                = hiera_array('wso2::file_list', undef)
+    $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
     $patch_list               = hiera('wso2::patch_list', undef)
     $system_file_list         = hiera_hash('wso2::system_file_list', undef)
     $directory_list           = hiera_array('wso2::directory_list', undef)
@@ -47,20 +49,14 @@ class wso2is::params {
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
-    $carbon_home_symlink      = hiera('wso2::carbon_home_symlink')
     $wso2_user                = hiera('wso2::user')
     $wso2_group               = hiera('wso2::group')
     $maintenance_mode         = hiera('wso2::maintenance_mode')
-    $install_mode             = hiera('wso2::install_mode')
-
-    if $install_mode == 'file_repo' {
-      $remote_file_url        = hiera('remote_file_url')
-    }
+    $file_source              = hiera('file_source')
+    $file_proxy_url           = hiera('file_proxy_url', undef)
 
     $install_dir              = hiera('wso2::install_dir')
     $pack_dir                 = hiera('wso2::pack_dir')
-    $pack_filename            = hiera('wso2::pack_filename')
-    $pack_extracted_dir       = hiera('wso2::pack_extracted_dir')
     $hostname                 = hiera('wso2::hostname')
     $mgt_hostname             = hiera('wso2::mgt_hostname')
     $worker_node              = hiera('wso2::worker_node')
@@ -199,7 +195,6 @@ class wso2is::params {
     $wso2_user                = 'wso2user'
     $wso2_group               = 'wso2'
     $maintenance_mode         = 'refresh'
-    $install_mode             = 'file_bucket'
     $install_dir              = "/mnt/${ipaddress}"
     $pack_dir                 = '/mnt/packs'
     $pack_filename            = "${product_name}-${product_version}.zip"
@@ -258,40 +253,43 @@ class wso2is::params {
 
     $key_stores               = {
       key_store              => {
-        location     => 'repository/resources/security/wso2carbon.jks',
+        location     => 'repository/resources/security/loginis-keyStore.jks',
         type         => 'JKS',
-        password     => 'wso2carbon',
-        key_alias    => 'wso2carbon',
-        key_password => 'wso2carbon'
+        password     => 'changeit',
+        key_alias    => 'login',
+        key_password => 'changeit'
       },
       registry_key_store     => {
-        location     => 'repository/resources/security/wso2carbon.jks',
+        location     => 'repository/resources/security/loginis-keyStore.jks',
         type         => 'JKS',
-        password     => 'wso2carbon',
-        key_alias    => 'wso2carbon',
-        key_password => 'wso2carbon'
+        password     => 'changeit',
+        key_alias    => 'login',
+        key_password => 'changeit'
       },
       trust_store            => {
-        location => 'repository/resources/security/client-truststore.jks',
+        location => 'repository/resources/security/loginis-trustStore.jks',
         type     => 'JKS',
-        password => 'wso2carbon'
+        password => 'changeit'
       },
       connector_key_store    => {
-        location => 'repository/resources/security/wso2carbon.jks',
-        password => 'wso2carbon'
+        location => 'repository/resources/security/loginis-keyStore.jks',
+        password => 'changeit'
       },
       user_trusted_rp_store  => {
-        location     => 'repository/resources/security/userRP.jks',
+        location     => 'repository/resources/security/loginis-trustStore.jks',
         type         => 'JKS',
-        password     => 'wso2carbon',
-        key_password => 'wso2carbon'
+        password     => 'changeit',
+        key_password => 'changeit'
       }
     }
   }
 
   $product_name               = 'wso2is'
-  $product_version            = '5.3.0'
+  $product_version            = '5.2.0'
   $platform_version           = '4.4.0'
+  $pack_filename              = "${product_name}-${product_version}.zip"
+  $pack_extracted_dir         = "${product_name}-${product_version}"
   $carbon_home                = "${install_dir}/${product_name}-${product_version}"
+  $carbon_home_symlink        = "/mnt/${product_name}-${product_version}"
   $pack_file_abs_path         = "${pack_dir}/${pack_filename}"
 }

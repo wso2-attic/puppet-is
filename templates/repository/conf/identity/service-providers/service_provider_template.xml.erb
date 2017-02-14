@@ -17,13 +17,13 @@
 -->
 <ServiceProvider>
     <ApplicationID>6</ApplicationID>
-    <ApplicationName><%= @name %></ApplicationName>
-    <Description><%= @name %> Service Provider</Description>
+    <ApplicationName><%= scope.lookupvar('wso2is::name') %></ApplicationName>
+    <Description><%= scope.lookupvar('wso2is::name') %> Service Provider</Description>
     <IsSaaSApp>true</IsSaaSApp>
     <InboundAuthenticationConfig>
         <InboundAuthenticationRequestConfigs>
             <InboundAuthenticationRequestConfig>
-                <InboundAuthKey><%= @name %></InboundAuthKey>
+                <InboundAuthKey><%= scope.lookupvar('wso2is::name') %></InboundAuthKey>
                 <InboundAuthType>samlsso</InboundAuthType>
                 <Properties></Properties>
             </InboundAuthenticationRequestConfig>

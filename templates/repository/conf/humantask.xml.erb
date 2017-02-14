@@ -33,7 +33,7 @@
         <TransactionManagerClass>org.apache.ode.il.EmbeddedGeronimoFactory</TransactionManagerClass>
     </TransactionManagerConfig>
     <SchedulerConfig>
-        <MaxThreadPoolSize><%= @scheduler_config_max_thread_pool_size %></MaxThreadPoolSize>
+        <MaxThreadPoolSize><%= scope.lookupvar('wso2is::scheduler_config_max_thread_pool_size') %></MaxThreadPoolSize>
     </SchedulerConfig>
     <!--TaskCleanupConfig>
         <cronExpression>0 0 0/4 * * ?</cronExpression>

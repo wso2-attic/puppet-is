@@ -22,6 +22,6 @@
 #       <true / false> - This is true if the last parameter in the xpath is parameter (starts with [ and ends with ])
 # and you want its value to be replaced with "password"
  
-<%- @secure_vault_configs.each do |secure_vault_config_name, secure_vault_config| -%>
+<%- scope.lookupvar('wso2is::secure_vault_configs').each do |secure_vault_config_name, secure_vault_config| -%>
 <%= secure_vault_config['secret_alias'] %>=<%= secure_vault_config['secret_alias_value'] %>
 <%- end -%>

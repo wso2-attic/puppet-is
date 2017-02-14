@@ -27,6 +27,7 @@ class wso2is (
   $packages               = $wso2is::params::packages,
   $template_list          = $wso2is::params::template_list,
   $file_list              = $wso2is::params::file_list,
+  $remove_file_list       = $wso2is::params::remove_file_list,
   $patch_list             = $wso2is::params::patch_list,
   $cert_list              = $wso2is::params::cert_list,
   $system_file_list       = $wso2is::params::system_file_list,
@@ -42,9 +43,9 @@ class wso2is (
   $product_version        = $wso2is::params::product_version,
   $platform_version       = $wso2is::params::platform_version,
   $carbon_home_symlink    = $wso2is::params::carbon_home_symlink,
-  $remote_file_url        = $wso2is::params::remote_file_url,
+  $file_source            = $wso2is::params::file_source,
+  $file_proxy_url         = $wso2is::params::file_proxy_url,
   $maintenance_mode       = $wso2is::params::maintenance_mode,
-  $install_mode           = $wso2is::params::install_mode,
   $install_dir            = $wso2is::params::install_dir,
   $pack_dir               = $wso2is::params::pack_dir,
   $pack_filename          = $wso2is::params::pack_filename,
@@ -106,6 +107,7 @@ class wso2is (
     packages               => $packages,
     template_list          => $template_list,
     file_list              => $file_list,
+    remove_file_list       => $remove_file_list,
     patch_list             => $patch_list,
     cert_list              => $cert_list,
     system_file_list       => $system_file_list,
@@ -121,9 +123,9 @@ class wso2is (
     product_version        => $product_version,
     platform_version       => $platform_version,
     carbon_home_symlink    => $carbon_home_symlink,
-    remote_file_url        => $remote_file_url,
+    file_source            => $file_source,
+    file_proxy_url         => $file_proxy_url,
     maintenance_mode       => $maintenance_mode,
-    install_mode           => $install_mode,
     install_dir            => $install_dir,
     pack_dir               => $pack_dir,
     pack_filename          => $pack_filename,
@@ -141,12 +143,13 @@ class wso2is (
 
   contain wso2base
   contain wso2base::system
-  contain wso2base::clean
+  #contain wso2base::clean
   contain wso2base::install
   contain wso2is::configure
   contain wso2base::service
 
   Class['::wso2base'] -> Class['::wso2base::system']
-  -> Class['::wso2base::clean'] -> Class['::wso2base::install']
+  #-> Class['::wso2base::clean']
+  -> Class['::wso2base::install']
   -> Class['::wso2is::configure'] ~> Class['::wso2base::service']
 }
