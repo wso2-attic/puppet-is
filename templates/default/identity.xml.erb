@@ -28,9 +28,9 @@
             required to skip schema initialization during the server start up, set the
             following property to "true". -->
 		<!-- <SkipDBSchemaCreation>false</SkipDBSchemaCreation> -->
-		<!--SessionDataPersist>
-            <Enable>true</Enable>
-            <Temporary>false</Temporary>
+		<SessionDataPersist>
+            <Enable><%= @sessionDataPersist['enabled'] %></Enable>
+            <Temporary><%= @sessionDataPersist['temporary'] %></Temporary>
             <PoolSize>100</PoolSize>
             <SessionDataCleanUp>
                 <Enable>true</Enable>
@@ -41,7 +41,7 @@
                 <Enable>true</Enable>
                 <CleanUpPeriod>720</CleanUpPeriod>
             </OperationDataCleanUp>
-        </SessionDataPersist-->
+        </SessionDataPersist>
 	</JDBCPersistenceManager>
 
 	<!-- Time configurations are in minutes -->

@@ -77,6 +77,8 @@ class wso2is::params {
     $sso_authentication       = hiera('wso2::sso_authentication')
     $user_management          = hiera('wso2::user_management')
     $enable_secure_vault      = hiera('wso2::enable_secure_vault')
+    $sessionDataPersist       = hiera('wso2::sessionDataPersist')
+
 
     if $enable_secure_vault {
       $secure_vault_configs   = hiera('wso2::secure_vault_configs')
@@ -229,6 +231,10 @@ class wso2is::params {
           }
         ]
       }
+    }
+    $clustering               = {
+      enabled           => false,
+      Temporary         => false
     }
 
     $dep_sync                 = {

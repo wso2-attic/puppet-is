@@ -71,6 +71,11 @@ wso2::clustering:
       -
         hostname: 192.168.48.195
         port: 4000
+#JDBCPersistenceManager properties
+
+#wso2::sessionDataPersist:
+  #enabled:false
+
 # AWS membership scheme
 #   membership_scheme: aws
 #   aws:
@@ -99,6 +104,7 @@ wso2::registry_mounts:
 
 wso2::usermgt_datasource: wso2_user_db
 wso2::is_datasource: wso2_is_db
+#wso2::is_datasource: wso2_carbon_db
 # SSO Configuration
 wso2::sso_authentication:
   enabled: false
@@ -153,14 +159,14 @@ wso2::master_datasources:
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-wso2_is_db:
+ wso2_is_db:
    name: WSO2_IS_DB
    description: The datasource is used for user management and userstore
    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
    url: jdbc:mysql://192.168.48.19:3306/WSO2_IS_DB?autoReconnect=true
    username: root
    password: root
-   jndi_config: jdbc/WSO2USER_DB
+   jndi_config: jdbc/WSO2_IS_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
