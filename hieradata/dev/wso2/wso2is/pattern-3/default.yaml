@@ -73,8 +73,9 @@ wso2::clustering:
         port: 4000
 #JDBCPersistenceManager properties
 
-#wso2::sessionDataPersist:
-  #enabled:false
+wso2::sessionDataPersist:
+  enabled:false
+  temporary:false
 
 # AWS membership scheme
 #   membership_scheme: aws
