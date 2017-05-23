@@ -112,7 +112,6 @@ wso2::master_datasources:
    name: WSO2_CONFIG_DB
    description: The datasource used for config registry
    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:mysql://192.168.100.1:3306/WSO2_CONFIG_DB?autoReconnect=true
    url: jdbc:h2:file:repository/database/jpadb;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
    username: "%{hiera('wso2::datasources::common::username')}"
    password: "%{hiera('wso2::datasources::common::password')}"
@@ -128,9 +127,9 @@ wso2::master_datasources:
    name: WSO2_GOV_DB
    description: The datasource used for gov registry
    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-   url: jdbc:mysql://192.168.100.1:3306/WSO2_REG_DB?autoReconnect=true
-   username: "%{hiera('wso2::datasources::mysql::username')}"
-   password: "%{hiera('wso2::datasources::mysql::password')}"
+   url: jdbc:mysql://192.168.48.19:3306/WSO2_REG_DB?autoReconnect=true
+   username: root
+   password: root
    jndi_config: jdbc/WSO2_GOV_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
@@ -143,9 +142,9 @@ wso2::master_datasources:
    name: WSO2_USER_DB
    description: The datasource is used for user management and userstore
    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-   url: jdbc:mysql://192.168.100.1:3306/WSO2_USER_DB?autoReconnect=true
-   username: "%{hiera('wso2::datasources::mysql::username')}"
-   password: "%{hiera('wso2::datasources::mysql::password')}"
+   url: jdbc:mysql://192.168.48.19:3306/WSO2_USER_DB?autoReconnect=true
+   username: root
+   password: root
    jndi_config: jdbc/WSO2USER_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
@@ -158,9 +157,9 @@ wso2_is_db:
    name: WSO2_IS_DB
    description: The datasource is used for user management and userstore
    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-   url: jdbc:mysql://192.168.100.1:3306/WSO2_IS_DB?autoReconnect=true
-   username: "%{hiera('wso2::datasources::mysql::username')}"
-   password: "%{hiera('wso2::datasources::mysql::password')}"
+   url: jdbc:mysql://192.168.48.19:3306/WSO2_IS_DB?autoReconnect=true
+   username: root
+   password: root
    jndi_config: jdbc/WSO2USER_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
@@ -206,7 +205,7 @@ wso2::am_datasources:
 #    name: BPS_DS
 #    description: The datasource used for bps
 #    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-#    url: jdbc:mysql://192.168.100.1:3306/WSO2_CONFIG_DB?autoReconnect=true
+#    url: jdbc:mysql://192.168.48.19:3306/WSO2_CONFIG_DB?autoReconnect=true
 #    username: "%{hiera('wso2::datasources::mysql::username')}"
 #    password: "%{hiera('wso2::datasources::mysql::password')}"
 #    jndi_config: bpsds
@@ -240,7 +239,7 @@ wso2::metrics_datasources:
 #    name: WSO2_METRICS_DB
 #    description: The default datasource used for WSO2 Carbon Metrics
 #    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-#    url: jdbc:mysql://192.168.100.1:3306/WSO2_CONFIG_DB?autoReconnect=true
+#    url: jdbc:mysql://192.168.48.19:3306/WSO2_CONFIG_DB?autoReconnect=true
 #    username: "%{hiera('wso2::datasources::mysql::username')}"
 #    password: "%{hiera('wso2::datasources::mysql::password')}"
 #    jndi_config: jdbc/WSO2MetricsDB
@@ -257,7 +256,7 @@ wso2::metrics_datasources:
 #    name: WSO2AM_DB
 #    description: The datasource used for API Manager database
 #    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-#    url: jdbc:mysql://192.168.100.1:3306/WSO2_CONFIG_DB?autoReconnect=true
+#    url: jdbc:mysql://192.168.48.19:3306/WSO2_CONFIG_DB?autoReconnect=true
 #    username: "%{hiera('wso2::datasources::mysql::username')}"
 #    password: "%{hiera('wso2::datasources::mysql::password')}"
 #    jndi_config: jdbc/WSO2AM_DB
