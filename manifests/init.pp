@@ -103,6 +103,7 @@ class wso2is (
   validate_string($fqdn)
   validate_hash($sso_authentication)
   validate_hash($user_management)
+  validate_hash($sessionDataPersist)
 
   class { '::wso2base':
     packages               => $packages,
