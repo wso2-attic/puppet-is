@@ -232,9 +232,9 @@ class wso2is::params {
         ]
       }
     }
-    $clustering               = {
+    $sessionDataPersist       = {
       enabled           => false,
-      Temporary         => false
+      temporary         => false
     }
 
     $dep_sync                 = {
