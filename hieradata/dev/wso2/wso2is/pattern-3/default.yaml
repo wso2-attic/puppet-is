@@ -74,8 +74,8 @@ wso2::clustering:
 #JDBCPersistenceManager properties
 
 wso2::sessionDataPersist:
-  enabled:false
-  temporary:false
+  enabled:true
+  temporary:true
 
 # AWS membership scheme
 #   membership_scheme: aws

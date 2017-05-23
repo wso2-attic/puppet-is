@@ -69,6 +69,7 @@ class wso2is (
   $usermgt_datasource     = $wso2is::params::usermgt_datasource,
   $local_reg_datasource   = $wso2is::params::local_reg_datasource,
   $clustering             = $wso2is::params::clustering,
+  $sessionDataPersist     = $wso2is::params::sessionDataPersist,
   $dep_sync               = $wso2is::params::dep_sync,
   $ports                  = $wso2is::params::ports,
   $jvm                    = $wso2is::params::jvm,

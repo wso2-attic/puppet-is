@@ -233,8 +233,8 @@ class wso2is::params {
       }
     }
     $sessionDataPersist       = {
-      enabled           => false,
-      temporary         => false
+      enabled           => true,
+      temporary         => true
     }
 
     $dep_sync                 = {
