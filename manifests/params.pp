@@ -44,6 +44,7 @@ class wso2is::params {
     $directory_list           = hiera_array('wso2::directory_list', undef)
     $cert_list                = hiera_hash('wso2::cert_list', undef)
     $hosts_mapping            = hiera_hash('wso2::hosts_mapping')
+    $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
