@@ -85,8 +85,7 @@ wso2::sessi on_cleanUp:
 wso2::session_cleanUp:
   enabled: true
   period: 720
-  s
-# AWS membership scheme
+  # AWS membership scheme
 #   membership_scheme: aws
 #   aws:
 #     access_key: access-key

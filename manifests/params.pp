@@ -77,7 +77,9 @@ class wso2is::params {
     $sso_authentication       = hiera('wso2::sso_authentication')
     $user_management          = hiera('wso2::user_management')
     $enable_secure_vault      = hiera('wso2::enable_secure_vault')
-    $sessionDataPersist       = hiera('wso2::sessionDataPersist')
+    $session_persist          = hiera('wso2::session_persist')
+    $session_cleanUp          = hiera('wso2::session_cleanUp')
+    $operation_cleanUp       = hiera('wso2::operation_cleanUp')
 
 
     if $enable_secure_vault {
