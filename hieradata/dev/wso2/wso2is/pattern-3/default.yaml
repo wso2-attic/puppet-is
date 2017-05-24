@@ -77,12 +77,12 @@ wso2::session_persist:
   temporary: true
   pool_size: 0
 
-wso2::sessi on_cleanUp:
+wso2::session_cleanUp:
   enabled: true
   timeout: true
   period: 1140
 
-wso2::session_cleanUp:
+wso2::operation_cleanUp:
   enabled: true
   period: 720
   # AWS membership scheme
