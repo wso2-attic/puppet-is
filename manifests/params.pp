@@ -232,9 +232,21 @@ class wso2is::params {
         ]
       }
     }
-    $sessionDataPersist       = {
+    $session_persist       = {
       enabled           => true,
-      temporary         => true
+      temporary         => true,
+      pool_size         => 0
+    }
+
+    $session_cleanUp       = {
+      enabled           => true,
+      timeout           => 20160,
+      period            => 1140
+    }
+
+    $operation_cleanUp       = {
+      enabled           => true,
+      period            => 720
     }
 
     $dep_sync                 = {

@@ -29,17 +29,17 @@
             following property to "true". -->
 		<!-- <SkipDBSchemaCreation>false</SkipDBSchemaCreation> -->
 		<SessionDataPersist>
-            <Enable><%= @sessionDataPersist['enabled'] %></Enable>
-            <Temporary><%= @sessionDataPersist['temporary'] %></Temporary>
-            <PoolSize>100</PoolSize>
+            <Enable><%= @session_persist['enabled'] %></Enable>
+            <Temporary><%= @session_persist['temporary'] %></Temporary>
+            <PoolSize><%= @session_persist['pool_size'] %></PoolSize>
             <SessionDataCleanUp>
-                <Enable>true</Enable>
-                <CleanUpTimeout>20160</CleanUpTimeout>
-                <CleanUpPeriod>1140</CleanUpPeriod>
+                <Enable><%= @session_cleanUp['enabled'] %></Enable>
+                <CleanUpTimeout><%= @session_cleanUp['timeout>'] %></CleanUpTimeout>
+                <CleanUpPeriod><%= @session_cleanUp['period>'] %></CleanUpPeriod>
             </SessionDataCleanUp>
             <OperationDataCleanUp>
-                <Enable>true</Enable>
-                <CleanUpPeriod>720</CleanUpPeriod>
+                <Enable><%= @operation_cleanUp['enabled'] %></Enable>
+                <CleanUpPeriod><%= @operation_cleanUp['period'] %></CleanUpPeriod>
             </OperationDataCleanUp>
         </SessionDataPersist>
 	</JDBCPersistenceManager>
