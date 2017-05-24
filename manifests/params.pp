@@ -79,7 +79,11 @@ class wso2is::params {
     $enable_secure_vault      = hiera('wso2::enable_secure_vault')
     $session_persist          = hiera('wso2::session_persist')
     $session_cleanUp          = hiera('wso2::session_cleanUp')
-    $operation_cleanUp       = hiera('wso2::operation_cleanUp')
+    $operation_cleanUp        = hiera('wso2::operation_cleanUp')
+    $openID                   = hiera('wso2::openID')
+    $time_config              = hiera('wso2::time_config')
+    $oAuth                    = hiera('oAuth')
+
 
 
     if $enable_secure_vault {
