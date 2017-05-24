@@ -34,8 +34,8 @@
             <PoolSize><%= @session_persist['pool_size'] %></PoolSize>
             <SessionDataCleanUp>
                 <Enable><%= @session_cleanUp['enabled'] %></Enable>
-                <CleanUpTimeout><%= @session_cleanUp['timeout>'] %></CleanUpTimeout>
-                <CleanUpPeriod><%= @session_cleanUp['period>'] %></CleanUpPeriod>
+                <CleanUpTimeout><%= @session_cleanUp['timeout'] %></CleanUpTimeout>
+                <CleanUpPeriod><%= @session_cleanUp['period'] %></CleanUpPeriod>
             </SessionDataCleanUp>
             <OperationDataCleanUp>
                 <Enable><%= @operation_cleanUp['enabled'] %></Enable>
@@ -46,8 +46,8 @@
 
 	<!-- Time configurations are in minutes -->
 	<TimeConfig>
-		<SessionIdleTimeout>15</SessionIdleTimeout>
-		<RememberMeTimeout>20160</RememberMeTimeout>
+		<SessionIdleTimeout><%= @time_config['session_idle_timeout'] %></SessionIdleTimeout>
+		<RememberMeTimeout><%= @time_config['remember_me_timeout'] %>20160</RememberMeTimeout>
 	</TimeConfig>
 
 	<!-- Security configurations -->
@@ -90,11 +90,12 @@
 		<OpenIDLoginUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/openid_login.do</OpenIDLoginUrl>
 
 		<!-- If the users must be prompted for approval -->
-		<OpenIDSkipUserConsent>false</OpenIDSkipUserConsent>
+
+		<OpenIDSkipUserConsent><%= @openID['skip_user_consent'] %></OpenIDSkipUserConsent>
 		<!-- Expiry time of the OpenID RememberMe token in minutes -->
-		<OpenIDRememberMeExpiry>7200</OpenIDRememberMeExpiry>
+		<OpenIDRememberMeExpiry><%= @openID['remember_me_expir'] %></OpenIDRememberMeExpiry>
 		<!-- To enable or disable openid dumb mode -->
-		<DisableOpenIDDumbMode>false</DisableOpenIDDumbMode>
+		<DisableOpenIDDumbMode><%= @openID['disable_dumbmode'] %></DisableOpenIDDumbMode>
 
 		<!--
                OpenID private association store is configurable from following configs.
@@ -111,7 +112,7 @@
 
 		<!-- The expiration time (in minutes) for the OpenID association -->
 		<!--
-        <OpenIDAssociationExpiryTime>15</OpenIDAssociationExpiryTime>
+        <OpenIDAssociationExpiryTime>15/OpenIDAssociationExpiryTime>
     -->
 
 		<!-- Configs specific to PrivateAssociationCryptoStore -->
@@ -124,18 +125,17 @@
 		<!-- This enable private association cleanup task which cleans expired private associations -->
 		<!--
         <EnableOpenIDAssociationCleanupTask>true</EnableOpenIDAssociationCleanupTask>
-    -->
+        -->
 		<!-- Time Period (in minutes) that cleanup task would run -->
-		<!--
-        <OpenIDAssociationCleanupPeriod>15</OpenIDAssociationCleanupPeriod>
+		<!--        <OpenIDAssociationCleanupPeriod>15</OpenIDAssociationCleanupPeriod>
     -->
 	</OpenID>
 
 	<OAuth>
-		<AppInfoCacheTimeout>-1</AppInfoCacheTimeout>
-		<AuthorizationGrantCacheTimeout>-1</AuthorizationGrantCacheTimeout>
-		<SessionDataCacheTimeout>-1</SessionDataCacheTimeout>
-		<ClaimCacheTimeout>-1</ClaimCacheTimeout>
+		<AppInfoCacheTimeout><%= @oAuth['app_info_cache_timeout'] %></AppInfoCacheTimeout>
+		<AuthorizationGrantCacheTimeout><%= @oAuth['auth_grant_cache_timeout'] %></AuthorizationGrantCacheTimeout>
+		<SessionDataCacheTimeout><%= @oAuth['session_data_cache_timeout'] %></SessionDataCacheTimeout>
+		<ClaimCacheTimeout><%= @oAuth['claim_cache_timeout'] %></ClaimCacheTimeout>
 
 		<!--
             Default values for OAuth1RequestTokenUrl, OAuth1AccessTokenUrl, OAuth1AuthorizeUrl
@@ -158,25 +158,25 @@
 		<OIDCLogoutPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_logout.do</OIDCLogoutPage>
 
 		<!-- Default validity period for Authorization Code in seconds -->
-		<AuthorizationCodeDefaultValidityPeriod>300</AuthorizationCodeDefaultValidityPeriod>
+		<AuthorizationCodeDefaultValidityPeriod><%= @oAuth['auth_code_default_validity_period'] %></AuthorizationCodeDefaultValidityPeriod>
 		<!-- Default validity period for application access tokens in seconds -->
-		<AccessTokenDefaultValidityPeriod>3600</AccessTokenDefaultValidityPeriod>
+		<AccessTokenDefaultValidityPeriod><%= @oAuth['access_token_default_validity_period'] %></AccessTokenDefaultValidityPeriod>
 		<!-- Default validity period for user access tokens in seconds -->
-		<UserAccessTokenDefaultValidityPeriod>3600</UserAccessTokenDefaultValidityPeriod>
+		<UserAccessTokenDefaultValidityPeriod><%= @oAuth['user_access_token_default_validity_period'] %></UserAccessTokenDefaultValidityPeriod>
 		<!-- Validity period for refresh token -->
-		<RefreshTokenValidityPeriod>84600</RefreshTokenValidityPeriod>
+		<RefreshTokenValidityPeriod><%= @oAuth['refresh_token_validity_period'] %></RefreshTokenValidityPeriod>
 		<!-- Timestamp skew in seconds -->
-		<TimestampSkew>300</TimestampSkew>
+		<TimestampSkew><%= @oAuth['time_stamp_skew'] %></TimestampSkew>
 		<!-- Enable OAuth caching -->
-		<EnableOAuthCache>true</EnableOAuthCache>
+		<EnableOAuthCache><%= @oAuth['enable_OAuth_cache'] %></EnableOAuthCache>
 		<!-- Enable renewal of refresh token for refresh_token grant -->
-		<RenewRefreshTokenForRefreshGrant>true</RenewRefreshTokenForRefreshGrant>
+		<RenewRefreshTokenForRefreshGrant><%= @oAuth['renew_refresh_token_for_refresh_grant'] %></RenewRefreshTokenForRefreshGrant>
 		<!-- Process the token before storing it in database, e.g. encrypting -->
 		<TokenPersistenceProcessor>org.wso2.carbon.identity.oauth.tokenprocessor.PlainTextPersistenceProcessor</TokenPersistenceProcessor>
 		<!-- Supported Client Authentication Methods -->
 		<ClientAuthHandlers>
 			<ClientAuthHandler Class="org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler">
-				<Property Name="StrictClientCredentialValidation">false</Property>
+				<Property Name="StrictClientCredentialValidation"><%= @oAuth['strict_client_credential_validation'] %></Property>
 			</ClientAuthHandler>
 		</ClientAuthHandlers>
 		<!-- Supported Response Types -->
@@ -233,26 +233,26 @@
         </TokenValidators-->
 		<!-- Assertions can be used to embedd parameters into access token. -->
 		<EnableAssertions>
-			<UserName>false</UserName>
+			<UserName><%= @oAuth['enable_assertions_UserName'] %></UserName>
 		</EnableAssertions>
 
 		<!-- This should be set to true when using multiple user stores and keys
             should saved into different tables according to the user store. By default
             all the application keys are saved in to the same table. UserName Assertion
             should be 'true' to use this. -->
-		<EnableAccessTokenPartitioning>false</EnableAccessTokenPartitioning>
+		<EnableAccessTokenPartitioning><%= @oAuth['enable_access_token_partitioning'] %></EnableAccessTokenPartitioning>
 		<!-- user store domain names and mapping to new table name. eg: if you
             provide 'A:foo.com', foo.com should be the user store domain name and 'A'
             represent the relavant mapping of token store table, i.e. tokens will be
             added to a table called IDN_OAUTH2_ACCESS_TOKEN_A. -->
 		<AccessTokenPartitioningDomains><!-- A:foo.com, B:bar.com --></AccessTokenPartitioningDomains>
 		<AuthorizationContextTokenGeneration>
-			<Enabled>false</Enabled>
+			<Enabled><%= @oAuth['auth_context_token_generation_enabled'] %></Enabled>
 			<TokenGeneratorImplClass>org.wso2.carbon.identity.oauth2.authcontext.JWTTokenGenerator</TokenGeneratorImplClass>
 			<ClaimsRetrieverImplClass>org.wso2.carbon.identity.oauth2.authcontext.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
 			<ConsumerDialectURI>http://wso2.org/claims</ConsumerDialectURI>
 			<SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm>
-			<AuthorizationContextTTL>15</AuthorizationContextTTL>
+			<AuthorizationContextTTL><%= @oAuth['auth_context_token_generation_TTL'] %></AuthorizationContextTTL>
 		</AuthorizationContextTokenGeneration>
 		<SAML2Grant>
 			<!--SAML2TokenHandler></SAML2TokenHandler-->
@@ -271,12 +271,12 @@
             -->
 			<IDTokenIssuerID>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</IDTokenIssuerID>
 			<IDTokenCustomClaimsCallBackHandler>org.wso2.carbon.identity.openidconnect.SAMLAssertionClaimsCallback</IDTokenCustomClaimsCallBackHandler>
-			<IDTokenExpiration>3600</IDTokenExpiration>
+			<IDTokenExpiration><%= @oAuth['id_token_expiration'] %></IDTokenExpiration>
 			<UserInfoEndpointClaimRetriever>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoUserStoreClaimRetriever</UserInfoEndpointClaimRetriever>
 			<UserInfoEndpointRequestValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInforRequestDefaultValidator</UserInfoEndpointRequestValidator>
 			<UserInfoEndpointAccessTokenValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoISAccessTokenValidator</UserInfoEndpointAccessTokenValidator>
 			<UserInfoEndpointResponseBuilder>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoJSONResponseBuilder</UserInfoEndpointResponseBuilder>
-			<SkipUserConsent>false</SkipUserConsent>
+			<SkipUserConsent><%= @oAuth['skip_user_consent'] %></SkipUserConsent>
 		</OpenIDConnect>
 	</OAuth>
 

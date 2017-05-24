@@ -251,6 +251,38 @@ class wso2is::params {
       period            => 720
     }
 
+    $openID       = {
+      skip_user_consent => 15,
+      remember_me_timeout  => 20160
+    }
+
+    $time_config       = {
+      session_idle_timeout => false,
+      remember_me_timeout  => 7200,
+      disable_dumbmode   => false
+    }
+
+
+    $oAuth      = {
+      app_info_cache_timeout => -1,
+      auth_grant_cache_timeout  => -1,
+      session_data_cache_timeout   => -1,
+      claim_cache_timeout   => -1,
+      auth_code_default_validity_period => 300,
+      access_token_default_validity_period => 3600,
+      user_access_token_default_validity_period   => 84600,
+      time_stamp_skew   => 300,
+      enable_OAuth_cache => false,
+      renew_refresh_token_for_refresh_grant => true,
+      strict_client_credential_validation   => false,
+      enable_assertions_UserName => false,
+      enable_access_token_partitioning => false,
+      auth_context_token_generation_enabled => false,
+      auth_context_token_generation_TTL => 15,
+      id_token_expiration => 3600,
+      skip_user_consent => 15
+    }
+
     $dep_sync                 = {
       enabled => false
     }
