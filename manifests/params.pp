@@ -82,7 +82,7 @@ class wso2is::params {
     $operation_cleanUp        = hiera('wso2::operation_cleanUp')
     $openID                   = hiera('wso2::openID')
     $time_config              = hiera('wso2::time_config')
-    $oAuth                    = hiera('oAuth')
+    $oAuth                    = hiera('wso2::oAuth')
 
 
 
@@ -265,7 +265,6 @@ class wso2is::params {
       remember_me_timeout  => 7200,
       disable_dumbmode   => false
     }
-
 
     $oAuth      = {
       app_info_cache_timeout => -1,
