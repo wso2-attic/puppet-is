@@ -72,10 +72,10 @@ wso2::clustering:
         hostname: 192.168.48.195
         port: 4000
 #JDBCPersistenceManager properties
-
 wso2::sessionDataPersist:
-  enabled:true
-  temporary:true
+  enabled: true
+  temporary: true
+
 
 # AWS membership scheme
 #   membership_scheme: aws
