@@ -268,7 +268,7 @@ wso2::metrics_datasources:
 #    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
 #    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-#JDBCPersistenceManager properties in identity.xml
+# Properties in identity.xml
 wso2::session_persist:
   enabled: true
   temporary: true
@@ -325,7 +325,6 @@ wso2::sso:
 wso2::passiveSTS:
   slo_host_name_verifi_enabled: true
 
-
 wso2::evenet_listeners:
   user_store_action_listener: true
   identity_mgt_event_listener: false
@@ -340,21 +339,21 @@ wso2::cache:
   appauth_framework_session_contex: false
   authentication_context_cache    : false
   appauth_framework_session_contex: false
-  authentication_request_cache    : false
-  app_info_cache                  : false
-  authorization_grant_cache       : false
-  oauth_cache                     : false
-  oauth_session_data_cache        : false
-  samalsso_participant_cache      : false
-  samalsso_session_index_cache    : false
-  samalsso_session_data_cache     : false
-  service_provider_cache          : true
-  provisioning_connector_cache    : true
-  provisioning_entity_cache       : false
+  authentication_request_cache : false
+  app_info_cache : false
+  authorization_grant_cache : false
+  oauth_cache : false
+  oauth_session_data_cache : false
+  samalsso_participant_cache : false
+  samalsso_session_index_cache : false
+  samalsso_session_data_cache : false
+  service_provider_cache: true
+  provisioning_connector_cache : true
+  provisioning_entity_cache : false
   service_provider_provisioning_connector_cache: false
-  idP_cache_byauth_property       : true
-  idp_cache_byhri                 : true
-  idp_cache_by_name               : true
+  idP_cache_byauth_property : true
+  idp_cache_byhri : true
+  idp_cache_by_name: true
 
 
 
