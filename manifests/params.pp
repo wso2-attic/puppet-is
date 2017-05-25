@@ -77,19 +77,19 @@ class wso2is::params {
 
     # identitly.xml configurations
 
-    $sso_authentication       = hiera('wso2::sso_authentication')
-    $user_management          = hiera('wso2::user_management')
-    $enable_secure_vault      = hiera('wso2::enable_secure_vault')
-    $session_persist          = hiera('wso2::session_persist')
-    $session_cleanUp          = hiera('wso2::session_cleanUp')
-    $operation_cleanUp        = hiera('wso2::operation_cleanUp')
-    $openID                   = hiera('wso2::openID')
-    $time_config              = hiera('wso2::time_config')
-    $oAuth                    = hiera('wso2::oAuth')
-    $sso                      = hiera('wso2::sso')
-    $passiveSTS               = hiera('wso2:: passiveSTS')
-    $evenet_listeners         = hiera('wso2::evenet_listeners')
-    $cache                    = hiera('wso2::cache')
+    $sso_authentication       = hiera('wso2::sso_authentication', undef)
+    $user_management          = hiera('wso2::user_management', undef)
+    $enable_secure_vault      = hiera('wso2::enable_secure_vault', undef)
+    $session_persist          = hiera('wso2::session_persist', undef)
+    $session_cleanUp          = hiera('wso2::session_cleanUp', undef)
+    $operation_cleanUp        = hiera('wso2::operation_cleanUp', undef)
+    $openID                   = hiera('wso2::openID', undef)
+    $time_config              = hiera('wso2::time_config', undef)
+    $oAuth                    = hiera('wso2::oAuth', undef)
+    $sso                      = hiera('wso2::sso', undef)
+    $passiveSTS               = hiera('wso2:: passiveSTS', undef)
+    $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
+    $cache                    = hiera('wso2::cache', undef)
 
 
 
