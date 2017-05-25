@@ -270,7 +270,10 @@ class wso2is::params {
 
     $time_config       = {
       session_idle_timeout => 15,
-      remember_me_timeout  => 20160,
+      remember_me_timeout  => 20160
+
+
+
     }
 
     $oAuth      = {
