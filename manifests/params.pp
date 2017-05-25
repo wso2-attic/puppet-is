@@ -304,11 +304,11 @@ class wso2is::params {
       single_logout_retry_interval   => 60000,
       sAMLresponse_validity_period=> 5,
       use_authenticated_user_domain_crypto => false,
-      SLOHost_name_verifi_enabled => true
+      slo_host_name_verifi_enabled => true
     }
 
     $passiveSTS      = {
-      SLOHost_name_verifi_enabled => true
+      slo_host_name_verifi_enabled => true
     }
 
     $evenet_listeners     = {

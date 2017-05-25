@@ -344,7 +344,7 @@
 		<IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/passivests</IdentityProviderURL>
 		<RetryURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/retry.do</RetryURL>
 		<TokenStoreClassName>org.wso2.carbon.identity.sts.passive.utils.NoPersistenceTokenStore</TokenStoreClassName>
-		<SLOHostNameVerificationEnabled><%= @passiveSTS['SLOHost_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
+		<SLOHostNameVerificationEnabled><%= @passiveSTS['slo_host_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
 	</PassiveSTS>
 
 	<EntitlementSettings>
