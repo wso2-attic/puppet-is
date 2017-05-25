@@ -284,13 +284,14 @@ wso2::operation_cleanUp:
   period: 720
 
 wso2::openID:
-  skip_user_consent: 15
-  remember_me_timeout: 20160
+  skip_user_consent: false
+  remember_me_timeout: 7200
+  disable_dumbmode   : false
 
 wso2::time_config:
-  session_idle_timeout : false,
-  remember_me_timeout  : 7200,
-  disable_dumbmode   : false
+  session_idle_timeout : 15,
+  remember_me_timeout  : 20160,
+
 
 wso2::oAuth:
   app_info_cache_timeout : -1
@@ -299,7 +300,8 @@ wso2::oAuth:
   claim_cache_timeout   : -1
   auth_code_default_validity_period : 300
   access_token_default_validity_period : 3600
-  user_access_token_default_validity_period   : 84600
+  user_access_token_default_validity_period : 3600,
+  refresh_token_validity_period : 84600,
   time_stamp_skew   : 300
   enable_OAuth_cache : false
   renew_refresh_token_for_refresh_grant : true
@@ -309,10 +311,7 @@ wso2::oAuth:
   auth_context_token_generation_enabled : false
   auth_context_token_generation_TTL : 15
   id_token_expiration : 3600
-  skip_user_consent : 15
-
-
-
+  openIDConnect_skip_user_consent: false
 
 
 # Secure vault configuration
