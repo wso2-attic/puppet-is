@@ -313,6 +313,17 @@ wso2::oAuth:
   id_token_expiration : 3600
   openIDConnect_skip_user_consent: false
 
+#wso2::sso:
+  #persistance_cache_timeout: 157680000
+  #session_index_timeout: 157680000
+  #single_logout_retry_count: 5
+  #single_logout_retry_interval: 60000
+  #sAMLresponse_validity_period: 5
+  #use_authenticated_user_domain_crypto: false
+  #slo_host_name_verifi_enabled: true
+
+
+
 
 # Secure vault configuration
 #wso2::enable_secure_vault: true
