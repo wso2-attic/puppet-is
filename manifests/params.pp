@@ -302,7 +302,6 @@ class wso2is::params {
       sAMLresponse_validity_period=> 5,
       use_authenticated_user_domain_crypto => false,
       SLOHost_name_verifi_enabled => true
-
     }
 
     $passiveSTS      = {
@@ -317,7 +316,7 @@ class wso2is::params {
       identity_store_event_listener => true,
       daslogin_data_publisher => false,
       dassession_data_publisher => false,
-      authn_data_publisher_proxy => true,
+      authn_data_publisher_proxy => true
     }
 
     $cache      = {
@@ -338,8 +337,7 @@ class wso2is::params {
       service_provider_provisioning_connector_cache => false,
       idP_cache_byauth_property                     => true,
       idp_cache_byhri                               => true,
-      idp_cache_by_name                             => true,
-
+      idp_cache_by_name                             => true
     }
 
 
