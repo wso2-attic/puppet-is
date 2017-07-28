@@ -35,9 +35,9 @@ wso2::template_list:
 #  - password-tmp
 
 # Puppet file list to be populated
-wso2::file_list:
-  - cipher-tool.properties
-  - cipher-text.properties
+#wso2::file_list:
+#  - repository/conf/security/cipher-tool.properties
+#  - repository/conf/security/cipher-text.properties
 
 # Provide the server list for setting up sso
 #wso2::sso_service_providers:
