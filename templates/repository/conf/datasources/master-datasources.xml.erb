@@ -34,7 +34,11 @@
                 <configuration>
                     <url><%= datasource['url'] %></url>
                     <username><%= datasource['username'] %></username>
+                    <% if @enable_secure_vault %>
+                    <password svns:secretAlias="Datasources.<%= datasource['name'] %>.Configuration.Password">password</password>
+                    <%- else -%>
                     <password><%= datasource['password'] %></password>
+                    <% end %>
                     <driverClassName><%= datasource['driver_class_name'] %></driverClassName>
                     <maxActive><%= datasource['max_active'] %></maxActive>
                     <maxWait><%= datasource['max_wait'] %></maxWait>
