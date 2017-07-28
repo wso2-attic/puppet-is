@@ -17,7 +17,11 @@
   ~  under the License.
   -->
         
+<% if @enable_secure_vault %>
+<UserManager xmlns:svns="http://org.wso2.securevault/configuration">
+<%- else -%>
 <UserManager>
+<% end %>
     <Realm>
         <Configuration>
 		<AddAdmin>true</AddAdmin>

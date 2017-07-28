@@ -23,7 +23,11 @@
     ${carbon.home} represents the carbon.home system property.
     Other system properties can be specified in a similar manner.
 -->
+<% if @enable_secure_vault %>
+<Server xmlns="http://wso2.org/projects/carbon/carbon.xml" xmlns:svns="http://org.wso2.securevault/configuration">
+<%- else -%>
 <Server xmlns="http://wso2.org/projects/carbon/carbon.xml">
+<% end %>
 
     <!--
        Product Name

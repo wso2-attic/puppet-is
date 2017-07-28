@@ -17,7 +17,11 @@
   ~  under the License.
   -->
 
+<% if @enable_secure_vault %>
+<Server xmlns:svns="http://org.wso2.securevault/configuration" port="8005" shutdown="SHUTDOWN">
+<%- else -%>
 <Server port="8005" shutdown="SHUTDOWN">
+<% end %>
 
     <Service className="org.wso2.carbon.tomcat.ext.service.ExtendedStandardService" name="Catalina">
 
