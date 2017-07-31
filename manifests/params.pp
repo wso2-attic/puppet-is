@@ -44,6 +44,7 @@ class wso2is::params {
     $directory_list           = hiera_array('wso2::directory_list', undef)
     $cert_list                = hiera_hash('wso2::cert_list', undef)
     $hosts_mapping            = hiera_hash('wso2::hosts_mapping')
+    $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
@@ -76,10 +77,6 @@ class wso2is::params {
     $sso_authentication       = hiera('wso2::sso_authentication')
     $user_management          = hiera('wso2::user_management')
     $enable_secure_vault      = hiera('wso2::enable_secure_vault')
-
-    if $enable_secure_vault {
-      $secure_vault_configs   = hiera('wso2::secure_vault_configs')
-    }
 
     $key_stores               = hiera('wso2::key_stores')
 
@@ -290,7 +287,7 @@ class wso2is::params {
   }
 
   $product_name               = 'wso2is'
-  $product_version            = '5.1.0'
+  $product_version            = '5.3.0'
   $platform_version           = '4.4.0'
   $carbon_home                = "${install_dir}/${product_name}-${product_version}"
   $pack_file_abs_path         = "${pack_dir}/${pack_filename}"
