@@ -48,8 +48,12 @@ wso2::template_list:
 #     http: 80
 #     https: 443
 
-#wso2::file_list:
-#  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
+# Puppet file list to be populated
+wso2::file_list:
+  - repository/conf/security/cipher-tool.properties
+  - repository/conf/security/cipher-text.properties
+  - repository/conf/security/secret-conf.properties
+  - password-tmp
 
 wso2::clustering:
   enabled: false
