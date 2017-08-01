@@ -54,6 +54,7 @@ class wso2is (
   $service_template       = $wso2is::params::service_template,
   $ipaddress              = $wso2is::params::ipaddress,
   $enable_secure_vault    = $wso2is::params::enable_secure_vault,
+  $secure_vault_configs   = $wso2is::params::secure_vault_configs,
   $key_stores             = $wso2is::params::key_stores,
   $carbon_home            = $wso2is::params::carbon_home,
   $pack_file_abs_path     = $wso2is::params::pack_file_abs_path,
@@ -134,6 +135,7 @@ class wso2is (
     service_template       => $service_template,
     ipaddress              => $ipaddress,
     enable_secure_vault    => $enable_secure_vault,
+    secure_vault_configs   => $secure_vault_configs,
     key_stores             => $key_stores,
     carbon_home            => $carbon_home,
     pack_file_abs_path     => $pack_file_abs_path
