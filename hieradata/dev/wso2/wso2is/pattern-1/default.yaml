@@ -54,11 +54,11 @@ wso2::template_list:
 #     https: 443
 
 # Puppet file list to be populated
-wso2::file_list:
-  - repository/conf/security/cipher-tool.properties
-  - repository/conf/security/cipher-text.properties
-  - repository/conf/security/secret-conf.properties
-  - password-tmp
+# wso2::file_list:
+#  - repository/conf/security/cipher-tool.properties
+#  - repository/conf/security/cipher-text.properties
+#  - repository/conf/security/secret-conf.properties
+#  - password-tmp
 
 wso2::clustering:
   enabled: false
