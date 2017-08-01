@@ -32,10 +32,6 @@ wso2::template_list:
 #  - bin/ciphertool.sh
 #  - password-tmp
 
-#wso2::file_list:
-#  - repository/conf/security/cipher-tool.properties
-#  - repository/conf/security/cipher-text.properties
-
 # Provide the server list for setting up sso
 #wso2::sso_service_providers:
 #    wso2esb:
