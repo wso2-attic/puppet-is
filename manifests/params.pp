@@ -90,9 +90,6 @@ class wso2is::params {
     $passiveSTS               = hiera('wso2:: passiveSTS', undef)
     $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
     $cache                    = hiera('wso2::cache', undef)
-
-
-
     $key_stores               = hiera('wso2::key_stores')
 
   } else {
@@ -267,9 +264,6 @@ class wso2is::params {
     $time_config       = {
       session_idle_timeout => 15,
       remember_me_timeout  => 20160
-
-
-
     }
 
     $oAuth      = {
@@ -338,23 +332,6 @@ class wso2is::params {
       idp_cache_byhri                               => true,
       idp_cache_by_name                             => true
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     $dep_sync                 = {
       enabled => false
     }
