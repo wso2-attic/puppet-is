@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 ~
 ~ Licensed under the Apache License, Version 2.0 (the "License");
 ~ you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 ~ See the License for the specific language governing permissions and
 ~ limitations under the License.
  -->
+
 <ApplicationAuthentication xmlns="http://wso2.org/projects/carbon/application-authentication.xml">
 
 	<!--
@@ -45,6 +46,7 @@
 		<HomeRealmDiscoverer>org.wso2.carbon.identity.application.authentication.framework.handler.hrd.impl.DefaultHomeRealmDiscoverer</HomeRealmDiscoverer>
 		<ClaimHandler>org.wso2.carbon.identity.application.authentication.framework.handler.claims.impl.DefaultClaimHandler</ClaimHandler>
 		<ProvisioningHandler>org.wso2.carbon.identity.application.authentication.framework.handler.provisioning.impl.DefaultProvisioningHandler</ProvisioningHandler>
+		<AuthorizationHandler>org.wso2.carbon.identity.application.authz.xacml.handler.impl.XACMLBasedAuthorizationHandler</AuthorizationHandler>
 	</Extensions>
 
 	<!--
@@ -54,25 +56,25 @@
 		authenticator in place of an authenticator that gets packed with the
 		distribution.
 	-->
-    <AuthenticatorNameMappings>
-        <AuthenticatorNameMapping name="BasicAuthenticator" alias="basic" />
-        <AuthenticatorNameMapping name="OAuthRequestPathAuthenticator" alias="oauth-bearer" />
-        <AuthenticatorNameMapping name="BasicAuthRequestPathAuthenticator" alias="basic-auth" />
-        <AuthenticatorNameMapping name="IWAAuthenticator" alias="iwa" />
-        <AuthenticatorNameMapping name="SAMLSSOAuthenticator" alias="samlsso" />
-        <AuthenticatorNameMapping name="OpenIDConnectAuthenticator" alias="openidconnect" />
-        <AuthenticatorNameMapping name="OpenIDAuthenticator" alias="openid" />
-        <AuthenticatorNameMapping name="PassiveSTSAuthenticator" alias="passive-sts" />
-    </AuthenticatorNameMappings>
+	<AuthenticatorNameMappings>
+		<AuthenticatorNameMapping name="BasicAuthenticator" alias="basic" />
+		<AuthenticatorNameMapping name="OAuthRequestPathAuthenticator" alias="oauth-bearer" />
+		<AuthenticatorNameMapping name="BasicAuthRequestPathAuthenticator" alias="basic-auth" />
+		<AuthenticatorNameMapping name="IWAAuthenticator" alias="iwa" />
+		<AuthenticatorNameMapping name="SAMLSSOAuthenticator" alias="samlsso" />
+		<AuthenticatorNameMapping name="OpenIDConnectAuthenticator" alias="openidconnect" />
+		<AuthenticatorNameMapping name="OpenIDAuthenticator" alias="openid" />
+		<AuthenticatorNameMapping name="PassiveSTSAuthenticator" alias="passive-sts" />
+	</AuthenticatorNameMappings>
 
-    <!--
-		AuthenticatorConfigs allow specifying various configurations needed
-		by the authenticators by using any number of \'Parameter\' elements
-		E.g.
-		<AuthenticatorConfig name="CustomAuthenticator" enabled="true" />
-			<Parameter name="paramName1">paramValue</Parameter>
-			<Parameter name="paramName2">paramValue</Parameter>
-		</AuthenticatorConfig>
+	<!--
+        AuthenticatorConfigs allow specifying various configurations needed
+        by the authenticators by using any number of \'Parameter\' elements
+        E.g.
+        <AuthenticatorConfig name="CustomAuthenticator" enabled="true" />
+            <Parameter name="paramName1">paramValue</Parameter>
+            <Parameter name="paramName2">paramValue</Parameter>
+        </AuthenticatorConfig>
     -->
 	<AuthenticatorConfigs>
 		<AuthenticatorConfig name="BasicAuthenticator" enabled="true">
@@ -81,7 +83,7 @@
 		</AuthenticatorConfig>
 		<AuthenticatorConfig name="OAuthRequestPathAuthenticator" enabled="true" />
 		<AuthenticatorConfig name="BasicAuthRequestPathAuthenticator" enabled="true" />
- 		<AuthenticatorConfig name="SAMLSSOAuthenticator" enabled="true">
+		<AuthenticatorConfig name="SAMLSSOAuthenticator" enabled="true">
 			<!--Parameter name="SignAuth2SAMLUsingSuperTenant">true</Parameter-->
 			<!--Parameter name="SAML2SSOManager">org.wso2.carbon.identity.application.authenticator.samlsso.manager.DefaultSAML2SSOManager</Parameter-->
 		</AuthenticatorConfig>
@@ -91,8 +93,8 @@
 		</AuthenticatorConfig>
 		<AuthenticatorConfig name="OpenIDAuthenticator" enabled="true">
 			<Parameter name="LoginPage">/authenticationendpoint/login.do</Parameter>
-			<Parameter name="TrustStorePath">/<%= @key_stores['trust_store']['location'] %></Parameter>
-			<Parameter name="TrustStorePassword"><%= @key_stores['trust_store']['password'] %></Parameter>
+			<Parameter name="TrustStorePath">/repository/resources/security/client-truststore.jks</Parameter>
+			<Parameter name="TrustStorePassword">wso2carbon</Parameter>
 			<!--Parameter name="OpenIDManager">org.wso2.carbon.identity.application.authenticator.openid.manager.DefaultOpenIDManager</Parameter>
 			<Parameter name="AttributesRequestor">org.wso2.carbon.identity.application.authenticator.openid.manager.SampleAttributesRequestor</Parameter-->
 		</AuthenticatorConfig>
@@ -119,13 +121,41 @@
 			<Parameter name="YahooOAuthzEndpoint">https://api.login.yahoo.com/oauth2/request_auth</Parameter>
 			<Parameter name="YahooUserInfoEndpoint">https://social.yahooapis.com/v1/user/</Parameter>
 		</AuthenticatorConfig>
+		<AuthenticatorConfig name="MobileConnectAuthenticator" enabled="true">
+			<Parameter name="MobileConnectKey">mobileConnectClientId</Parameter>
+			<Parameter name="MobileConnectSecret">mobileConnectClientSecret</Parameter>
+		</AuthenticatorConfig>
+		<AuthenticatorConfig name="EmailOTP" enabled="true">
+			<Parameter name="GmailClientId">gmailClientIdValue</Parameter>
+			<Parameter name="GmailClientSecret">gmailClientSecretValue</Parameter>
+			<Parameter name="SendgridAPIKey">sendgridAPIKeyValue</Parameter>
+			<Parameter name="GmailRefreshToken">gmailRefreshTokenValue</Parameter>
+			<Parameter name="GmailEmailEndpoint">https://www.googleapis.com/gmail/v1/users/[userId]/messages/send</Parameter>
+			<Parameter name="SendgridEmailEndpoint">https://api.sendgrid.com/api/mail.send.json</Parameter>
+			<Parameter name="accessTokenRequiredAPIs">Gmail</Parameter>
+			<Parameter name="apiKeyHeaderRequiredAPIs">Sendgrid</Parameter>
+			<Parameter name="SendgridFormData">sendgridFormDataValue</Parameter>
+			<Parameter name="SendgridURLParams">sendgridURLParamsValue</Parameter>
+			<Parameter name="GmailAuthTokenType">Bearer</Parameter>
+			<Parameter name="GmailTokenEndpoint">https://www.googleapis.com/oauth2/v3/token</Parameter>
+			<Parameter name="SendgridAuthTokenType">Bearer</Parameter>
+		</AuthenticatorConfig>
+		<AuthenticatorConfig name="x509CertificateAuthenticator" enabled="true">
+			<Parameter name="AuthenticationEndpoint">https://localhost:8443/x509-certificate-servlet</Parameter>
+		</AuthenticatorConfig>
+		<AuthenticatorConfig name="totp" enabled="true">
+			<Parameter name="encodingMethod">Base32</Parameter>
+			<Parameter name="timeStepSize">30</Parameter>
+			<Parameter name="windowSize">3</Parameter>
+			<Parameter name="enableTOTP">false</Parameter>
+		</AuthenticatorConfig>
 	</AuthenticatorConfigs>
 
-    <!--
-		Sequences allow specifying authentication flows for different
-		registered applications. \'default\' sequence is taken if an
-		application specific sequence doesn't exist in this file or
-		in the Application Mgt module.
+	<!--
+        Sequences allow specifying authentication flows for different
+        registered applications. \'default\' sequence is taken if an
+        application specific sequence doesn't exist in this file or
+        in the Application Mgt module.
     -->
 	<Sequences>
 		<!-- Default Sequence. This is mandatory -->
@@ -147,15 +177,15 @@
         	'sessionDataKey', 'type', 'relyingParty', 'sp' and 'authenticators'
         	parameters will be always sent. They should not be specified here.
     	-->
-    	<AuthenticationEndpointQueryParams action="exclude">
-        	<AuthenticationEndpointQueryParam name="username"/>
-        	<AuthenticationEndpointQueryParam name="password"/>
-            <AuthenticationEndpointQueryParam name="SAMLRequest"/>
-        </AuthenticationEndpointQueryParams>
+	<AuthenticationEndpointQueryParams action="exclude">
+		<AuthenticationEndpointQueryParam name="username"/>
+		<AuthenticationEndpointQueryParam name="password"/>
+		<AuthenticationEndpointQueryParam name="SAMLRequest"/>
+	</AuthenticationEndpointQueryParams>
 
-	    <!--TenantDomainDropDownEnabled>true</TenantDomainDropDownEnabled>
-	    <TenantDataListenerURLs>
-		  <TenantDataListenerURL>/authenticationendpoint/tenantlistrefresher.do</TenantDataListenerURL>
-	    </TenantDataListenerURLs-->
+	<!--TenantDomainDropDownEnabled>true</TenantDomainDropDownEnabled>
+    <TenantDataListenerURLs>
+      <TenantDataListenerURL>/authenticationendpoint/tenantlistrefresher.do</TenantDataListenerURL>
+    </TenantDataListenerURLs-->
 
 </ApplicationAuthentication>
