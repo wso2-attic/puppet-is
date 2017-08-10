@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
- Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
+  ~  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
+  ~
+  ~  WSO2 Inc. licenses this file to you under the Apache License,
+  ~  Version 2.0 (the "License"); you may not use this file except
+  ~  in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
 
 <!--
     This is the main server configuration file
@@ -21,7 +23,11 @@
     ${carbon.home} represents the carbon.home system property.
     Other system properties can be specified in a similar manner.
 -->
+<% if @enable_secure_vault %>
+<Server xmlns="http://wso2.org/projects/carbon/carbon.xml" xmlns:svns="http://org.wso2.securevault/configuration">
+<%- else -%>
 <Server xmlns="http://wso2.org/projects/carbon/carbon.xml">
+<% end %>
 
     <!--
        Product Name
@@ -36,7 +42,7 @@
     <!--
        Product Version
     -->
-    <Version>5.3.0-beta</Version>
+    <Version>5.3.0</Version>
 
     <!--
        Host name or IP address of the machine hosting this server
@@ -67,10 +73,10 @@
     <!--
     <ServerURL>https://localhost:${carbon.management.port}${carbon.context}/services/</ServerURL>
     -->
-    <!--
-    The URL of the index page. This is where the user will be redirected after signing in to the
-    carbon server.
-    -->
+     <!--
+     The URL of the index page. This is where the user will be redirected after signing in to the
+     carbon server.
+     -->
     <!-- IndexPageURL>/carbon/admin/index.jsp</IndexPageURL-->
 
     <!--
@@ -155,20 +161,20 @@
             <KDCServerPort>8000</KDCServerPort>
         </EmbeddedLDAP>
 
-        <!--
-                 Override datasources JNDIproviderPort defined in bps.xml and datasources.properties files
-        -->
-        <!--<JNDIProviderPort>2199</JNDIProviderPort>-->
-        <!--Override receive port of thrift based entitlement service.-->
-        <ThriftEntitlementReceivePort>10500</ThriftEntitlementReceivePort>
+	<!--
+             Override datasources JNDIproviderPort defined in bps.xml and datasources.properties files
+	-->
+	<!--<JNDIProviderPort>2199</JNDIProviderPort>-->
+	<!--Override receive port of thrift based entitlement service.-->
+	<ThriftEntitlementReceivePort>10500</ThriftEntitlementReceivePort>
 
-        <!--
-         This is the proxy port of the worker cluster. These need to be configured in a scenario where
-         manager node is not exposed through the load balancer through which the workers are exposed
-         therefore doesn't have a proxy port.
-        <WorkerHttpProxyPort>80</WorkerHttpProxyPort>
-        <WorkerHttpsProxyPort>443</WorkerHttpsProxyPort>
-        -->
+    <!--
+     This is the proxy port of the worker cluster. These need to be configured in a scenario where
+     manager node is not exposed through the load balancer through which the workers are exposed
+     therefore doesn't have a proxy port.
+    <WorkerHttpProxyPort>80</WorkerHttpProxyPort>
+    <WorkerHttpsProxyPort>443</WorkerHttpsProxyPort>
+    -->
 
     </Ports>
 
@@ -337,9 +343,9 @@
         <!-- If this parameter is set, the ?wsdl on an admin service will not give the admin service wsdl. -->
         <HideAdminServiceWSDLs>true</HideAdminServiceWSDLs>
 
-        <!--WARNING-Use With Care! Uncommenting bellow parameter would expose all AdminServices in HTTP transport.
-        With HTTP transport your credentials and data routed in public channels are vulnerable for sniffing attacks.
-        Use bellow parameter ONLY if your communication channels are confirmed to be secured by other means -->
+	<!--WARNING-Use With Care! Uncommenting bellow parameter would expose all AdminServices in HTTP transport.
+	With HTTP transport your credentials and data routed in public channels are vulnerable for sniffing attacks.
+	Use bellow parameter ONLY if your communication channels are confirmed to be secured by other means -->
         <!--HttpAdminServices>*</HttpAdminServices-->
 
     </Axis2Config>
@@ -378,11 +384,19 @@
             <!-- Keystore type (JKS/PKCS12 etc.)-->
             <Type><%= @key_stores['key_store']['type'] %></Type>
             <!-- Keystore password-->
+            <% if @enable_secure_vault %>
+            <Password svns:secretAlias="Carbon.Security.KeyStore.Password">password</Password>
+            <%- else -%>
             <Password><%= @key_stores['key_store']['password'] %></Password>
+            <% end %>
             <!-- Private Key alias-->
             <KeyAlias><%= @key_stores['key_store']['key_alias'] %></KeyAlias>
             <!-- Private Key password-->
+            <% if @enable_secure_vault %>
+            <KeyPassword svns:secretAlias="Carbon.Security.KeyStore.KeyPassword">password</KeyPassword>
+            <%- else -%>
             <KeyPassword><%= @key_stores['key_store']['key_password'] %></KeyPassword>
+            <% end %>
         </KeyStore>
 
         <!--
@@ -395,7 +409,11 @@
             <!-- trust-store type (JKS/PKCS12 etc.) -->
             <Type><%= @key_stores['trust_store']['type'] %></Type>
             <!-- trust-store password -->
+            <% if @enable_secure_vault %>
+            <Password svns:secretAlias="Carbon.Security.TrustStore.Password">password</Password>
+            <%- else -%>
             <Password><%= @key_stores['trust_store']['password'] %></Password>
+            <% end %>
         </TrustStore>
 
         <!--
@@ -410,21 +428,21 @@
                 exceptions at runtime.
             -->
             <!-- <Credential> -->
-            <!--
-                the pattern that would match a subset of URLs for which this authenticator
-                would be used
-            -->
-            <!-- <Pattern>regularExpression</Pattern> -->
-            <!--
-                the type of this authenticator. Allowed values are:
-                1. server
-                2. proxy
-            -->
-            <!-- <Type>proxy</Type> -->
-            <!-- the username used to log in to server/proxy -->
-            <!-- <Username>username</Username> -->
-            <!-- the password used to log in to server/proxy -->
-            <!-- <Password>password</Password> -->
+                <!--
+                    the pattern that would match a subset of URLs for which this authenticator
+                    would be used
+                -->
+                <!-- <Pattern>regularExpression</Pattern> -->
+                <!--
+                    the type of this authenticator. Allowed values are:
+                    1. server
+                    2. proxy
+                -->
+                <!-- <Type>proxy</Type> -->
+                <!-- the username used to log in to server/proxy -->
+                <!-- <Username>username</Username> -->
+                <!-- the password used to log in to server/proxy -->
+                <!-- <Password>password</Password> -->
             <!-- </Credential> -->
         </NetworkAuthenticatorConfig>
 
@@ -439,28 +457,34 @@
         -->
         <TomcatRealm>UserManager</TomcatRealm>
 
-        <!--Option to disable storing of tokens issued by STS-->
-        <DisableTokenStore>false</DisableTokenStore>
+	<!--Option to disable storing of tokens issued by STS-->
+	<DisableTokenStore>false</DisableTokenStore>
 
-        <STSCallBackHandlerName>org.wso2.carbon.identity.provider.AttributeCallbackHandler</STSCallBackHandlerName>
+	<!--
+	 Security token store class name. If this is not set, default class will be
+	 org.wso2.carbon.security.util.SecurityTokenStore
+	-->
+	<TokenStoreClassName>org.wso2.carbon.identity.sts.store.DBTokenStore</TokenStoreClassName>
 
-        <!--
-         Security token store class name. If this is not set, default class will be
-         org.wso2.carbon.security.util.SecurityTokenStore
-        -->
-        <TokenStoreClassName>org.wso2.carbon.identity.sts.store.DBTokenStore</TokenStoreClassName>
 
-        <XSSPreventionConfig>
+
+        <!-- Configurations to avoid Cross Site Request Forgery vulnerabilities -->
+        <CSRFPreventionConfig>
+            <!-- CSRFPreventionFilter configurations that adopts Synchronizer Token Pattern -->
+            <CSRFPreventionFilter>
+                <!-- Set below to true to enable the CSRFPreventionFilter -->
+                <Enabled>false</Enabled>
+                <!-- Url Pattern to skip application of CSRF protection-->
+                <SkipUrlPattern>(.*)(/images|/css|/js|/docs)(.*)</SkipUrlPattern>
+            </CSRFPreventionFilter>
+        </CSRFPreventionConfig>
+
+        <!-- Configuration to enable or disable CR and LF sanitization filter-->
+        <CRLFPreventionConfig>
+            <!--Set below to true to enable the CRLFPreventionFilter-->
             <Enabled>true</Enabled>
-            <Rule>allow</Rule>
-            <Patterns>
-                <!--Pattern></Pattern-->
-            </Patterns>
-        </XSSPreventionConfig>
+        </CRLFPreventionConfig>
     </Security>
-    <HideMenuItemIds>
-        <HideMenuItemId>identity_mgt_emailtemplate_menu</HideMenuItemId>
-    </HideMenuItemIds>
 
     <!--
        The temporary work directory
@@ -577,7 +601,7 @@
         </Processor>
     </HttpGetRequestProcessors>
 
-    <!-- Deployment Synchronizer Configuration. Enable value to true when running with "svn based" dep sync.
+    <!-- Deployment Synchronizer Configuration. t Enabled value to true when running with "svn based" dep sync.
 	In master nodes you need to set both AutoCommit and AutoCheckout to true
 	and in  worker nodes set only AutoCheckout to true.
     -->
@@ -668,30 +692,30 @@
        Default Feature Repository of WSO2 Carbon.
     -->
     <FeatureRepository>
-        <RepositoryName>default repository</RepositoryName>
-        <RepositoryURL>http://product-dist.wso2.com/p2/carbon/releases/wilkes/</RepositoryURL>
+	    <RepositoryName>default repository</RepositoryName>
+	    <RepositoryURL>http://product-dist.wso2.com/p2/carbon/releases/wilkes/</RepositoryURL>
     </FeatureRepository>
 
     <!--
 	Configure API Management
    -->
-    <APIManagement>
+   <APIManagement>
 
-        <!--Uses the embedded API Manager by default. If you want to use an external
-        API Manager instance to manage APIs, configure below  externalAPIManager-->
+	<!--Uses the embedded API Manager by default. If you want to use an external
+	API Manager instance to manage APIs, configure below  externalAPIManager-->
 
-        <Enabled>true</Enabled>
+	<Enabled>true</Enabled>
 
-        <!--Uncomment and configure API Gateway and
-        Publisher URLs to use external API Manager instance-->
+	<!--Uncomment and configure API Gateway and
+	Publisher URLs to use external API Manager instance-->
 
-        <!--ExternalAPIManager>
+	<!--ExternalAPIManager>
 
-            <APIGatewayURL>http://localhost:8281</APIGatewayURL>
-            <APIPublisherURL>http://localhost:8281/publisher</APIPublisherURL>
+		<APIGatewayURL>http://localhost:8281</APIGatewayURL>
+		<APIPublisherURL>http://localhost:8281/publisher</APIPublisherURL>
 
-        </ExternalAPIManager-->
+	</ExternalAPIManager-->
 
-        <LoadAPIContextsInServerStartup>true</LoadAPIContextsInServerStartup>
-    </APIManagement>
+	<LoadAPIContextsInServerStartup>true</LoadAPIContextsInServerStartup>
+   </APIManagement>
 </Server>

@@ -18,16 +18,16 @@ Follow the steps mentioned in the [wiki](https://github.com/wso2/puppet-base/wik
 
 Copy the following files to their corresponding locations.
 
-1. WSO2 Identity Server distribution (5.1.0) to `<PUPPET_HOME>/modules/wso2is/files`
+1. WSO2 Identity Server distribution (5.3.0) to `<PUPPET_HOME>/modules/wso2is/files`
 2. JDK 1.7_80 distribution to `<PUPPET_HOME>/modules/wso2base/files`
 
-Note: For wso2is_km puppet module use WSO2 Identity Server 5.1.0 distribution which has API Key Manager feature installed on it. If you are using the pre-packaged [WSO2 Identity Server 5.1.0 Key Manager pack](http://product-dist.wso2.com/downloads/api-manager/1.10.0/identity-server/wso2is-5.1.0.zip) with Secure Vault enabled, extract the product zip file, remove `authenticationendpoint` folder in `CARBON_HOME/repository/deployment/server/webapps`, compress the pack and then copy it to `<PUPPET_HOME>/modules/wso2is_km/files`. For more details, refer step 4 under `Running  WSO2 Identity Server Key Manager with Secure Vault`.
+Note: For wso2is_km puppet module use WSO2 Identity Server 5.3.0 distribution which has API Key Manager feature installed on it. If you are using the pre-packaged [WSO2 Identity Server 5.3.0 Key Manager pack](http://product-dist.wso2.com/downloads/api-manager/1.10.0/identity-server/wso2is-5.3.0.zip) with Secure Vault enabled, extract the product zip file, remove `authenticationendpoint` folder in `CARBON_HOME/repository/deployment/server/webapps`, compress the pack and then copy it to `<PUPPET_HOME>/modules/wso2is_km/files`. For more details, refer step 4 under `Running  WSO2 Identity Server Key Manager with Secure Vault`.
 
 ## Running WSO2 Identity Server in the `default` profile
 No changes to Hiera data are required to run the `default` profile.  Copy the above mentioned files to their corresponding locations and apply the Puppet Modules.
 
 ## Running WSO2 Identity Server with clustering in specific profiles
-No changes to Hiera data are required to run the distributed deployment of WSO2 Identity Server, other than pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Identity Server 5.1.0](https://docs.wso2.com/display/CLUSTER44x/Clustering+Identity+Server+5.1.0) and [WSO2 Identity Server 5.0.0](https://docs.wso2.com/display/CLUSTER420/Clustering+Identity+Server) clustering guides.
+No changes to Hiera data are required to run the distributed deployment of WSO2 Identity Server, other than pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Identity Server 5.3.0](https://docs.wso2.com/display/CLUSTER44x/Clustering+Identity+Server+5.3.0) and [WSO2 Identity Server 5.0.0](https://docs.wso2.com/display/CLUSTER420/Clustering+Identity+Server) clustering guides.
 
 1. If the Clustering Membership Scheme is `WKA`, add the Well Known Address list.
 
@@ -165,7 +165,7 @@ Uncomment and modify the below changes in Hiera file to apply Secure Vault.
 
     Please add the `password-tmp` template also to `template_list` if the `vm_type` is not `docker` when you are running the server in `default` platform.
 
-4. For IS 5.1.0, encrypting KeyStore and TrustStore passwords in `EndpointConfig.properties` using Cipher Tool fails to deploy `authenticationendpoint` web app. This is due to a class loading issue as reported in [JIRA: IDENTITY-4276](https://wso2.org/jira/browse/IDENTITY-4276). To fix this follow the below steps:
+4. For IS 5.3.0, encrypting KeyStore and TrustStore passwords in `EndpointConfig.properties` using Cipher Tool fails to deploy `authenticationendpoint` web app. This is due to a class loading issue as reported in [JIRA: IDENTITY-4276](https://wso2.org/jira/browse/IDENTITY-4276). To fix this follow the below steps:
    - get the `authenticationendpoint.war` in CARBON_HOME/repository/deployment/server/webapps folder, remove the `org.wso2.securevault-1.0.0-wso2v2.jar` from webapp's WEB_INF/lib folder and add it to `files/configs/repository/deployment/server` folder
    - Add the `authenticationendpoint.war` file path to `file_list` in default.yaml file
 

@@ -93,10 +93,6 @@ class wso2is::params {
 
 
 
-    if $enable_secure_vault {
-      $secure_vault_configs   = hiera('wso2::secure_vault_configs')
-    }
-
     $key_stores               = hiera('wso2::key_stores')
 
   } else {
