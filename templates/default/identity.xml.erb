@@ -1,19 +1,19 @@
 <%
-   #  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
-   #
-   #  WSO2 Inc. licenses this file to you under the Apache License,
-   #  Version 2.0 (the "License"); you may not use this file except
-   #  in compliance with the License.
-   #  You may obtain a copy of the License at
-   #
-   #    http://www.apache.org/licenses/LICENSE-2.0
-   #
-   #  Unless required by applicable law or agreed to in writing,
-   #  software distributed under the License is distributed on an
-   #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-   #  KIND, either express or implied.  See the License for the
-   #  specific language governing permissions and limitations
-   #  under the License.
+  #  Copyright (c) 2016, WSO2 Inc. (http://wso2.com) All Rights Reserved.
+  #
+  #  WSO2 Inc. licenses this file to you under the Apache License,
+  #  Version 2.0 (the "License"); you may not use this file except
+  #  in compliance with the License.
+  #  You may obtain a copy of the License at
+  #
+  #    http://www.apache.org/licenses/LICENSE-2.0
+  #
+  #  Unless required by applicable law or agreed to in writing,
+  #  software distributed under the License is distributed on an
+  #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  #  KIND, either express or implied.  See the License for the
+  #  specific language governing permissions and limitations
+  #  under the License.
 %>
 
 <Server xmlns="http://wso2.org/projects/carbon/carbon.xml">
@@ -25,22 +25,30 @@
 			<Name><%= @master_datasources[@is_datasource]['jndi_config'] %></Name>
 		</DataSource>
 		<!-- If the identity database is created from another place and if it is
-			required to skip schema initialization during the server start up, set the
-			following property to "true". -->
+            required to skip schema initialization during the server start up, set the
+            following property to "true". -->
 		<!-- <SkipDBSchemaCreation>false</SkipDBSchemaCreation> -->
-        <!--SessionDataPersist>
-            <Enable>true</Enable>
-            <EnableCleanUp>true</EnableCleanUp>
-            <Temporary>false</Temporary-->
-        <!--/SessionDataPersist-->
+		<SessionDataPersist>
+            <Enable><%= @session_persist['enabled'] %></Enable>
+            <Temporary><%= @session_persist['temporary'] %></Temporary>
+            <PoolSize><%= @session_persist['pool_size'] %></PoolSize>
+            <SessionDataCleanUp>
+                <Enable><%= @session_cleanUp['enabled'] %></Enable>
+                <CleanUpTimeout><%= @session_cleanUp['timeout'] %></CleanUpTimeout>
+                <CleanUpPeriod><%= @session_cleanUp['period'] %></CleanUpPeriod>
+            </SessionDataCleanUp>
+            <OperationDataCleanUp>
+                <Enable><%= @operation_cleanUp['enabled'] %></Enable>
+                <CleanUpPeriod><%= @operation_cleanUp['period'] %></CleanUpPeriod>
+            </OperationDataCleanUp>
+        </SessionDataPersist>
 	</JDBCPersistenceManager>
 
-    <TimeConfig>
-        <SessionIdleTimeout>120</SessionIdleTimeout><!-- Minutes -->
-        <RememberMeTimeout>20160</RememberMeTimeout><!-- Minutes -->
-        <PersistanceCleanUpTimeout>20160</PersistanceCleanUpTimeout><!-- Minutes -->
-        <PersistanceCleanUpPeriod>1140</PersistanceCleanUpPeriod><!-- Minutes -->
-    </TimeConfig>
+	<!-- Time configurations are in minutes -->
+	<TimeConfig>
+		<SessionIdleTimeout><%= @time_config['session_idle_timeout'] %></SessionIdleTimeout>
+		<RememberMeTimeout><%= @time_config['remember_me_timeout'] %>20160</RememberMeTimeout>
+	</TimeConfig>
 
 	<!-- Security configurations -->
 	<Security>
@@ -56,6 +64,8 @@
 
 		<!-- The directory under which all other KeyStore files will be stored -->
 		<KeyStoresDir>${carbon.home}/conf/keystores</KeyStoresDir>
+		<KeyManagerType>SunX509</KeyManagerType>
+		<TrustManagerType>SunX509</TrustManagerType>
 	</Security>
 
 	<Identity>
@@ -70,140 +80,209 @@
 	</Identity>
 
 	<OpenID>
-		<OpenIDServerUrl>https://localhost:9443/openidserver</OpenIDServerUrl>
-		<OpenIDUserPattern>https://localhost:9443/openid/</OpenIDUserPattern>
+		<!--
+            Default values for OpenIDServerUrl and OpenIDUSerPattern are built in following format
+            https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/<context>
+            If above format doesn't satisfy uncomment the following configs and explicitly configure the values
+         -->
+		<OpenIDServerUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/openidserver</OpenIDServerUrl>
+		<OpenIDUserPattern>${carbon.protocol}://${carbon.host}:${carbon.management.port}/openid</OpenIDUserPattern>
+		<OpenIDLoginUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/openid_login.do</OpenIDLoginUrl>
+
 		<!-- If the users must be prompted for approval -->
-		<OpenIDSkipUserConsent>false</OpenIDSkipUserConsent>
+
+		<OpenIDSkipUserConsent><%= @openID['skip_user_consent'] %></OpenIDSkipUserConsent>
 		<!-- Expiry time of the OpenID RememberMe token in minutes -->
-		<OpenIDRememberMeExpiry>7200</OpenIDRememberMeExpiry>
-		<!-- Multifactor Authentication configuration -->
-	        <UseMultifactorAuthentication>false</UseMultifactorAuthentication>
-        	<!-- To enable or disable openid dumb mode -->
-        	<DisableOpenIDDumbMode>false</DisableOpenIDDumbMode>
-		<!-- remember me session timeout in seconds -->
-		<SessionTimeout>36000</SessionTimeout>
-		<!-- skips authentication if valid SAML2 Web SSO browser session available -->
-		<AcceptSAMLSSOLogin>false</AcceptSAMLSSOLogin>
-		<ClaimsRetrieverImplClass>org.wso2.carbon.identity.provider.openid.claims.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
+		<OpenIDRememberMeExpiry><%= @openID['remember_me_expir'] %></OpenIDRememberMeExpiry>
+		<!-- To enable or disable openid dumb mode -->
+		<DisableOpenIDDumbMode><%= @openID['disable_dumbmode'] %></DisableOpenIDDumbMode>
+
+		<!--
+               OpenID private association store is configurable from following configs.
+               It includes two new replication stores,
+                       i.   OpenIDServerAssociationStore (Default association store)
+                       ii.  PrivateAssociationCryptoStore
+                       iii. PrivateAssociationReplicationStore
+        -->
+
+		<!-- Specify full qualified class name of the class which going to use as private association store -->
+		<!--
+        <OpenIDPrivateAssociationStoreClass>org.wso2.carbon.identity.provider.openid.PrivateAssociationCryptoStore</OpenIDPrivateAssociationStoreClass>
+    -->
+
+		<!-- The expiration time (in minutes) for the OpenID association -->
+		<!--
+        <OpenIDAssociationExpiryTime>15/OpenIDAssociationExpiryTime>
+    -->
+
+		<!-- Configs specific to PrivateAssociationCryptoStore -->
+		<!-- Server secret. This value should be the same in all nodes in the cluster -->
+		<!--
+        <OpenIDPrivateAssociationServerKey>qewlj324lmasc</OpenIDPrivateAssociationServerKey>
+    -->
+
+		<!-- Configs specific to PrivateAssociationCryptoStore -->
+		<!-- This enable private association cleanup task which cleans expired private associations -->
+		<!--
+        <EnableOpenIDAssociationCleanupTask>true</EnableOpenIDAssociationCleanupTask>
+        -->
+		<!-- Time Period (in minutes) that cleanup task would run -->
+		<!--        <OpenIDAssociationCleanupPeriod>15</OpenIDAssociationCleanupPeriod>
+    -->
 	</OpenID>
 
 	<OAuth>
-        <AppInfoCacheTimeout>-1</AppInfoCacheTimeout>
-        <AuthorizationGrantCacheTimeout>-1</AuthorizationGrantCacheTimeout>
-        <SessionDataCacheTimeout>-1</SessionDataCacheTimeout>
-        <ClaimCacheTimeout>-1</ClaimCacheTimeout>
-		<RequestTokenUrl>https://localhost:9443/oauth/request-token</RequestTokenUrl>
-		<AccessTokenUrl>https://localhost:9443/oauth/access-token</AccessTokenUrl>
-		<AuthorizeUrl>https://localhost:9443/oauth/authorize-url</AuthorizeUrl>
+		<AppInfoCacheTimeout><%= @oAuth['app_info_cache_timeout'] %></AppInfoCacheTimeout>
+		<AuthorizationGrantCacheTimeout><%= @oAuth['auth_grant_cache_timeout'] %></AuthorizationGrantCacheTimeout>
+		<SessionDataCacheTimeout><%= @oAuth['session_data_cache_timeout'] %></SessionDataCacheTimeout>
+		<ClaimCacheTimeout><%= @oAuth['claim_cache_timeout'] %></ClaimCacheTimeout>
+
+		<!--
+            Default values for OAuth1RequestTokenUrl, OAuth1AccessTokenUrl, OAuth1AuthorizeUrl
+            OAuth2AuthzEPUrl, OAuth2TokenEPUrl and OAuth2UserInfoEPUrl are built in following format
+            https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/<context>/<path>
+            If above format doesn't satisfy uncomment the following configs and explicitly configure the values
+         -->
+		<OAuth1RequestTokenUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth/request-token</OAuth1RequestTokenUrl>
+		<OAuth1AuthorizeUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth/authorize-url</OAuth1AuthorizeUrl>
+		<OAuth1AccessTokenUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth/access-token</OAuth1AccessTokenUrl>
+		<OAuth2AuthzEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/authorize</OAuth2AuthzEPUrl>
+		<OAuth2TokenEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</OAuth2TokenEPUrl>
+		<OAuth2UserInfoEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/userinfo</OAuth2UserInfoEPUrl>
+		<OIDCCheckSessionEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oidc/checksession</OIDCCheckSessionEPUrl>
+		<OIDCLogoutEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oidc/logout</OIDCLogoutEPUrl>
+		<OAuth2ConsentPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_authz.do</OAuth2ConsentPage>
+		<OAuth2ErrorPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_error.do</OAuth2ErrorPage>
+		<OIDCConsentPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_consent.do</OIDCConsentPage>
+		<OIDCLogoutConsentPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_logout_consent.do</OIDCLogoutConsentPage>
+		<OIDCLogoutPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_logout.do</OIDCLogoutPage>
+
 		<!-- Default validity period for Authorization Code in seconds -->
-		<AuthorizationCodeDefaultValidityPeriod>300</AuthorizationCodeDefaultValidityPeriod>
+		<AuthorizationCodeDefaultValidityPeriod><%= @oAuth['auth_code_default_validity_period'] %></AuthorizationCodeDefaultValidityPeriod>
 		<!-- Default validity period for application access tokens in seconds -->
-		<AccessTokenDefaultValidityPeriod>3600</AccessTokenDefaultValidityPeriod>
+		<AccessTokenDefaultValidityPeriod><%= @oAuth['access_token_default_validity_period'] %></AccessTokenDefaultValidityPeriod>
 		<!-- Default validity period for user access tokens in seconds -->
-		<UserAccessTokenDefaultValidityPeriod>3600</UserAccessTokenDefaultValidityPeriod>
+		<UserAccessTokenDefaultValidityPeriod><%= @oAuth['user_access_token_default_validity_period'] %></UserAccessTokenDefaultValidityPeriod>
 		<!-- Validity period for refresh token -->
-		<RefreshTokenValidityPeriod>84600</RefreshTokenValidityPeriod>
+		<RefreshTokenValidityPeriod><%= @oAuth['refresh_token_validity_period'] %></RefreshTokenValidityPeriod>
 		<!-- Timestamp skew in seconds -->
-		<TimestampSkew>300</TimestampSkew>
+		<TimestampSkew><%= @oAuth['time_stamp_skew'] %></TimestampSkew>
 		<!-- Enable OAuth caching -->
-		<EnableOAuthCache>true</EnableOAuthCache>
+		<EnableOAuthCache><%= @oAuth['enable_OAuth_cache'] %></EnableOAuthCache>
 		<!-- Enable renewal of refresh token for refresh_token grant -->
-		<RenewRefreshTokenForRefreshGrant>true</RenewRefreshTokenForRefreshGrant>
+		<RenewRefreshTokenForRefreshGrant><%= @oAuth['renew_refresh_token_for_refresh_grant'] %></RenewRefreshTokenForRefreshGrant>
 		<!-- Process the token before storing it in database, e.g. encrypting -->
 		<TokenPersistenceProcessor>org.wso2.carbon.identity.oauth.tokenprocessor.PlainTextPersistenceProcessor</TokenPersistenceProcessor>
-		<!-- Supported Client Autnetication Methods -->
-        <ClientAuthHandlers>
-            <ClientAuthHandler Class="org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler">
-                <Property Name="StrictClientCredentialValidation">false</Property>
-            </ClientAuthHandler>
-        </ClientAuthHandlers>
+		<!-- Supported Client Authentication Methods -->
+		<ClientAuthHandlers>
+			<ClientAuthHandler Class="org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler">
+				<Property Name="StrictClientCredentialValidation"><%= @oAuth['strict_client_credential_validation'] %></Property>
+			</ClientAuthHandler>
+		</ClientAuthHandlers>
 		<!-- Supported Response Types -->
 		<SupportedResponseTypes>
-		    <SupportedResponseType>
-		    	<ResponseTypeName>token</ResponseTypeName>
-			<ResponseTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.authz.handlers.TokenResponseTypeHandler</ResponseTypeHandlerImplClass>
-		    </SupportedResponseType>
-		    <SupportedResponseType>
-		    	<ResponseTypeName>code</ResponseTypeName>
-			<ResponseTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.authz.handlers.CodeResponseTypeHandler</ResponseTypeHandlerImplClass>
-		    </SupportedResponseType>
+			<SupportedResponseType>
+				<ResponseTypeName>token</ResponseTypeName>
+				<ResponseTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.authz.handlers.TokenResponseTypeHandler</ResponseTypeHandlerImplClass>
+			</SupportedResponseType>
+			<SupportedResponseType>
+				<ResponseTypeName>code</ResponseTypeName>
+				<ResponseTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.authz.handlers.CodeResponseTypeHandler</ResponseTypeHandlerImplClass>
+			</SupportedResponseType>
+			<SupportedResponseType>
+				<ResponseTypeName>id_token</ResponseTypeName>
+				<ResponseTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.authz.handlers.TokenResponseTypeHandler</ResponseTypeHandlerImplClass>
+			</SupportedResponseType>
+			<SupportedResponseType>
+				<ResponseTypeName>id_token token</ResponseTypeName>
+				<ResponseTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.authz.handlers.TokenResponseTypeHandler</ResponseTypeHandlerImplClass>
+			</SupportedResponseType>
 		</SupportedResponseTypes>
 		<!-- Supported Grant Types -->
 		<SupportedGrantTypes>
-		    <SupportedGrantType>
-		    	<GrantTypeName>authorization_code</GrantTypeName>
-			<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.AuthorizationCodeGrantHandler</GrantTypeHandlerImplClass>
-		    </SupportedGrantType>
-		    <SupportedGrantType>
-		    	<GrantTypeName>password</GrantTypeName>
-			<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.PasswordGrantHandler</GrantTypeHandlerImplClass>
-		    </SupportedGrantType>
-		    <SupportedGrantType>
-		    	<GrantTypeName>refresh_token</GrantTypeName>
-			<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.RefreshGrantHandler</GrantTypeHandlerImplClass>
-		    </SupportedGrantType>
-		    <SupportedGrantType>
-		    	<GrantTypeName>client_credentials</GrantTypeName>
-			<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.ClientCredentialsGrantHandler</GrantTypeHandlerImplClass>
-		    </SupportedGrantType>
-		    <SupportedGrantType>
-		    	<GrantTypeName>urn:ietf:params:oauth:grant-type:saml2-bearer</GrantTypeName>
-			<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.saml.SAML2BearerGrantHandler</GrantTypeHandlerImplClass>
-		    </SupportedGrantType>
-		    <SupportedGrantType>
-                        <GrantTypeName>iwa:ntlm</GrantTypeName>
-                        <GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.iwa.ntlm.NTLMAuthenticationGrantHandler</GrantTypeHandlerImplClass>
-                    </SupportedGrantType>
+			<SupportedGrantType>
+				<GrantTypeName>authorization_code</GrantTypeName>
+				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.AuthorizationCodeGrantHandler</GrantTypeHandlerImplClass>
+			</SupportedGrantType>
+			<SupportedGrantType>
+				<GrantTypeName>password</GrantTypeName>
+				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.PasswordGrantHandler</GrantTypeHandlerImplClass>
+			</SupportedGrantType>
+			<SupportedGrantType>
+				<GrantTypeName>refresh_token</GrantTypeName>
+				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.RefreshGrantHandler</GrantTypeHandlerImplClass>
+			</SupportedGrantType>
+			<SupportedGrantType>
+				<GrantTypeName>client_credentials</GrantTypeName>
+				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.ClientCredentialsGrantHandler</GrantTypeHandlerImplClass>
+			</SupportedGrantType>
+			<SupportedGrantType>
+				<GrantTypeName>urn:ietf:params:oauth:grant-type:saml2-bearer</GrantTypeName>
+				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.saml.SAML2BearerGrantHandler</GrantTypeHandlerImplClass>
+			</SupportedGrantType>
+			<SupportedGrantType>
+				<GrantTypeName>iwa:ntlm</GrantTypeName>
+				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.iwa.ntlm.NTLMAuthenticationGrantHandler</GrantTypeHandlerImplClass>
+			</SupportedGrantType>
 		</SupportedGrantTypes>
 		<OAuthCallbackHandlers>
-			<OAuthCallbackHandler Class="org.wso2.carbon.identity.oauth.callback.DefaultCallbackHandler" />
+			<OAuthCallbackHandler Class="org.wso2.carbon.identity.oauth.callback.DefaultCallbackHandler"/>
 		</OAuthCallbackHandlers>
 		<!--TokenValidators>
-			<TokenValidator type="bearer" class="org.wso2.carbon.identity.oauth2.validators.DefaultOAuth2TokenValidator"/>
-		</TokenValidators-->
+            <TokenValidator type="bearer" class="org.wso2.carbon.identity.oauth2.validators.DefaultOAuth2TokenValidator"/>
+        </TokenValidators-->
 		<!-- Assertions can be used to embedd parameters into access token. -->
 		<EnableAssertions>
-			<UserName>false</UserName>
+			<UserName><%= @oAuth['enable_assertions_UserName'] %></UserName>
 		</EnableAssertions>
 
 		<!-- This should be set to true when using multiple user stores and keys
-			should saved into different tables according to the user store. By default
-			all the application keys are saved in to the same table. UserName Assertion
-			should be 'true' to use this. -->
-		<EnableAccessTokenPartitioning>false</EnableAccessTokenPartitioning>
+            should saved into different tables according to the user store. By default
+            all the application keys are saved in to the same table. UserName Assertion
+            should be 'true' to use this. -->
+		<EnableAccessTokenPartitioning><%= @oAuth['enable_access_token_partitioning'] %></EnableAccessTokenPartitioning>
 		<!-- user store domain names and mapping to new table name. eg: if you
-			provide 'A:foo.com', foo.com should be the user store domain name and 'A'
-			represent the relavant mapping of token store table, i.e. tokens will be
-			added to a table called IDN_OAUTH2_ACCESS_TOKEN_A. -->
-		<AccessTokenPartitioningDomains><!-- A:foo.com, B:bar.com -->
-		</AccessTokenPartitioningDomains>
+            provide 'A:foo.com', foo.com should be the user store domain name and 'A'
+            represent the relavant mapping of token store table, i.e. tokens will be
+            added to a table called IDN_OAUTH2_ACCESS_TOKEN_A. -->
+		<AccessTokenPartitioningDomains><!-- A:foo.com, B:bar.com --></AccessTokenPartitioningDomains>
 		<AuthorizationContextTokenGeneration>
-			<Enabled>false</Enabled>
+			<Enabled><%= @oAuth['auth_context_token_generation_enabled'] %></Enabled>
 			<TokenGeneratorImplClass>org.wso2.carbon.identity.oauth2.authcontext.JWTTokenGenerator</TokenGeneratorImplClass>
 			<ClaimsRetrieverImplClass>org.wso2.carbon.identity.oauth2.authcontext.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
 			<ConsumerDialectURI>http://wso2.org/claims</ConsumerDialectURI>
 			<SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm>
-			<AuthorizationContextTTL>15</AuthorizationContextTTL>
+			<AuthorizationContextTTL><%= @oAuth['auth_context_token_generation_TTL'] %></AuthorizationContextTTL>
 		</AuthorizationContextTokenGeneration>
 		<SAML2Grant>
 			<!--SAML2TokenHandler></SAML2TokenHandler-->
 		</SAML2Grant>
-                <OpenIDConnect>
-                         <IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
-                         <IDTokenIssuerID>https://localhost:9443/oauth2endpoints/token</IDTokenIssuerID>
-                         <IDTokenSubjectClaim>http://wso2.org/claims/givenname</IDTokenSubjectClaim>
-                         <IDTokenCustomClaimsCallBackHandler>org.wso2.carbon.identity.openidconnect.SAMLAssertionClaimsCallback</IDTokenCustomClaimsCallBackHandler>
-                         <IDTokenExpiration>3600</IDTokenExpiration>
-                         <UserInfoEndpointClaimDialect>http://wso2.org/claims</UserInfoEndpointClaimDialect>
-                         <UserInfoEndpointClaimRetriever>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoUserStoreClaimRetriever</UserInfoEndpointClaimRetriever>
-                         <UserInfoEndpointRequestValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInforRequestDefaultValidator</UserInfoEndpointRequestValidator>
-                         <UserInfoEndpointAccessTokenValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoISAccessTokenValidator</UserInfoEndpointAccessTokenValidator>
-                         <UserInfoEndpointResponseBuilder>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoJSONResponseBuilder</UserInfoEndpointResponseBuilder>
-                         <SkipUserConsent>false</SkipUserConsent>
-                </OpenIDConnect>
+		<OpenIDConnect>
+			<IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
+            <IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
+             <SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm
+			<!-- Comment out to add Audience values to the JWT token (id_token)  -->
+			<!--Audiences>
+                   <Audience>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</Audience>
+            </Audiences -->
+
+			<!--
+                Default value for IDTokenIssuerID, is OAuth2TokenEPUrl.
+                If that doesn't satisfy uncomment the following config and explicitly configure the value
+            -->
+			<IDTokenIssuerID>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</IDTokenIssuerID>
+			<IDTokenCustomClaimsCallBackHandler>org.wso2.carbon.identity.openidconnect.SAMLAssertionClaimsCallback</IDTokenCustomClaimsCallBackHandler>
+			<IDTokenExpiration><%= @oAuth['id_token_expiration'] %></IDTokenExpiration>
+			<UserInfoEndpointClaimRetriever>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoUserStoreClaimRetriever</UserInfoEndpointClaimRetriever>
+			<UserInfoEndpointRequestValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInforRequestDefaultValidator</UserInfoEndpointRequestValidator>
+			<UserInfoEndpointAccessTokenValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoISAccessTokenValidator</UserInfoEndpointAccessTokenValidator>
+			<UserInfoEndpointResponseBuilder>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoJSONResponseBuilder</UserInfoEndpointResponseBuilder>
+			<SkipUserConsent><%= @oAuth['openIDConnect_skip_user_consent'] %></SkipUserConsent>
+		</OpenIDConnect>
 	</OAuth>
 
 	<MultifactorAuthentication>
+		<!--Enable>false</Enable-->
 		<XMPPSettings>
 			<XMPPConfig>
 				<XMPPProvider>gtalk</XMPPProvider>
@@ -217,47 +296,60 @@
 	</MultifactorAuthentication>
 
 	<SSOService>
-        <PersistanceCacheTimeout>157680000</PersistanceCacheTimeout>
-        <SessionIndexCacheTimeout>157680000</SessionIndexCacheTimeout>
-		<EntityId>localhost</EntityId>
-		<%- if @ports['proxyPort'] and @ports['proxyPort']['https'] -%>
-		<IdentityProviderURL>https://<%= @hostname %>:<%= @ports['proxyPort']['https'] %>/samlsso</IdentityProviderURL>
-		<%- else -%>
-		<IdentityProviderURL>https://<%= @hostname %>:9443/samlsso</IdentityProviderURL>
-		<%- end -%>
-		<SingleLogoutRetryCount>5</SingleLogoutRetryCount>
-		<SingleLogoutRetryInterval>60000</SingleLogoutRetryInterval> <!-- in milli seconds -->
-		<TenantPartitioningEnabled>false</TenantPartitioningEnabled>
-		<SessionTimeout>36000</SessionTimeout> <!-- remember me session timeout in seconds -->
-		<!-- skips authentication if valid SAML2 Web SSO browser session available -->
-		<AttributeStatementBuilder>org.wso2.carbon.identity.sso.saml.attributes.UserAttributeStatementBuilder</AttributeStatementBuilder>
-                <AttributesClaimDialect>http://wso2.org/claims</AttributesClaimDialect>
-		<AcceptOpenIDLogin>false</AcceptOpenIDLogin>
-		<ClaimsRetrieverImplClass>org.wso2.carbon.identity.sso.saml.builders.claims.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
-		<SAMLSSOAssertionBuilder>org.wso2.carbon.identity.sso.saml.builders.assertion.DefaultSAMLAssertionBuilder</SAMLSSOAssertionBuilder>
+		<PersistanceCacheTimeout><%= @sso['persistance_cache_timeout'] %></PersistanceCacheTimeout>
+		<SessionIndexCacheTimeout><%= @sso['session_index_timeout'] %></SessionIndexCacheTimeout>
+		<EntityId>${carbon.host}</EntityId>
+		<!--
+            Default value for IdentityProviderURL is  built in following format
+            https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/samlsso
+            If that doesn't satisfy uncomment the following config and explicitly configure the value
+        -->
+		<IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/samlsso</IdentityProviderURL>
+		<DefaultLogoutEndpoint>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/samlsso_logout.do</DefaultLogoutEndpoint>
+		<NotificationEndpoint>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/samlsso_notification.do</NotificationEndpoint>
+		<SingleLogoutRetryCount><%= @sso['single_logout_retry_count'] %></SingleLogoutRetryCount>
+		<SingleLogoutRetryInterval><%= @sso['single_logout_retry_interval'] %></SingleLogoutRetryInterval>
+		<!-- in milli seconds -->
+		<TenantPartitioningEnabled><%= @sso['tenant_partitioning_enabled'] %></TenantPartitioningEnabled>
+		<AttributesClaimDialect>http://wso2.org/claims</AttributesClaimDialect>
+		<SAMLSSOAssertionBuilder>org.wso2.carbon.identity.sso.saml.builders.assertion.ExtendedDefaultAssertionBuilder</SAMLSSOAssertionBuilder>
 		<SAMLSSOEncrypter>org.wso2.carbon.identity.sso.saml.builders.encryption.DefaultSSOEncrypter</SAMLSSOEncrypter>
-                <SAMLSSOSigner>org.wso2.carbon.identity.sso.saml.builders.signature.DefaultSSOSigner</SAMLSSOSigner>
-                <SAML2HTTPRedirectSignatureValidator>org.wso2.carbon.identity.sso.saml.validators.SAML2HTTPRedirectDeflateSignatureValidator</SAML2HTTPRedirectSignatureValidator>
-                <!--SAMLSSOResponseBuilder>org.wso2.carbon.identity.sso.saml.builders.DefaultResponseBuilder</SAMLSSOResponseBuilder-->
+		<SAMLSSOSigner>org.wso2.carbon.identity.sso.saml.builders.signature.DefaultSSOSigner</SAMLSSOSigner>
+		<SAML2HTTPRedirectSignatureValidator>org.wso2.carbon.identity.sso.saml.validators.SAML2HTTPRedirectDeflateSignatureValidator</SAML2HTTPRedirectSignatureValidator>
+		<!--SAMLSSOResponseBuilder>org.wso2.carbon.identity.sso.saml.builders.DefaultResponseBuilder</SAMLSSOResponseBuilder-->
 
 		<!-- SAML Token validity period in minutes -->
-                <SAMLResponseValidityPeriod>5</SAMLResponseValidityPeriod>
-                <UseAuthenticatedUserDomainCrypto>false</UseAuthenticatedUserDomainCrypto>
+		<SAMLResponseValidityPeriod><%= @sso['sAMLresponse_validity_period'] %></SAMLResponseValidityPeriod>
+		<UseAuthenticatedUserDomainCrypto><%= @sso['use_authenticated_user_domain_crypto'] %></UseAuthenticatedUserDomainCrypto>
+		<SAMLDefaultSigningAlgorithmURI>http://www.w3.org/2000/09/xmldsig#rsa-sha1</SAMLDefaultSigningAlgorithmURI>
+		<SAMLDefaultDigestAlgorithmURI>http://www.w3.org/2000/09/xmldsig#sha1</SAMLDefaultDigestAlgorithmURI>
+		<SLOHostNameVerificationEnabled><%= @sso['SLOHost_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
 	</SSOService>
 
+	<SecurityTokenService>
+		<!--
+            Default value for IdentityProviderURL is  built in following format
+            https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/services/wso2carbon-sts
+            If that doesn't satisfy uncomment the following config and explicitly configure the value
+        -->
+		<IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/services/wso2carbon-sts</IdentityProviderURL>
+	</SecurityTokenService>
+
+	<PassiveSTS>
+		<!--
+            Default value for IdentityProviderURL is  built in following format
+            https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/passivests
+            If that doesn't satisfy uncomment the following config and explicitly configure the value
+        -->
+		<IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/passivests</IdentityProviderURL>
+		<RetryURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/retry.do</RetryURL>
+		<TokenStoreClassName>org.wso2.carbon.identity.sts.passive.utils.NoPersistenceTokenStore</TokenStoreClassName>
+		<SLOHostNameVerificationEnabled><%= @passiveSTS['slo_host_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
+	</PassiveSTS>
+
 	<EntitlementSettings>
-		<!-- Uncomment this to enable on-demand policy loading -->
-		<!--OnDemandPolicyLoading> <Enable>true</Enable> <MaxInMemoryPolicies>100</MaxInMemoryPolicies>
-			</OnDemandPolicyLoading -->
-		<DecisionCaching>
-			<Enable>true</Enable>
-			<CachingInterval>36000</CachingInterval>
-		</DecisionCaching>
-		<AttributeCaching>
-			<Enable>true</Enable>
-		</AttributeCaching>
 		<ThirftBasedEntitlementConfig>
-            		<EnableThriftService><%= @enable_thrift_service %></EnableThriftService>
+            		<EnableThriftService>false</EnableThriftService>
 			<ReceivePort>${Ports.ThriftEntitlementReceivePort}</ReceivePort>
 			<ClientTimeout>10000</ClientTimeout>
 			<KeyStore>
@@ -265,24 +357,179 @@
 				<Password><%= @key_stores['key_store']['password'] %></Password>
 			</KeyStore>
 			<!-- Enable this element to mention the host-name of your IS machine -->
-			<ThriftHostName>localhost</ThriftHostName>
+			<ThriftHostName>${carbon.host}</ThriftHostName>
 		</ThirftBasedEntitlementConfig>
 	</EntitlementSettings>
 
-	<SCIMAuthenticators>
-		<Authenticator class="org.wso2.carbon.identity.scim.provider.auth.BasicAuthHandler">
-			<Property name="Priority">5</Property>
-		</Authenticator>
-		<Authenticator class="org.wso2.carbon.identity.scim.provider.auth.OAuthHandler">
-			<Property name="Priority">10</Property>
-			<Property name="AuthorizationServer">local://services</Property>
-			<!--Property name="AuthorizationServer">https://localhost:9443/services</Property>
-			<Property name="UserName">admin</Property>
-			<Property name="Password">admin</Property-->
-		</Authenticator>
-	</SCIMAuthenticators>
+	<SCIM>
+		<!--
+            Default value for UserEPUrl and GroupEPUrl are built in following format
+            https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/<context>/<path>
+            If that doesn't satisfy uncomment the following config and explicitly configure the value
+        -->
+		<UserEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/wso2/scim/Users</UserEPUrl>
+		<GroupEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/wso2/scim/Groups</GroupEPUrl>
+		<SCIMAuthenticators>
+			<Authenticator class="org.wso2.carbon.identity.scim.provider.auth.BasicAuthHandler">
+				<Property name="Priority">5</Property>
+			</Authenticator>
+			<Authenticator class="org.wso2.carbon.identity.scim.provider.auth.OAuthHandler">
+				<Property name="Priority">10</Property>
+				<Property name="AuthorizationServer">local://services</Property>
+				<!--Property name="AuthorizationServer">${carbon.protocol}://${carbon.host}:${carbon.management.port}/services</Property>
+                <Property name="UserName">admin</Property>
+                <Property name="Password">admin</Property-->
+			</Authenticator>
+		</SCIMAuthenticators>
+	</SCIM>
+
+	<!--Recovery>
+        <Notification>
+            <Password>
+                <Enable>false</Enable>
+            </Password>
+            <Username>
+                <Enable>false</Enable>
+            </Username>
+            <InternallyManage>true</InternallyManage>
+        </Notification>
+        <Question>
+            <Password>
+                <Enable>false</Enable>
+                <NotifyStart>true</NotifyStart>
+                <Separator>!</Separator>
+                <MinAnswers>2</MinAnswers>
+                <ReCaptcha>
+                    <Enable>true</Enable>
+                    <MaxFailedAttempts>3</MaxFailedAttempts>
+                </ReCaptcha>
+            </Password>
+        </Question>
+        <ExpiryTime>3</ExpiryTime>
+        <NotifySuccess>true</NotifySuccess>
+        <AdminPasswordReset>
+            <Offline>false</Offline>
+            <OTP>false</OTP>
+            <RecoveryLink>false</RecoveryLink>
+        </AdminPasswordReset>
+    </Recovery>
+
+    <EmailVerification>
+        <Enable>false</Enable>
+        <LockOnCreation>false</LockOnCreation>
+        <Notification>
+            <InternallyManage>true</InternallyManage>
+        </Notification>
+    </EmailVerification>
+
+    <SelfRegistration>
+        <Enable>false</Enable>
+        <LockOnCreation>false</LockOnCreation>
+        <Notification>
+            <InternallyManage>true</InternallyManage>
+        </Notification>
+        <ReCaptcha>false</ReCaptcha>
+    </SelfRegistration-->
+
 	<!--SessionContextCache>
-		<Enable>true</Enable>
-		<Capacity>100000</Capacity>
-	</SessionContextCache-->
+        <Enable>true</Enable>
+        <Capacity>100000</Capacity>
+    </SessionContextCache-->
+
+	<EventListeners>
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+					   name="org.wso2.carbon.user.mgt.workflow.userstore.UserStoreActionListener"
+					   orderId="10" enable="<%= @evenet_listeners['user_store_action_listener'] %>"/>
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+					   name="org.wso2.carbon.identity.mgt.IdentityMgtEventListener"
+					   orderId="50" enable="<%= @evenet_listeners['identity_mgt_event_listener'] %>"/>
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
+					   orderId="95" enable="<%= @evenet_listeners['identity_governance_event_listener'] %>"/>
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+		               name="org.wso2.carbon.identity.scim.common.listener.SCIMUserOperationListener"
+					   orderId="90" enable="<%= @evenet_listeners['scimuser_operation_listener'] %>"/>
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+		               name="org.wso2.carbon.identity.governance.listener.IdentityStoreEventListener"
+					   orderId="97" enable="<%= @evenet_listeners['identity_store_event_listener'] %>">
+			<Property name="Data.Store">org.wso2.carbon.identity.governance.store.UserStoreBasedIdentityDataStore</Property>
+		</EventListener>
+		<EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
+					   name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASLoginDataPublisherImpl"
+					   orderId="10" enable="<%= @evenet_listeners['daslogin_data_publisher'] %>"/>
+		<EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
+					   name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASSessionDataPublisherImpl"
+					   orderId="11" enable="<%= @evenet_listeners['dassession_data_publisher'] %>"/>
+		<EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
+					   name="org.wso2.carbon.identity.data.publisher.application.authentication.AuthnDataPublisherProxy"
+					   orderId="11" enable="<%= @evenet_listeners['authn_data_publisher_proxy'] %>"/>
+	</EventListeners>
+
+    <CacheConfig>
+        <CacheManager name="IdentityApplicationManagementCacheManager">
+            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_contex']  %> " timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache']  %>"  timeout="1 capacity="5000" isDistributed="false"/>
+            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+
+            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+
+            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+
+            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+
+            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%= @cache['service_provider_provisioning_connector_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+         </CacheManager>
+    </CacheConfig>
+
+	<!--Cookies>
+        <Cookie name="commonAuthId" domain="localhost" httpOnly="true" secure="true" />
+    </Cookies-->
+
+
+	<ResourceAccessControl>
+		<Resource context="(.*)/api/identity/user/(.*)" secured="true" http-method="all"/>
+		<Resource context="(.*)/api/identity/recovery/(.*)" secured="true" http-method="all"/>
+		<Resource context="(.*)/identity/register/(.*)" secured="true" http-method="all">
+			<Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
+		</Resource>
+		<Resource context="(.*)/identity/connect/register/(.*)" secured="true" http-method="all">
+			<Permissions>/permission/admin/manage/identity/applicationmgt/create</Permissions>
+		</Resource>
+		<Resource context="(.*)/oauth2/introspect/(.*)" secured="true" http-method="all">
+			<Permissions>/permission/admin/manage/identity/applicationmgt/view</Permissions>
+		</Resource>
+		<Resource context="(.*)/api/identity/entitlement/(.*)" secured="true" http-method="all">
+			<Permissions>/permission/admin/manage/identity/pep</Permissions>
+		</Resource>
+	</ResourceAccessControl>
+
+	<ClientAppAuthentication>
+		<Application name="dashboard" hash="66cd9688a2ae068244ea01e70f0e230f5623b7fa4cdecb65070a09ec06452262"/>
+	</ClientAppAuthentication>
+
+	<TenantContextsToRewrite>
+		<WebApp>
+			<Context>/api/identity/user/v0.9</Context>
+			<Context>/api/identity/recovery/v0.9</Context>
+			<Context>/oauth2/introspect</Context>
+			<Context>/entitlement</Context>
+		</WebApp>
+		<Servlet>
+			<Context>/identity/(.*)</Context>
+		</Servlet>
+	</TenantContextsToRewrite>
+
+	<!-- Server Synchronization Tolerance Configuration in seconds -->
+	<ClockSkew>300</ClockSkew>
 </Server>
