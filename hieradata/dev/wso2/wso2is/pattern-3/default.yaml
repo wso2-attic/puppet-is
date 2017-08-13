@@ -336,7 +336,7 @@ wso2::evenet_listeners:
   authn_data_publisher_proxy: true
 
 wso2::cache:
-  appauth_framework_session_contex: false
+  appauth_framework_session_context: false
   authentication_context_cache    : false
   appauth_framework_session_contex: false
   authentication_request_cache : false

@@ -467,7 +467,7 @@
 
     <CacheConfig>
         <CacheManager name="IdentityApplicationManagementCacheManager">
-            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_contex'] %> " timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="1" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="1" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="1" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>

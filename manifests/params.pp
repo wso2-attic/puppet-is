@@ -313,9 +313,8 @@ class wso2is::params {
     }
 
     $cache      = {
-      appauth_framework_session_contex              => false,
+      appauth_framework_session_context             => false,
       authentication_context_cache                  => false,
-      appauth_framework_session_contex              => false,
       authentication_request_cache                  => false,
       app_info_cache                                => false,
       authorization_grant_cache                     => false,
