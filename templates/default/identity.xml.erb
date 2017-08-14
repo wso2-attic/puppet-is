@@ -260,7 +260,7 @@
 		<OpenIDConnect>
 			<IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
             <IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
-             <SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm
+             <SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm>
 			<!-- Comment out to add Audience values to the JWT token (id_token)  -->
 			<!--Audiences>
                    <Audience>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</Audience>
@@ -467,28 +467,24 @@
 
     <CacheConfig>
         <CacheManager name="IdentityApplicationManagementCacheManager">
-            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_contex']  %> " timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="1" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache']  %>"  timeout="1 capacity="5000" isDistributed="false"/>
-            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-
-            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-
-            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-
-            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-
-            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%= @cache['service_provider_provisioning_connector_cache']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri']  %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name']  %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%= @cache['service_provider_provisioning_connector_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name'] %>" timeout="1" capacity="5000" isDistributed="false"/>
          </CacheManager>
     </CacheConfig>
 
