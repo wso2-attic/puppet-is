@@ -233,7 +233,7 @@ wso2::metrics_datasources:
     url: jdbc:h2:repository/database/WSO2METRICS_DB;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
     username: "%{hiera('wso2::datasources::common::username')}"
     password: "%{hiera('wso2::datasources::common::password')}"
-    jndi_config: WSO2MetricsDB
+    jndi_config: jdbc/WSO2MetricsDB
     max_active: "%{hiera('wso2::datasources::common::max_active')}"
     max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
     test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
