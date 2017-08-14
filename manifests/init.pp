@@ -75,8 +75,6 @@ class wso2is (
   $fqdn                   = $wso2is::params::fqdn,
   $sso_authentication     = $wso2is::params::sso_authentication,
   $user_management        = $wso2is::params::user_management,
-  $session_cleanUp        = $wso2is::params::session_cleanUp,
-  $session_persist 	  = $wso2is::params::session_persist
 ) inherits wso2is::params {
 
   validate_hash($am_datasources)
@@ -104,9 +102,6 @@ class wso2is (
   validate_string($fqdn)
   validate_hash($sso_authentication)
   validate_hash($user_management)
-  validate_string($session_persist)
-  validate_string($session_cleanUp)
-
   class { '::wso2base':
     packages               => $packages,
     template_list          => $template_list,
