@@ -37,7 +37,6 @@ wso2::template_list:
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/cipher-tool.properties
 #  - bin/ciphertool.sh
-#  - password-tmp
 
 # Provide the server list for setting up sso
 #wso2::sso_service_providers:
@@ -58,6 +57,8 @@ wso2::template_list:
 #  - repository/conf/security/cipher-tool.properties
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/secret-conf.properties
+
+#wso2::file_list_copy_without_refresh:
 #  - password-tmp
 #  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
 
