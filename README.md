@@ -124,55 +124,33 @@ Uncomment and modify the below changes in Hiera file to apply Secure Vault.
     wso2::enable_secure_vault: true
     ```
 
-2. Add Secure Vault configurations as below
+2. Run the ciphertool.sh / ciphertool.bat (in <WSO2_HOME>/bin) with -Dconfigure parameter and enter the primary keystore password of carbon server.
 
-    ```yaml
-    wso2::secure_vault_configs:
-      <secure_vault_config_name>:
-        secret_alias: <secret_alias>
-        secret_alias_value: <secret_alias_value>
-        password: <password>
-    ```
+```bash
+sh ciphertool.sh -Dconfigure
+[Please Enter Primary KeyStore Password of Carbon Server : ]
 
-    Ex:
-    ```yaml
-    wso2::secure_vault_configs:
-      key_store_password:
-        secret_alias: Carbon.Security.KeyStore.Password
-        secret_alias_value: repository/conf/carbon.xml//Server/Security/KeyStore/Password,false
-        password: wso2carbon
-    ```
+```
 
-    For Identity Server `5.0.0` which is based on WSO2 Carbon Kernel 4.2.0
+3. Copy repository/conf/security/cipher-tool.properties, repository/conf/security/cipher-text.properties, repository/conf/security/secret-conf.properties in <WSO2_HOME>/repository/conf/security to 
+'/etc/puppet/environments/production/modules/wso2is/files/configs/repository/conf/security'
 
-    Ex:
-    ```yaml
-    wso2::secure_vault_configs:
-      key_store_password:
-        secret_alias: Carbon.Security.KeyStore.Password
-        secret_alias_value: carbon.xml//Server/Security/KeyStore/Password,true
-        password: wso2carbon
-    ```
+4. Create a file named 'password-tmp' containing the the primary keystore password of carbon server in 
+'/etc/puppet/environments/production/modules/wso2is/files/configs'
 
-3. Add Cipher Tool configuration file templates to `template_list`
+5. Add the following configurations
+   
+```yaml
+# Puppet file list to be populated
+ wso2::file_list:
+  - repository/conf/security/cipher-tool.properties
+  - repository/conf/security/cipher-text.properties
+  - repository/conf/security/secret-conf.properties
 
-    ```yaml
-    wso2::template_list:
-      - repository/conf/security/cipher-text.properties
-      - repository/conf/security/cipher-tool.properties
-      - bin/ciphertool.sh
-    ```
-
-    Please add the `password-tmp` template also to `template_list` if the `vm_type` is not `docker` when you are running the server in `default` platform.
-
-4. For IS 5.3.0, encrypting KeyStore and TrustStore passwords in `EndpointConfig.properties` using Cipher Tool fails to deploy `authenticationendpoint` web app. This is due to a class loading issue as reported in [JIRA: IDENTITY-4276](https://wso2.org/jira/browse/IDENTITY-4276). To fix this follow the below steps:
-   - get the `authenticationendpoint.war` in CARBON_HOME/repository/deployment/server/webapps folder, remove the `org.wso2.securevault-1.0.0-wso2v2.jar` from webapp's WEB_INF/lib folder and add it to `files/configs/repository/deployment/server` folder
-   - Add the `authenticationendpoint.war` file path to `file_list` in default.yaml file
-
-    ```yaml
-    wso2::file_list:
-      - repository/deployment/server/webapps/authenticationendpoint.war
-    ```
+# Puppet file list to be populated without triggering refresh
+wso2::file_list_copy_without_refresh:
+  - password-tmp
+```
 
 ## Running WSO2 Identity Server on Kubernetes
 WSO2 Puppet Module ships Hiera data required to deploy WSO2 Identity Server on Kubernetes. For more information refer to the documentation on [deploying WSO2 products on Kubernetes using WSO2 Puppet Modules](https://docs.wso2.com/display/PM210/Deploying+WSO2+Products+on+Kubernetes+Using+WSO2+Puppet+Modules).
