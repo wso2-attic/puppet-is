@@ -37,7 +37,6 @@ wso2::template_list:
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/cipher-tool.properties
 #  - bin/ciphertool.sh
-#  - password-tmp
 
 # Provide the server list for setting up sso
 #wso2::sso_service_providers:
@@ -53,11 +52,15 @@ wso2::template_list:
 #     http: 80
 #     https: 443
 
-# Puppet file list to be populated
+# File list to be copied to the product folder, if there are changes found in the files, the system
+# service will be restarted
 # wso2::file_list:
 #  - repository/conf/security/cipher-tool.properties
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/secret-conf.properties
+
+# Files to be copied to the product folder when restarting the system service
+#wso2::service_refresh_file_list:
 #  - password-tmp
 #  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
 
