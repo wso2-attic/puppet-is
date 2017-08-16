@@ -147,10 +147,16 @@ sh ciphertool.sh -Dconfigure
   - repository/conf/security/cipher-text.properties
   - repository/conf/security/secret-conf.properties
 
-# Puppet file list to be populated without triggering refresh
-wso2::file_list_copy_without_refresh:
+# Puppet file list to be populated without triggering service refresh
+wso2::service_refresh_file_list:
   - password-tmp
 ```
+
+For more information please refer [Using WSO2 Carbon Secure Vault with WSO2 Puppet Modules](https://github.com/wso2/puppet-base/wiki/Using-WSO2-Carbon-Secure-Vault-With-WSO2-Puppet-Modules)
+
+## System Service Re-starts
+
+The system service will only restart for distribution changes or configuration changes.
 
 ## Running WSO2 Identity Server on Kubernetes
 WSO2 Puppet Module ships Hiera data required to deploy WSO2 Identity Server on Kubernetes. For more information refer to the documentation on [deploying WSO2 products on Kubernetes using WSO2 Puppet Modules](https://docs.wso2.com/display/PM210/Deploying+WSO2+Products+on+Kubernetes+Using+WSO2+Puppet+Modules).
