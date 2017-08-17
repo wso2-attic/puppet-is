@@ -148,6 +148,6 @@ class wso2is (
   contain wso2base::service
 
   Class['::wso2base'] -> Class['::wso2base::system']
-  -> Class['::wso2base::install'] -> Class['::wso2is::configure']
-  ~> Class['::wso2base::service']
+  -> Class['::wso2base::clean'] -> Class['::wso2base::install']
+  -> Class['::wso2is::configure'] ~> Class['::wso2base::service']
 }
