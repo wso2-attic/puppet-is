@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2005-2011 WSO2, Inc. (http://wso2.com)
+  ~ Copyright (c) 2015 WSO2, Inc. (http://wso2.com)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -73,10 +73,10 @@
     <parameter name="ModulesDirectory">axis2modules</parameter>
 
     <parameter name="userAgent" locked="true">
-        WSO2 Identity Server-5.3.0-SNAPSHOT
+        WSO2 Identity Server-5.3.0
     </parameter>
     <parameter name="server" locked="true">
-        WSO2 Identity Server-5.3.0-SNAPSHOT
+        WSO2 Identity Server-5.3.0
     </parameter>
 
     <!-- ========================================================================-->
@@ -162,13 +162,13 @@
         <!--messageFormatter contentType="application/json"
                           class="org.apache.axis2.json.JSONMessageFormatter"/-->
         <messageFormatter contentType="application/json"
-                          class="org.apache.axis2.json.gson.JsonFormatter"/>
+                                  class="org.apache.axis2.json.gson.JsonFormatter" />
         <messageFormatter contentType="application/json/badgerfish"
                           class="org.apache.axis2.json.JSONBadgerfishMessageFormatter"/>
         <!--messageFormatter contentType="text/javascript"
                           class="org.apache.axis2.json.JSONMessageFormatter"/-->
         <messageFormatter contentType="text/javascript"
-                          class="org.apache.axis2.json.gson.JsonFormatter"/>
+                                  class="org.apache.axis2.json.gson.JsonFormatter" />
 
         <!--messageFormatter contentType="application/x-www-form-urlencoded"
                         class="org.wso2.carbon.relay.ExpandingMessageFormatter"/-->
@@ -198,13 +198,13 @@
         <!--messageBuilder contentType="application/json"
                         class="org.apache.axis2.json.JSONOMBuilder"/-->
         <messageBuilder contentType="application/json"
-                        class="org.apache.axis2.json.gson.JsonBuilder"/>
+                                class="org.apache.axis2.json.gson.JsonBuilder" />
         <messageBuilder contentType="application/json/badgerfish"
                         class="org.apache.axis2.json.JSONBadgerfishOMBuilder"/>
         <!--messageBuilder contentType="text/javascript"
                         class="org.apache.axis2.json.JSONOMBuilder"/-->
         <messageBuilder contentType="text/javascript"
-                        class="org.apache.axis2.json.gson.JsonBuilder"/>
+                                class="org.apache.axis2.json.gson.JsonBuilder" />
 
         <!--messageBuilder contentType="application/xml"
      		        class="org.wso2.carbon.relay.BinaryRelayBuilder"/-->
@@ -470,9 +470,9 @@
                 <order phase="Transport"/>
             </handler>
             <handler name="RequestURIOperationDispatcher"
-                     class="org.apache.axis2.dispatchers.RequestURIOperationDispatcher"/>
+                     class="org.apache.axis2.dispatchers.RequestURIOperationDispatcher" />
             <handler name="JSONMessageHandler"
-                     class="org.apache.axis2.json.gson.JSONMessageHandler"/>
+                     class="org.apache.axis2.json.gson.JSONMessageHandler" />
         </phase>
         <phase name="Addressing">
             <handler name="AddressingBasedDispatcher"
@@ -587,7 +587,7 @@
         <phase name="PolicyDetermination"/>
         <phase name="MessageOut"/>
         <phase name="Security"/>
-        <phase name="Transport"/>
+	<phase name="Transport"/>
         <!--
            The MsgOutObservation phase is used to observe messages just before the
            responses are sent out. In this phase, we could do some things such as SOAP message
@@ -669,8 +669,7 @@
         The TCP port used by this member. This is the port through which other nodes will
         contact this member
          -->
-        <parameter name="localMemberPort"><%= @clustering['local_member_port']-%>
-        </parameter>
+            <parameter name="localMemberPort"><%= @clustering['local_member_port'] %></parameter>
         <!--
             The bind port of this member. The difference between localMemberPort & localMemberBindPort
             is that localMemberPort is the one that is advertised by this member, while localMemberBindPort
@@ -704,18 +703,16 @@
            The list of static or well-known members. These entries will only be valid if the
            "membershipScheme" above is set to "wka"
         -->
-        <%- if @clustering['membership_scheme'] == 'wka' -%>
+<%- if @clustering['membership_scheme'] == 'wka' -%>
         <members>
-            <%- @clustering['wka']['members'].each do |member| -%>
+   <%- @clustering['wka']['members'].each do |member| -%>
             <member>
-                <hostName><%= member['hostname'] %>
-                </hostName>
-                <port><%= member['port'] %>
-                </port>
+                <hostName><%= member['hostname'] %></hostName>
+                <port><%= member['port'] %></port>
             </member>
-            <%- end -%>
+   <%- end -%>
         </members>
-        <%- end -%>
+<%- end -%>
 
         @value
 

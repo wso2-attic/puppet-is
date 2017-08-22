@@ -55,6 +55,7 @@ wso2::template_list:
 # File list to be copied to the product folder, if there are changes found in the files, the system
 # service will be restarted
 # wso2::file_list:
+#  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
 #  - repository/conf/security/cipher-tool.properties
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/secret-conf.properties
@@ -62,10 +63,9 @@ wso2::template_list:
 # Files to be copied to the product folder when restarting the system service
 #wso2::service_refresh_file_list:
 #  - password-tmp
-#  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
 
 wso2::clustering:
-  enabled: false
+  enabled: true
   local_member_host: "%{::ipaddress}"
   local_member_port: 4000
   domain: is.wso2.domain
@@ -122,10 +122,10 @@ wso2::master_datasources:
    name: WSO2_CONFIG_DB
    description: The datasource used for config registry
    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_CONFIG_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
+   url: jdbc:h2:file:repository/database/jpadb;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
    username: "%{hiera('wso2::datasources::common::username')}"
    password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
+   jndi_config: jdbc/WSO2_CONFIG_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
@@ -136,11 +136,11 @@ wso2::master_datasources:
  wso2_gov_db:
    name: WSO2_GOV_DB
    description: The datasource used for gov registry
-   driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_GOV_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
-   username: "%{hiera('wso2::datasources::common::username')}"
-   password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
+   driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
+   url: jdbc:mysql://192.168.48.19:3306/WSO2_REG_DB?autoReconnect=true
+   username: root
+   password: root
+   jndi_config: jdbc/WSO2_GOV_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
@@ -148,15 +148,14 @@ wso2::master_datasources:
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-
  wso2_user_db:
    name: WSO2_USER_DB
    description: The datasource is used for user management and userstore
-   driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_USER_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
-   username: "%{hiera('wso2::datasources::common::username')}"
-   password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
+   driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
+   url: jdbc:mysql://192.168.48.19:3306/WSO2_USER_DB?autoReconnect=true
+   username: root
+   password: root
+   jndi_config: jdbc/WSO2USER_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
@@ -167,11 +166,11 @@ wso2::master_datasources:
  wso2_is_db:
    name: WSO2_IS_DB
    description: The datasource is used for user management and userstore
-   driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_IS_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
-   username: "%{hiera('wso2::datasources::common::username')}"
-   password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
+   driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
+   url: jdbc:mysql://192.168.48.19:3306/WSO2_IS_DB?autoReconnect=true
+   username: root
+   password: root
+   jndi_config: jdbc/WSO2_IS_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"

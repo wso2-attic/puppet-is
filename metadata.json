@@ -4,7 +4,7 @@
   "author": "WSO2",
   "license": "Apache-2.0",
   "summary": "WSO2 Identity Server Puppet module",
-  "source": "https://github.com/dharshanaw/puppet-is.git",
+  "source": "https://github.com/wso2/puppet-is.git",
   "project_page": "http://wso2.com/products/identity-server/",
   "operatingsystem_support": [
     {

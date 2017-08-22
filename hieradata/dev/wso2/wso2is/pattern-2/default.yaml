@@ -29,10 +29,7 @@ wso2::template_list:
   - repository/conf/identity/application-authentication.xml
   - repository/conf/identity/EndpointConfig.properties
   - repository/conf/datasources/am-datasources.xml
-#  - repository/conf/security/cipher-text.properties
-#  - repository/conf/security/cipher-tool.properties
 #  - bin/ciphertool.sh
-#  - password-tmp
 
 # Provide the server list for setting up sso
 #wso2::sso_service_providers:
@@ -48,11 +45,16 @@ wso2::template_list:
 #     http: 80
 #     https: 443
 
+# File list to be copied to the product folder, if there are changes found in the files, the system
+# service will be restarted
 # wso2::file_list:
 #  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
 #  - repository/conf/security/cipher-tool.properties
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/secret-conf.properties
+
+# Files to be copied to the product folder when restarting the system service
+#wso2::service_refresh_file_list:
 #  - password-tmp
 
 wso2::clustering:
@@ -179,11 +181,12 @@ wso2::metrics_datasources:
     url: jdbc:mysql://192.168.100.1:3306/WSO2_CONFIG_DB?autoReconnect=true
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: jdbc/WSO2MetricsDB
-    datasource: WSO2MetricsDB
+    jndi_config: bpsds
     max_active: "%{hiera('wso2::datasources::common::max_active')}"
+    max_idle: "%{hiera('wso2::datasources::common::max_idle')}"
     max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
     test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
+    use_datasource_factory: "%{hiera('wso2::datasources::common::use_datasource_factory')}"
     default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
@@ -206,83 +209,90 @@ wso2::am_datasources:
 
 # Secure vault configuration
 #wso2::enable_secure_vault: true
-#wso2::secure_vault_configs:
-#  key_store_password:
-#    secret_alias: Carbon.Security.KeyStore.Password
-#    secret_alias_value: repository/conf/carbon.xml//Server/Security/KeyStore/Password,false
-#    password: "%{hiera('wso2::key_stores::key_store::password')}"
-#
-#  key_store_key_password:
-#    secret_alias: Carbon.Security.KeyStore.KeyPassword
-#    secret_alias_value: repository/conf/carbon.xml//Server/Security/KeyStore/KeyPassword,false
-#    password: "%{hiera('wso2::key_stores::key_store::key_password')}"
-#
-#  trust_store_password:
-#    secret_alias: Carbon.Security.TrustStore.Password
-#    secret_alias_value: repository/conf/carbon.xml//Server/Security/TrustStore/Password,false
-#    password: "%{hiera('wso2::key_stores::trust_store::password')}"
-#
-#  user_manager_admin_password:
-#    secret_alias: UserManager.AdminUser.Password
-#    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/Configuration/AdminUser/Password,false
-#    password: "%{hiera('wso2::super_admin::password')}"
-#
-#  wso2_carbon_db_password:
-#    secret_alias: Datasources.WSO2_CARBON_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_CARBON_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::common::password')}"
-#
-#  connector_key_store_password:
-#    secret_alias: Server.Service.Connector.keystorePass
-#    secret_alias_value: repository/conf/tomcat/catalina-server.xml//Server/Service/Connector[@keystorePass],true
-#    password: "%{hiera('wso2::key_stores::connector_key_store::password')}"
-#
-#  bps_ds_db_password:
-#    secret_alias: Datasources.BPS_DS.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/bps-datasources.xml//datasources-configuration/datasources/datasource[name='BPS_DS']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::common::password')}"
-#
-#  wso2_metrics_db_password:
-#    secret_alias: Datasources.WSO2_METRICS_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/metrics-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_METRICS_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::common::password')}"
-#
-#  wso2_config_db_password:
-#    secret_alias: Datasources.WSO2_CONFIG_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_CONFIG_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  wso2_gov_db_password:
-#    secret_alias: Datasources.WSO2_GOV_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_GOV_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  wso2_user_db_password:
-#    secret_alias: Datasources.WSO2_USER_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_USER_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  wso2_am_db_password:
-#    secret_alias: Datasource.WSO2AM_DB.configuration.password
-#    secret_alias_value: repository/conf/datasources/am-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2AM_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::common::password')}"
-#
-#  xmpp_password:
-#    secret_alias: MultifactorAuthentication.XMPPSettings.XMPPConfig.XMPPPassword
-#    secret_alias_value: repository/conf/identity/identity.xml//MultifactorAuthentication/XMPPSettings/XMPPConfig/XMPPPassword,false
-#    password: wso2carbon
-#
-#  authenticator_config_trust_store_password:
-#    secret_alias: AuthenticatorConfig.TrustStore.Password
-#    secret_alias_value: repository/conf/identity/application-authentication.xml//ApplicationAuthentication/AuthenticatorConfigs/AuthenticatorConfig[@name='OpenIDAuthenticator']/Parameter[@name='TrustStorePassword'],false
-#    password: "%{hiera('wso2::key_stores::trust_store::password')}"
-#
-#  dep_sync_svn_password:
-#    secret_alias: Carbon.DeploymentSynchronizer.SvnPassword
-#    secret_alias_value: repository/conf/carbon.xml//Server/DeploymentSynchronizer/SvnPassword,true
-#    password: password
-#
-#  thrift_based_entitlement_config_key_store_password:
-#    secret_alias: ThirftBasedEntitlementConfig.KeyStore.Password
-#    secret_alias_value: repository/conf/identity/identity.xml//Server/EntitlementSettings/ThirftBasedEntitlementConfig/KeyStore/Password,false
-#    password: "%{hiera('wso2::key_stores::key_store::password')}"
+# Properties in identity.xml
+wso2::session_persist:
+  enabled: true
+  temporary: true
+  pool_size: 0
+
+wso2::session_cleanUp:
+  enabled: true
+  timeout: true
+  period: 1140
+
+wso2::operation_cleanUp:
+  enabled: true
+  period: 720
+
+wso2::openID:
+  skip_user_consent: false
+  remember_me_timeout: 7200
+  disable_dumbmode   : false
+
+wso2::time_config:
+  session_idle_timeout : 15,
+  remember_me_timeout  : 20160,
+
+
+wso2::oAuth:
+  app_info_cache_timeout : -1
+  auth_grant_cache_timeout  : -1
+  session_data_cache_timeout   : -1
+  claim_cache_timeout   : -1
+  auth_code_default_validity_period : 300
+  access_token_default_validity_period : 3600
+  user_access_token_default_validity_period : 3600,
+  refresh_token_validity_period : 84600,
+  time_stamp_skew   : 300
+  enable_OAuth_cache : false
+  renew_refresh_token_for_refresh_grant : true
+  strict_client_credential_validation   : false
+  enable_assertions_UserName : false
+  enable_access_token_partitioning : false
+  auth_context_token_generation_enabled : false
+  auth_context_token_generation_TTL : 15
+  id_token_expiration : 3600
+  openIDConnect_skip_user_consent: false
+
+wso2::sso:
+  persistance_cache_timeout: 157680000
+  session_index_timeout: 157680000
+  single_logout_retry_count: 5
+  single_logout_retry_interval: 60000
+  sAMLresponse_validity_period: 5
+  use_authenticated_user_domain_crypto: false
+  slo_host_name_verifi_enabled: true
+
+wso2::passiveSTS:
+  slo_host_name_verifi_enabled: true
+
+wso2::evenet_listeners:
+  user_store_action_listener: true
+  identity_mgt_event_listener: false
+  identity_governance_event_listener: true
+  scimuser_operation_listener: true
+  identity_store_event_listener: true
+  daslogin_data_publisher: false
+  dassession_data_publisher: false
+  authn_data_publisher_proxy: true
+
+wso2::cache:
+  appauth_framework_session_context: false
+  authentication_context_cache    : false
+  appauth_framework_session_contex: false
+  authentication_request_cache : false
+  app_info_cache : false
+  authorization_grant_cache : false
+  oauth_cache : false
+  oauth_session_data_cache : false
+  samalsso_participant_cache : false
+  samalsso_session_index_cache : false
+  samalsso_session_data_cache : false
+  service_provider_cache: true
+  provisioning_connector_cache : true
+  provisioning_entity_cache : false
+  service_provider_provisioning_connector_cache: false
+  idP_cache_byauth_property : true
+  idp_cache_byhri : true
+  idp_cache_by_name: true
+
