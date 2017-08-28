@@ -58,7 +58,6 @@ class wso2is (
   $key_stores             = $wso2is::params::key_stores,
   $carbon_home            = $wso2is::params::carbon_home,
   $pack_file_abs_path     = $wso2is::params::pack_file_abs_path,
-  $remove_file_list       = $wso2am_runtime::params::remove_file_list,
 
   # Templated configuration parameters
   $master_datasources     = $wso2is::params::master_datasources,
@@ -107,7 +106,6 @@ class wso2is (
     packages               => $packages,
     template_list          => $template_list,
     file_list              => $file_list,
-    remove_file_list       => $remove_file_list,
     patch_list             => $patch_list,
     cert_list              => $cert_list,
     system_file_list       => $system_file_list,
