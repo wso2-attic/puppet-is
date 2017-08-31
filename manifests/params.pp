@@ -28,6 +28,7 @@ class wso2is::params {
     $bps_datasources          = hiera('wso2::bps_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
     $is_datasource            = hiera('wso2::is_datasource')
+    $reg_datasource           = hiera('wso2::reg_datasource')
     $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
     $enable_thrift_service    = hiera('wso2::enable_thrift_service')
 
@@ -55,6 +56,10 @@ class wso2is::params {
     $maintenance_mode         = hiera('wso2::maintenance_mode')
     $install_mode             = hiera('wso2::install_mode')
 
+    $config_mount             = hiera('wso2::config_mount')
+    $gov_mount                = hiera('wso2::gov_mount')
+   
+    $userstore_config         = hiera('wso2::userstore_config')
     if $install_mode == 'file_repo' {
       $remote_file_url        = hiera('remote_file_url')
     }
@@ -75,7 +80,6 @@ class wso2is::params {
     $dep_sync                 = hiera('wso2::dep_sync')
     $ports                    = hiera('wso2::ports')
     $jvm                      = hiera('wso2::jvm')
-
     # identitly.xml configurations
 
     $sso_authentication       = hiera('wso2::sso_authentication', undef)
@@ -92,6 +96,13 @@ class wso2is::params {
     $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
     $cache                    = hiera('wso2::cache', undef)
     $key_stores               = hiera('wso2::key_stores')
+    $cleanup_task             = hiera('wso2::cleanup_task')
+  
+    # catalina-server.xml configurations
+   
+    $tomcat                  = hiera('wso2::tomcat')
+    
+   
 
   } else {
 
@@ -392,7 +403,7 @@ class wso2is::params {
   }
 
   $product_name               = 'wso2is'
-  $product_version            = '5.3.0'
+  $product_version            = '5.4.0'
   $platform_version           = '4.4.0'
   $carbon_home                = "${install_dir}/${product_name}-${product_version}"
   $pack_file_abs_path         = "${pack_dir}/${pack_filename}"
