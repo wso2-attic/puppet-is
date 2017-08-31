@@ -56,9 +56,6 @@ class wso2is::params {
     $maintenance_mode         = hiera('wso2::maintenance_mode')
     $install_mode             = hiera('wso2::install_mode')
 
-    $config_mount             = hiera('wso2::config_mount')
-    $gov_mount                = hiera('wso2::gov_mount')
-   
     $userstore_config         = hiera('wso2::userstore_config')
     if $install_mode == 'file_repo' {
       $remote_file_url        = hiera('remote_file_url')

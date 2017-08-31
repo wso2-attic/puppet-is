@@ -43,15 +43,14 @@
         <cacheId><%= @master_datasources[@reg_datasource]['username'] %>@<%= @master_datasources[@reg_datasource]['url'] %></cacheId>
     </remoteInstance>
 
-    <mount path="<%= @config_mount['path'] %>" overwrite="virtual">
-        <instanceId><%= @master_datasources[@reg_datasource]['name'] %></instanceId>
-        <targetPath><%= @config_mount['target_path'] %></targetPath>
+   <% if @registry_mounts and !@registry_mounts.empty? -%>
+  <%- @registry_mounts.each do |datasource_name, registry_mount| -%>
+    <mount path="<%= registry_mount['path'] %>" overwrite="virtual">
+           <instanceId><%= @master_datasources[@reg_datasource]['name'] %></instanceId>
+           <targetPath><%= registry_mount['target_path'] %></targetPath>
     </mount>
-
-     <mount path="<%= @gov_mount['path'] %>" overwrite="virtual">
-        <instanceId><%= @master_datasources[@reg_datasource]['name'] %></instanceId>
-        <targetPath><%= @gov_mount['target_path'] %></targetPath>
-    </mount>
+   <%- end -%>
+  <%- end -%>
 
 
    <handler class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyHandler">
