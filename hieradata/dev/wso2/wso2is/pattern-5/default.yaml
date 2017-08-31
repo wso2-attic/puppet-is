@@ -132,7 +132,7 @@ wso2::master_datasources:
    name: WSO2_REG_DB
    description: The datasource used for shared registry
    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-   url: jdbc:mysql://is540.cd3cwezibdu8.us-east-1.rds.amazonaws.com:3306/is540reg?autoReconnect=true&amp;useSSL=false
+   url: jdbc:mysql://192.168.100.1:3306/is540reg?autoReconnect=true&amp;useSSL=false
    username: "%{hiera('wso2::datasources::mysql::username')}"
    password: "%{hiera('wso2::datasources::mysql::password')}"
    jndi_config: jdbc/WSO2_REG_DB
