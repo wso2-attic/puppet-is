@@ -191,8 +191,6 @@ class wso2is_analytics::params {
     }
 
     $file_list          = [
-      'dbscripts/identity/h2.sql',
-      'dbscripts/identity/mysql.sql'
     ]
 
     $portal   = {
