@@ -1,0 +1,19 @@
+{
+  "name": "wso2-wso2is_analytics",
+  "version": "5.4.0",
+  "author": "WSO2",
+  "license": "Apache-2.0",
+  "summary": "WSO2 IS Analytics Server Puppet module",
+  "source": "https://github.com/wso2/puppet-is.git",
+  "project_page": "http://wso2.com/products/identity-analytics-server/",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "12.04", "14.04" ]
+    }
+  ],
+  "tags" : ["wso2is_analytics", "5.4.0"],
+  "dependencies": [
+    { "name": "wso2/wso2base", "version_requirement": "1.0.0" }
+  ]
+}
