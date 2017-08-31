@@ -63,7 +63,6 @@ wso2::ports:
 # File list to be copied to the product folder, if there are changes found in the files, the system
 # service will be restarted
 wso2::file_list:
-#  - repository/components/lib/mysql-connector-java-5.1.39.jar
   - repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}
 #  - repository/conf/security/cipher-tool.properties
 #  - repository/conf/security/cipher-text.properties
