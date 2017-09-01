@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2015 WSO2, Inc. (http://wso2.com)
+  ~ Copyright 2005-2011 WSO2, Inc. (http://wso2.com)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -73,10 +73,10 @@
     <parameter name="ModulesDirectory">axis2modules</parameter>
 
     <parameter name="userAgent" locked="true">
-        WSO2 Identity Server-5.3.0
+        WSO2 Identity Server-5.4.0-SNAPSHOT
     </parameter>
     <parameter name="server" locked="true">
-        WSO2 Identity Server-5.3.0
+        WSO2 Identity Server-5.4.0-SNAPSHOT
     </parameter>
 
     <!-- ========================================================================-->
@@ -245,13 +245,13 @@
         <!--<parameter name="proxyPort">80</parameter>-->
     </transportReceiver>
 
-    <!--Please uncomment this in Multiple Instance Scenario if you want to use NIO Transport Recievers and
+    <!--Please uncomment this in Multiple Instance Scenario if you want to use NIO Transport Recievers and 
  	Remove the current transport REceivers in axis2.xml -->
     <!--transportReceiver name="http" class="org.apache.synapse.transport.nhttp.HttpCoreNIOListener">
         <parameter name="port" locked="false">8280</parameter>
         <parameter name="non-blocking" locked="false">true</parameter>
     </transportReceiver>
-
+    
     <transportReceiver name="https" class="org.apache.synapse.transport.nhttp.HttpCoreNIOSSLListener">
         <parameter name="port" locked="false">8243</parameter>
         <parameter name="non-blocking" locked="false">true</parameter>
@@ -420,7 +420,7 @@
     </transportSender>-->
 
     <!--Please uncomment this in Multiple Instance Scenario if you want to use NIO sender -->
-    <!--
+    <!--  
     <transportSender name="http" class="org.apache.synapse.transport.nhttp.HttpCoreNIOSender">
         <parameter name="non-blocking" locked="false">true</parameter>
     </transportSender>
@@ -625,8 +625,8 @@
         -->
         <parameter name="membershipScheme"><%= @clustering['membership_scheme'] %></parameter>
         <%= scope.function_template(["wso2base/clustering/#{@clustering['membership_scheme']}.erb"]) %>
-
-        <!--<parameter name="licenseKey">xxx</parameter>-->
+	
+	<!--<parameter name="licenseKey">xxx</parameter>-->
         <!--<parameter name="mgtCenterURL">http://localhost:8081/mancenter/</parameter>-->
 
         <!--
@@ -669,7 +669,8 @@
         The TCP port used by this member. This is the port through which other nodes will
         contact this member
          -->
-            <parameter name="localMemberPort"><%= @clustering['local_member_port'] %></parameter>
+        <parameter name="localMemberPort"><%= @clustering['local_member_port'] %></parameter>
+
         <!--
             The bind port of this member. The difference between localMemberPort & localMemberBindPort
             is that localMemberPort is the one that is advertised by this member, while localMemberBindPort
@@ -715,6 +716,7 @@
 <%- end -%>
 
         @value
+
 
         <!--
         Enable the groupManagement entry if you need to run this node as a cluster manager.
