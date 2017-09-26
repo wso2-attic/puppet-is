@@ -107,7 +107,7 @@ wso2::registry_mounts:
 
 wso2::usermgt_datasource: wso2_user_db
 wso2::is_datasource: wso2_is_db
-#wso2::is_datasource: wso2_carbon_db
+wso2::reg_datasource: wso2_reg_db
 
 # SSO Configuration
 wso2::sso_authentication:
@@ -365,7 +365,9 @@ wso2::cache:
   idp_cache_byhri : true
   idp_cache_by_name: true
 
-
+wso2::tomcat:
+ maxThreads : 500
+ acceptCount : 500
 
 # Secure vault configuration
 #wso2::enable_secure_vault: true
