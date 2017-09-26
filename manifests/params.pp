@@ -76,7 +76,7 @@ class wso2is::params {
     $service_name             = hiera('wso2::service_name')
     $service_template         = hiera('wso2::service_template')
     $usermgt_datasource       = hiera('wso2::usermgt_datasource')
-    $reg_datasource           = hiera('wso2::reg_datasource')
+    $local_reg_datasource     = hiera('wso2::local_reg_datasource')
     $clustering               = hiera('wso2::clustering')
     $dep_sync                 = hiera('wso2::dep_sync')
     $ports                    = hiera('wso2::ports')
@@ -233,7 +233,7 @@ class wso2is::params {
     $service_name             = $product_name
     $service_template         = 'wso2base/wso2service.erb'
     $usermgt_datasource       = 'wso2_carbon_db'
-    $reg_datasource           = 'wso2_carbon_db'
+    $local_reg_datasource          = 'wso2_carbon_db'
 
     $clustering               = {
       enabled           => false,
