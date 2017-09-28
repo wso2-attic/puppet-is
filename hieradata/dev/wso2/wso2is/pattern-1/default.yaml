@@ -133,42 +133,11 @@ wso2::master_datasources:
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
- wso2_gov_db:
-   name: WSO2_GOV_DB
-   description: The datasource used for gov registry
+wso2_reg_db:
+   name: WSO2_REG_DB
+   description: The datasource used for shared registry
    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_GOV_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
-   username: "%{hiera('wso2::datasources::common::username')}"
-   password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
-   max_active: "%{hiera('wso2::datasources::common::max_active')}"
-   max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-   test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-   default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-   validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-   validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
-
-
- wso2_user_db:
-   name: WSO2_USER_DB
-   description: The datasource is used for user management and userstore
-   driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_USER_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
-   username: "%{hiera('wso2::datasources::common::username')}"
-   password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
-   max_active: "%{hiera('wso2::datasources::common::max_active')}"
-   max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-   test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-   default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-   validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-   validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
-
- wso2_is_db:
-   name: WSO2_IS_DB
-   description: The datasource is used for user management and userstore
-   driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-   url: jdbc:h2:file:repository/database/WSO2_IS_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
+   url: jdbc:h2:file:repository/database/WSO2_REG_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
    username: "%{hiera('wso2::datasources::common::username')}"
    password: "%{hiera('wso2::datasources::common::password')}"
    jndi_config: bpsds
@@ -300,8 +269,7 @@ wso2::openID:
 
 wso2::time_config:
   session_idle_timeout : 15,
-  remember_me_timeout  : 20160,
-
+  remember_me_timeout  : 20160
 
 wso2::oAuth:
   app_info_cache_timeout : -1
