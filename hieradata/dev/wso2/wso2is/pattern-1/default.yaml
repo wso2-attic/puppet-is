@@ -134,14 +134,14 @@ wso2::master_datasources:
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-wso2_reg_db:
+ wso2_reg_db:
    name: WSO2_REG_DB
    description: The datasource used for shared registry
    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
    url: jdbc:h2:file:repository/database/WSO2_REG_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
    username: "%{hiera('wso2::datasources::common::username')}"
    password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
+   jndi_config: jdbc/WSO2_REG_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
@@ -155,7 +155,7 @@ wso2_reg_db:
    url: jdbc:h2:file:repository/database/WSO2_IS_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
    username: "%{hiera('wso2::datasources::common::username')}"
    password: "%{hiera('wso2::datasources::common::password')}"
-   jndi_config: bpsds
+   jndi_config: jdbc/WSO2_IS_DB
    max_active: "%{hiera('wso2::datasources::common::max_active')}"
    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
