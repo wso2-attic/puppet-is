@@ -107,7 +107,7 @@ wso2::registry_mounts:
     enable_cache: true
 
 wso2::usermgt_datasource: wso2_user_db
-wso2::is_datasource: wso2_is_db
+wso2::is_datasource: wso2_identity_db
 wso2::reg_datasource: wso2_reg_db
 
 # SSO Configuration
@@ -149,7 +149,7 @@ wso2::master_datasources:
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
- wso2_is_db:
+ wso2_identity_db:
    name: WSO2_IS_DB
    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
    url: jdbc:h2:file:repository/database/WSO2_IS_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
@@ -299,7 +299,7 @@ wso2::openID:
 
 wso2::time_config:
   session_idle_timeout : 15,
-  remember_me_timeout  : 20160
+  remember_me_timeout  : 20160,
 
 wso2::oAuth:
   app_info_cache_timeout : -1

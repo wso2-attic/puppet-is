@@ -1,4 +1,4 @@
-# Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+0# Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -283,7 +283,7 @@ wso2::oAuth:
   enable_access_token_partitioning : false
   auth_context_token_generation_enabled : false
   auth_context_token_generation_TTL : 15
-  id_token_expiration : 3600
+  id_token_expiration : 3600,
   openIDConnect_skip_user_consent: false
 
 wso2::sso:
@@ -332,33 +332,3 @@ wso2::tomcat:
  maxThreads : 500
  acceptCount : 500
 
-wso2::userstore_config:
- userstore : <UserStoreManager class="org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager">
-             <Property name="TenantManager">org.wso2.carbon.user.core.tenant.JDBCTenantManager</Property>
-             <Property name="ReadOnly">false</Property>
-             <Property name="ReadGroups">true</Property>
-             <Property name="WriteGroups">true</Property>
-             <Property name="UsernameJavaRegEx">^[\S]{3,30}$</Property>
-             <Property name="UsernameJavaScriptRegEx">^[\S]{3,30}$</Property>
-             <Property name="UsernameJavaRegExViolationErrorMsg">Username pattern policy violated</Property>
-             <Property name="PasswordJavaRegEx">^[\S]{5,30}$</Property>
-             <Property name="PasswordJavaScriptRegEx">^[\S]{5,30}$</Property>
-             <Property name="PasswordJavaRegExViolationErrorMsg">Password length should be within 5 to 30 characters</Property>
-             <Property name="RolenameJavaRegEx">^[\S]{3,30}$</Property>
-             <Property name="RolenameJavaScriptRegEx">^[\S]{3,30}$</Property>
-             <Property name="CaseInsensitiveUsername">false</Property>
-             <Property name="SCIMEnabled">true</Property>
-             <Property name="IsBulkImportSupported">false</Property>
-             <Property name="PasswordDigest">SHA-256</Property>
-             <Property name="StoreSaltedPassword">true</Property>
-             <Property name="MultiAttributeSeparator">,</Property>
-             <Property name="MaxUserNameListLength">100</Property>
-             <Property name="MaxRoleNameListLength">100</Property>
-             <Property name="UserRolesCacheEnabled">true</Property>
-             <Property name="UserNameUniqueAcrossTenants">false</Property>
-             </UserStoreManager>
-
-
-wso2::cleanup_task:
- operationDataCleanUp : false
- sessionDataCleanUp : false
