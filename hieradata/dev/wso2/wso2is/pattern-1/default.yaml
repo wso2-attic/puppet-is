@@ -34,6 +34,7 @@ wso2::template_list:
   - repository/conf/identity/EndpointConfig.properties
   - repository/conf/email/email-admin-config.xml
   - repository/conf/datasources/am-datasources.xml
+
 #  - repository/conf/security/cipher-text.properties
 #  - repository/conf/security/cipher-tool.properties
 #  - bin/ciphertool.sh
@@ -302,7 +303,7 @@ wso2::oAuth:
   enable_access_token_partitioning : false
   auth_context_token_generation_enabled : false
   auth_context_token_generation_TTL : 15
-  id_token_expiration : 3600
+  id_token_expiration : 3600,
   openIDConnect_skip_user_consent: false
 
 wso2::sso:
