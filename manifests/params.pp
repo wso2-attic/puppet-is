@@ -49,7 +49,6 @@ class wso2is::params {
     $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
-#    $db_details               = hiera('wso2::db_details')
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
     $carbon_home_symlink      = hiera('wso2::carbon_home_symlink')
     $wso2_user                = hiera('wso2::user')
@@ -57,10 +56,6 @@ class wso2is::params {
     $maintenance_mode         = hiera('wso2::maintenance_mode')
     $install_mode             = hiera('wso2::install_mode')
 
-#    $config_mount             = hiera('wso2::config_mount')
-#    $gov_mount                = hiera('wso2::gov_mount')
-   
-#    $userstore_config         = hiera('wso2::userstore_config')
     if $install_mode == 'file_repo' {
       $remote_file_url        = hiera('remote_file_url')
     }
@@ -97,13 +92,13 @@ class wso2is::params {
     $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
     $cache                    = hiera('wso2::cache', undef)
     $key_stores               = hiera('wso2::key_stores')
-  #  $cleanup_task             = hiera('wso2::cleanup_task')
-  
+    $cleanup_task             = hiera('wso2::cleanup_task')
+
     # catalina-server.xml configurations
-   
+
     $tomcat                  = hiera('wso2::tomcat')
-    
-   
+
+
 
   } else {
 
@@ -233,7 +228,7 @@ class wso2is::params {
     $service_name             = $product_name
     $service_template         = 'wso2base/wso2service.erb'
     $usermgt_datasource       = 'wso2_carbon_db'
-    $local_reg_datasource          = 'wso2_carbon_db'
+    $local_reg_datasource     = 'wso2_carbon_db'
 
     $clustering               = {
       enabled           => false,
