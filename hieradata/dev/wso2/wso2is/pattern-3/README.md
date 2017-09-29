@@ -1,4 +1,4 @@
-#WSO2 IDENTITY SERVER Pattern-5
+# WSO2 IDENTITY SERVER Pattern-5
 
 
 This pattern consist of a clustered IS setup with a 2 node deployment. The databases used in this pattern are external

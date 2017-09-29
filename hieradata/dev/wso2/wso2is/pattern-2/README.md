@@ -1,4 +1,4 @@
-#WSO2 IDENTITY SERVER Pattern-4
+# WSO2 IDENTITY SERVER Pattern-4
 
  Registry Mounting using one DB and multiple Registry spaces as bellow
 
@@ -11,6 +11,7 @@ mounter seprately.
 
 Content of /opt/deployment.conf file should be similar to below to run the agent and setup this pattern in Puppet Agent.
 
+```
 product_name=wso2is
 product_version=5.4.0
 product_profile=default
@@ -19,3 +20,4 @@ vm_type=openstack
 use_hieradata=true
 platform=default
 pattern=pattern-2
+```
