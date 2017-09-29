@@ -371,6 +371,7 @@ wso2::cache:
   oauth_session_data_cache : false
   samalsso_participant_cache : false
   samalsso_session_index_cache : false
+  samalsso_session_index_cache : false
   samalsso_session_data_cache : false
   service_provider_cache: true
   provisioning_connector_cache : true
