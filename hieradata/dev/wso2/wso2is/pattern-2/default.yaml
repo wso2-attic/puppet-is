@@ -217,6 +217,7 @@ wso2::metrics_datasources:
     default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
+
 ## Uncomment the following AM data source and comment out the above H2 data source for a clustered setup
 #  wso2_am_db:
 #    name: WSO2AM_DB
