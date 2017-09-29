@@ -107,6 +107,7 @@ wso2::registry_mounts:
     read_only: false
     registry_root: /
     enable_cache: true
+    overwrite: true
 
 wso2::usermgt_datasource: wso2_user_db
 wso2::is_datasource: wso2_identity_db
