@@ -275,15 +275,16 @@ wso2::session_cleanUp:
   enabled: true
   timeout: 20160
   period: 1140
+  delete_chunk_size: 5000
 
 wso2::operation_cleanUp:
   enabled: true
-  period: 720
 
 wso2::openID:
   skip_user_consent: false
   remember_me_timeout: 7200
   disable_dumbmode   : false
+   remember_me_expir: 7200
 
 wso2::time_config:
   session_idle_timeout : 15,

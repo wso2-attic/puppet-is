@@ -36,10 +36,12 @@
                 <Enable><%= @session_cleanUp['enabled'] %></Enable>
                 <CleanUpTimeout><%= @session_cleanUp['timeout'] %></CleanUpTimeout>
                 <CleanUpPeriod><%= @session_cleanUp['period'] %></CleanUpPeriod>
+                <!--Instead of deleting all the records at once, we are deleting the records in chunks to prevent the -->
+                <!--possible deadlock and lock scenarios. The following property defines the chunk size.-->
+                <DeleteChunkSize><%= @session_cleanUp['delete_chunk_size'] %></DeleteChunkSize>
             </SessionDataCleanUp>
             <OperationDataCleanUp>
                 <Enable><%= @operation_cleanUp['enabled'] %></Enable>
-                <CleanUpPeriod><%= @operation_cleanUp['period'] %></CleanUpPeriod>
             </OperationDataCleanUp>
         </SessionDataPersist>
 	</JDBCPersistenceManager>
@@ -52,15 +54,6 @@
 
 	<!-- Security configurations -->
 	<Security>
-		<UserTrustedRPStore>
-			<Location>${carbon.home}/<%= @key_stores['user_trusted_rp_store']['location'] %></Location>
-			<!-- Keystore type (JKS/PKCS12 etc.) -->
-			<Type><%= @key_stores['user_trusted_rp_store']['type'] %></Type>
-			<!-- Keystore password -->
-			<Password><%= @key_stores['user_trusted_rp_store']['password'] %></Password>
-			<!-- Private Key password -->
-			<KeyPassword><%= @key_stores['user_trusted_rp_store']['key_password'] %></KeyPassword>
-		</UserTrustedRPStore>
 
 		<!-- The directory under which all other KeyStore files will be stored -->
 		<KeyStoresDir>${carbon.home}/conf/keystores</KeyStoresDir>
@@ -113,7 +106,7 @@
 
 		<!-- The expiration time (in minutes) for the OpenID association -->
 		<!--
-        <OpenIDAssociationExpiryTime>15/OpenIDAssociationExpiryTime>
+        <OpenIDAssociationExpiryTime>15</OpenIDAssociationExpiryTime>
     -->
 
 		<!-- Configs specific to PrivateAssociationCryptoStore -->

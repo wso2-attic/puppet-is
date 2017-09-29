@@ -254,19 +254,20 @@ class wso2is::params {
     $session_cleanUp       = {
       enabled           => true,
       timeout           => 20160,
-      period            => 1140
+      period            => 1140,
+      delete_chunk_size => 5000
     }
 
     $operation_cleanUp       = {
       enabled           => true,
-      period            => 720
-
-    }
+     }
 
     $openID       = {
       skip_user_consent => false,
       remember_me_timeout  => 7200,
-      disable_dumbmode   => false
+      disable_dumbmode   => false,
+      remember_me_expir => 7200
+
     }
 
     $time_config       = {
