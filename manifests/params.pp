@@ -255,7 +255,7 @@ class wso2is::params {
       enabled           => true,
       timeout           => 20160,
       period            => 1140,
-      delete_chunk_size => 5000
+      delete_chunk_size => 50000
     }
 
     $operation_cleanUp       = {

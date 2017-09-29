@@ -280,7 +280,7 @@ wso2::session_cleanUp:
   enabled: true
   timeout: 20160
   period: 1140
-  delete_chunk_size: 5000
+  delete_chunk_size: 50000
 
 wso2::operation_cleanUp:
   enabled: true
@@ -314,6 +314,10 @@ wso2::oAuth:
   id_token_expiration : 3600,
   openIDConnect_skip_user_consent: false
   sign_jwt_spey: false
+  token_persistence_enable: true
+  token_persistence_pool_size: 0,
+  token_persistence_retry_count: 5
+
 
 
 wso2::sso:

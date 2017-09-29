@@ -473,15 +473,15 @@
         <Notification>
             <InternallyManage>true</InternallyManage>
         </Notification>
+         <AskPassword>
+ 	        <ExpiryTime>1440</ExpiryTime>
+ 	        <PasswordGenerator>org.wso2.carbon.user.mgt.common.DefaultPasswordGenerator</PasswordGenerator>
+         </AskPassword>
     </EmailVerification>
 
     <SelfRegistration>
         <Enable>false</Enable>
         <LockOnCreation>true</LockOnCreation>
-         <AskPassword>
- 	        <ExpiryTime>1440</ExpiryTime>
- 	        <PasswordGenerator>org.wso2.carbon.user.mgt.common.DefaultPasswordGenerator</PasswordGenerator>
-         </AskPassword>
         <Notification>
             <InternallyManage>true</InternallyManage>
         </Notification>
@@ -511,7 +511,7 @@
 
         <EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
                        name="org.wso2.carbon.identity.scim2.common.listener.SCIMUserOperationListener"
-                       orderId="93" enable="<%= @evenet_listeners['identity_scim2_user_operation_listener"'] %>""/>
+                       orderId="93" enable="<%= @evenet_listeners['identity_scim2_user_operation_listener'] %>""/>
 
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
@@ -534,7 +534,12 @@
 	</EventListeners>
 
     <CacheConfig>
-        <CacheManager name="IdentityApplicationManagementCacheManager">
+        <!-- Identity cache configuration.
+             Timeouts are in seconds.
+             Capacity is the maximum cache size.
+             Unless specifically mentioned, you do not need to set the isDistributed flag.
+         -->
+           <CacheManager name="IdentityApplicationManagementCacheManager">
             <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="300" capacity="5000" isDistributed="false"/>

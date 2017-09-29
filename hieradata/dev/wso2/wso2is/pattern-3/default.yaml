@@ -280,7 +280,7 @@ wso2::session_cleanUp:
   enabled: true
   timeout: 20160
   period: 1140
-  delete_chunk_size: 5000
+  delete_chunk_size: 50000
 
 wso2::operation_cleanUp:
   enabled: true
@@ -304,7 +304,7 @@ wso2::oAuth:
   access_token_default_validity_period : 3600
   user_access_token_default_validity_period : 3600,
   refresh_token_validity_period : 84600,
-  time_stamp_skew   : 300
+  time_stamp_skew   : 0
   renew_refresh_token_for_refresh_grant : true
   strict_client_credential_validation   : false
   enable_assertions_UserName : false
@@ -314,6 +314,9 @@ wso2::oAuth:
   id_token_expiration : 3600,
   openIDConnect_skip_user_consent: false
   sign_jwt_spey: false
+  token_persistence_enable: true
+  token_persistence_pool_size: 0,
+  token_persistence_retry_count: 5
 
 wso2::sso:
   persistance_cache_timeout: 157680000
