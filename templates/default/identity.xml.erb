@@ -188,12 +188,12 @@
 		<RefreshTokenValidityPeriod><%= @oAuth['refresh_token_validity_period'] %></RefreshTokenValidityPeriod>
 		<!-- Timestamp skew in seconds -->
 		<TimestampSkew><%= @oAuth['time_stamp_skew'] %></TimestampSkew>
-		<!-- Enable OAuth caching -->
-		<EnableOAuthCache><%= @oAuth['enable_OAuth_cache'] %></EnableOAuthCache>
 		<!-- Enable renewal of refresh token for refresh_token grant -->
 		<RenewRefreshTokenForRefreshGrant><%= @oAuth['renew_refresh_token_for_refresh_grant'] %></RenewRefreshTokenForRefreshGrant>
 		<!-- Process the token before storing it in database, e.g. encrypting -->
 		<TokenPersistenceProcessor>org.wso2.carbon.identity.oauth.tokenprocessor.PlainTextPersistenceProcessor</TokenPersistenceProcessor>
+        <!-- If the user is a federated, user will not be able to access claims from local userstore even if the username matches -->
+        <MapFederatedUsersToLocal>false</MapFederatedUsersToLocal>
 		<!-- Supported Client Authentication Methods -->
 		<ClientAuthHandlers>
 			<ClientAuthHandler Class="org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler">
@@ -320,14 +320,15 @@
             <!-- Sign the ID Token with Service Provider Tenant Private Key-->
             <SignJWTWithSPKey><%= @oAuth['sign_jwt_spey'] %>/SignJWTWithSPKey>
 
+		</OpenIDConnect>
+
             <!-- Configs related to OAuth2 token persistence -->
             <TokenPersistence>
                 <Enable><%= @oAuth['token_persistence_enable'] %></Enable>
                 <PoolSize><%= @oAuth['token_persistence_pool_size'] %></PoolSize>
                 <RetryCount><%= @oAuth['token_persistence_retry_count'] %></RetryCount>
             </TokenPersistence>
-		</OpenIDConnect>
-	</OAuth>
+		</OAuth>
 
 	<MultifactorAuthentication>
 		<!--Enable>false</Enable-->
@@ -395,7 +396,7 @@
 		<IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/passivests</IdentityProviderURL>
 		<RetryURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/retry.do</RetryURL>
 		<TokenStoreClassName>org.wso2.carbon.identity.sts.passive.utils.NoPersistenceTokenStore</TokenStoreClassName>
-		<SLOHostNameVerificationEnabled><%= @passiveSTS['slo_host_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
+		<SLOHostNameVerificationEnabled>true</SLOHostNameVerificationEnabled>
 	</PassiveSTS>
 
 	<EntitlementSettings>
@@ -468,7 +469,7 @@
     <EmailVerification>
         <Enable>false</Enable>
             <ExpiryTime>1440</ExpiryTime>
-        <LockOnCreation>false</LockOnCreation>
+        <LockOnCreation>true</LockOnCreation>
         <Notification>
             <InternallyManage>true</InternallyManage>
         </Notification>
@@ -477,6 +478,10 @@
     <SelfRegistration>
         <Enable>false</Enable>
         <LockOnCreation>true</LockOnCreation>
+         <AskPassword>
+ 	        <ExpiryTime>1440</ExpiryTime>
+ 	        <PasswordGenerator>org.wso2.carbon.user.mgt.common.DefaultPasswordGenerator</PasswordGenerator>
+         </AskPassword>
         <Notification>
             <InternallyManage>true</InternallyManage>
         </Notification>
@@ -485,6 +490,10 @@
 	       <ExpiryTime>1440</ExpiryTime>
 	    </VerificationCode>
     </SelfRegistration-->
+    <AuthenticationPolicy>
+        <CheckAccountExist>true</CheckAccountExist>
+    </AuthenticationPolicy>
+
 
 
 	<EventListeners>
@@ -495,11 +504,19 @@
 					   name="org.wso2.carbon.identity.mgt.IdentityMgtEventListener"
 					   orderId="50" enable="<%= @evenet_listeners['identity_mgt_event_listener'] %>"/>
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
-					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
-					   orderId="95" enable="<%= @evenet_listeners['identity_governance_event_listener'] %>"/>
-		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 		               name="org.wso2.carbon.identity.scim.common.listener.SCIMUserOperationListener"
 					   orderId="90" enable="<%= @evenet_listeners['scimuser_operation_listener'] %>"/>
+
+        <!-- Enable the following SCIM2 event listener and disable the above SCIM event listener if SCIM2 is used. -->
+
+        <EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+                       name="org.wso2.carbon.identity.scim2.common.listener.SCIMUserOperationListener"
+                       orderId="93" enable="<%= @evenet_listeners['identity_scim2_user_operation_listener"'] %>""/>
+
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
+					   orderId="95" enable="<%= @evenet_listeners['identity_governance_event_listener'] %>"/>
+
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 		               name="org.wso2.carbon.identity.governance.listener.IdentityStoreEventListener"
 					   orderId="97" enable="<%= @evenet_listeners['identity_store_event_listener'] %>">
@@ -518,24 +535,31 @@
 
     <CacheConfig>
         <CacheManager name="IdentityApplicationManagementCacheManager">
-            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%= @cache['service_provider_provisioning_connector_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache'] %>" timeout="900"
+            capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache'] %>"
+            timeout="900" capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache'] %>" timeout="900"
+            capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%=
+            @cache['service_provider_provisioning_connector_cache'] %>" timeout="900" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property'] %>" timeout="900"
+            capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri'] %>" timeout="900" capacity="5000"
+            isDistributed="false"/>
+            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name'] %>" timeout="900" capacity="5000"
+            isDistributed="false"/>
          </CacheManager>
     </CacheConfig>
 
@@ -545,37 +569,100 @@
 
 
 	<ResourceAccessControl>
-		<Resource context="(.*)/api/identity/user/(.*)" secured="true" http-method="all"/>
-		<Resource context="(.*)/api/identity/recovery/(.*)" secured="true" http-method="all"/>
-		<Resource context="(.*)/identity/register/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
-		</Resource>
-		<Resource context="(.*)/identity/connect/register/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/applicationmgt/create</Permissions>
-		</Resource>
-		<Resource context="(.*)/oauth2/introspect/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/applicationmgt/view</Permissions>
-		</Resource>
-		<Resource context="(.*)/api/identity/entitlement/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/pep</Permissions>
-		</Resource>
+        <Resource context="(.*)/api/identity/user/(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/api/identity/recovery/(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/.well-known(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/identity/register(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/identity/connect/register(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/oauth2/introspect(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/entitlement/(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/pep</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users" secured="true" http-method="POST">
+            <Permissions>/permission/admin/manage/identity/usermgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/usermgt/list</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups" secured="true" http-method="POST">
+            <Permissions>/permission/admin/manage/identity/rolemgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/rolemgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/usermgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="PUT">
+            <Permissions>/permission/admin/manage/identity/usermgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="PATCH">
+            <Permissions>/permission/admin/manage/identity/usermgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/usermgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/rolemgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="PUT">
+            <Permissions>/permission/admin/manage/identity/rolemgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="PATCH">
+            <Permissions>/permission/admin/manage/identity/rolemgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/rolemgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true"    http-method="GET">
+            <Permissions>/permission/admin/login</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/usermgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true"    http-method="PUT">
+            <Permissions>/permission/admin/login</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true"   http-method="PATCH">
+            <Permissions>/permission/admin/login</Permissions>
+        </Resource>
+        <Resource context="/scim2/ServiceProviderConfig" secured="false" http-method="all">
+            <Permissions></Permissions>
+        </Resource>
+        <Resource context="/scim2/ResourceType" secured="false" http-method="all">
+            <Permissions></Permissions>
+        </Resource>
+        <Resource context="/scim2/Bulk" secured="true"  http-method="all">
+            <Permissions>/permission/admin/manage/identity/usermgt</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/oauth2/dcr/(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt</Permissions>
+        </Resource>
 	</ResourceAccessControl>
 
 	<ClientAppAuthentication>
 		<Application name="dashboard" hash="66cd9688a2ae068244ea01e70f0e230f5623b7fa4cdecb65070a09ec06452262"/>
 	</ClientAppAuthentication>
 
-	<TenantContextsToRewrite>
-		<WebApp>
-			<Context>/api/identity/user/v0.9</Context>
-			<Context>/api/identity/recovery/v0.9</Context>
-			<Context>/oauth2/introspect</Context>
-			<Context>/entitlement</Context>
-		</WebApp>
-		<Servlet>
-			<Context>/identity/(.*)</Context>
-		</Servlet>
-	</TenantContextsToRewrite>
+    <TenantContextsToRewrite>
+        <WebApp>
+            <Context>/api/identity/user/v0.9</Context>
+            <Context>/api/identity/recovery/v0.9</Context>
+            <Context>/oauth2</Context>
+            <Context>/scim2</Context>
+            <Context>/api/identity/entitlement</Context>
+            <Context>/api/identity/oauth2/dcr/v1.0</Context>
+        </WebApp>
+        <Servlet>
+            <Context>/identity/(.*)</Context>
+        </Servlet>
+    </TenantContextsToRewrite>
 
 	<!-- Server Synchronization Tolerance Configuration in seconds -->
 	<ClockSkew>300</ClockSkew>

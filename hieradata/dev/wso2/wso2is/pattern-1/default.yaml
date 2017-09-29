@@ -284,7 +284,7 @@ wso2::openID:
   skip_user_consent: false
   remember_me_timeout: 7200
   disable_dumbmode   : false
-   remember_me_expir: 7200
+  remember_me_expir: 7200
 
 wso2::time_config:
   session_idle_timeout : 15,
@@ -299,8 +299,7 @@ wso2::oAuth:
   access_token_default_validity_period : 3600
   user_access_token_default_validity_period : 3600,
   refresh_token_validity_period : 84600,
-  time_stamp_skew   : 300
-  enable_OAuth_cache : false
+  time_stamp_skew   : 0
   renew_refresh_token_for_refresh_grant : true
   strict_client_credential_validation   : false
   enable_assertions_UserName : false
@@ -321,7 +320,7 @@ wso2::sso:
   single_logout_retry_interval: 60000
   sAMLresponse_validity_period: 5
   use_authenticated_user_domain_crypto: false
-  slo_host_name_verifi_enabled: true,
+  slo_host_name_verifi_enabled: true
   tenant_partitioning_enabled: false
 
 wso2::passiveSTS:

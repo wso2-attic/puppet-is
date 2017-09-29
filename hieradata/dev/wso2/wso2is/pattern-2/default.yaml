@@ -304,8 +304,7 @@ wso2::oAuth:
   access_token_default_validity_period : 3600
   user_access_token_default_validity_period : 3600,
   refresh_token_validity_period : 84600,
-  time_stamp_skew   : 300
-  enable_OAuth_cache : false
+  time_stamp_skew   : 0
   renew_refresh_token_for_refresh_grant : true
   strict_client_credential_validation   : false
   enable_assertions_UserName : false
