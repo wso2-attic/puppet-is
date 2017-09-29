@@ -98,6 +98,8 @@ wso2::registry_mounts:
     read_only: false
     registry_root: /
     enable_cache: true
+    overwrite: true
+
 
   wso2_gov_db:
     path: /_system/governance
@@ -163,7 +165,7 @@ wso2::master_datasources:
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-  wso2_user_db:
+ wso2_user_db:
    name: WSO2_USER_DB
    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
    url: jdbc:h2:file:repository/database/WSO2_USER_DB;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE

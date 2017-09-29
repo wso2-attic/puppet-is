@@ -92,12 +92,10 @@ class wso2is::params {
     $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
     $cache                    = hiera('wso2::cache', undef)
     $key_stores               = hiera('wso2::key_stores')
-    $cleanup_task             = hiera('wso2::cleanup_task')
 
     # catalina-server.xml configurations
 
     $tomcat                  = hiera('wso2::tomcat')
-
 
 
   } else {
@@ -229,6 +227,7 @@ class wso2is::params {
     $service_template         = 'wso2base/wso2service.erb'
     $usermgt_datasource       = 'wso2_carbon_db'
     $local_reg_datasource     = 'wso2_carbon_db'
+    $is_datasource            = 'wso2_carbon_db'
 
     $clustering               = {
       enabled           => false,
