@@ -1,9 +1,5 @@
 # WSO2 IDENTITY SERVER Pattern-4
 
- Registry Mounting using one DB and multiple Registry spaces as bellow
-
-
-
 This pattern consist of a stand-alone IS setup with a single node deployment. The databases used in this pattern are
 external MYSQL databases and also registry mounting  is done using a one shared registry database,  registry spaces are
 use for config and governance registry.

@@ -34,7 +34,7 @@ wso2::template_list:
 
 
 wso2::clustering:
-  enabled: true
+  enabled: false
   local_member_host: "%{::ipaddress}"
   local_member_port: 4000
   domain: is.wso2.domain
