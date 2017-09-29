@@ -166,6 +166,7 @@ wso2::master_datasources:
    default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
+
 wso2::bps_datasources:
   bps_ds:
     name: BPS_DS
