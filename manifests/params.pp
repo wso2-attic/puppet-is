@@ -260,6 +260,7 @@ class wso2is::params {
     $operation_cleanUp       = {
       enabled           => true,
       period            => 720
+
     }
 
     $openID       = {
@@ -291,7 +292,11 @@ class wso2is::params {
       auth_context_token_generation_enabled => false,
       auth_context_token_generation_TTL => 15,
       id_token_expiration => 3600,
-      openIDConnect_skip_user_consent => false
+      openIDConnect_skip_user_consent => false,
+      sign_jwt_spey => false,
+      token_persistence_enable => true,
+      token_persistence_pool_size => 0,
+      token_persistence_retry_count => 5
     }
 
     $sso      = {
@@ -301,7 +306,8 @@ class wso2is::params {
       single_logout_retry_interval   => 60000,
       sAMLresponse_validity_period=> 5,
       use_authenticated_user_domain_crypto => false,
-      slo_host_name_verifi_enabled => true
+      slo_host_name_verifi_enabled => true,
+      tenant_partitioning_enabled => false
     }
 
     $passiveSTS      = {

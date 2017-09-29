@@ -278,7 +278,7 @@ wso2::session_persist:
 
 wso2::session_cleanUp:
   enabled: true
-  timeout: true
+  timeout: 20160
   period: 1140
 
 wso2::operation_cleanUp:
@@ -313,6 +313,8 @@ wso2::oAuth:
   auth_context_token_generation_TTL : 15
   id_token_expiration : 3600,
   openIDConnect_skip_user_consent: false
+  sign_jwt_spey: false
+
 
 wso2::sso:
   persistance_cache_timeout: 157680000
@@ -322,6 +324,7 @@ wso2::sso:
   sAMLresponse_validity_period: 5
   use_authenticated_user_domain_crypto: false
   slo_host_name_verifi_enabled: true
+  tenant_partitioning_enabled: false
 
 wso2::passiveSTS:
   slo_host_name_verifi_enabled: true
