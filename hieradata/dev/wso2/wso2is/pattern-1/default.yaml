@@ -348,20 +348,20 @@ wso2::cache:
   samalsso_participant_cache : false
   samalsso_session_index_cache : false
   samalsso_session_data_cache : false
-  service_provider_cache: true
-  provisioning_connector_cache : true
+  service_provider_cache: false
+  provisioning_connector_cache : false
   provisioning_entity_cache : false
   service_provider_provisioning_connector_cache: false
-  idP_cache_byauth_property : true
-  idp_cache_byhri : true
-  idp_cache_by_name: true
+  idP_cache_byauth_property : false
+  idp_cache_byhri : false
+  idp_cache_by_name: false
 
 wso2::tomcat:
  maxThreads : 500
  acceptCount : 500
 
 # Secure vault configuration
-#wso2::enable_secure_vault: true
+#wso2::enable_secure_vault: false
 #wso2::secure_vault_configs:
 #  key_store_password:
 #    secret_alias: Carbon.Security.KeyStore.Password
