@@ -22,7 +22,7 @@
 		<DataSource>
 			<!-- Include a data source name (jndiConfigName) from the set of data
 				sources defined in master-datasources.xml -->
-			<Name><%= @master_datasources[@is_datasource]['jndi_config'] %></Name>
+			<Name><%= @master_datasources[@identity_datasource]['jndi_config'] %></Name>
 		</DataSource>
 		<!-- If the identity database is created from another place and if it is
             required to skip schema initialization during the server start up, set the
@@ -137,6 +137,14 @@
         -->
         <!--<IdentityOAuthTokenGenerator>org.wso2.carbon.identity.oauth2.token.JWTTokenIssuer</IdentityOAuthTokenGenerator>-->
 
+        <!-- True, if access token alias is stored in the database instead of access token.
+             Eg. token alias and token is same when default AccessTokenValueGenerator is used.
+             When JWTTokenIssuer is used, jti is used as the token alias
+             Default: true.
+             Applicable values: true,false
+        -->
+        <!--<PersistAccessTokenAlias>false</PersistAccessTokenAlias>-->
+
         <!-- This configuration is used to specify the access token value generator.
              Default: org.apache.oltu.oauth2.as.issuer.UUIDValueGenerator
              Applicable values: org.apache.oltu.oauth2.as.issuer.UUIDValueGenerator,
@@ -174,7 +182,7 @@
         <OIDCWebFingerEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/.well-known/webfinger</OIDCWebFingerEPUrl>
 
         <!-- For tenants below urls will be modified as https://<hostname>:<port>/t/<tenant domain>/<path>-->
-        <OAuth2DCREPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/identity/connect/register</OAuth2DCREPUrl>
+        <OAuth2DCREPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/api/identity/oauth2/dcr/v1.0/register</OAuth2DCREPUrl>
         <OAuth2JWKSPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/jwks</OAuth2JWKSPage>
         <OIDCDiscoveryEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/oidcdiscovery</OIDCDiscoveryEPUrl>
 
@@ -236,6 +244,8 @@
 			<SupportedGrantType>
 				<GrantTypeName>client_credentials</GrantTypeName>
 				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.ClientCredentialsGrantHandler</GrantTypeHandlerImplClass>
+        <IsRefreshTokenAllowed>false</IsRefreshTokenAllowed>
+        <IdTokenAllowed>false</IdTokenAllowed>
 			</SupportedGrantType>
 			<SupportedGrantType>
 				<GrantTypeName>urn:ietf:params:oauth:grant-type:saml2-bearer</GrantTypeName>
@@ -245,22 +255,29 @@
 				<GrantTypeName>iwa:ntlm</GrantTypeName>
 				<GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.iwa.ntlm.NTLMAuthenticationGrantHandler</GrantTypeHandlerImplClass>
 			</SupportedGrantType>
+      <SupportedGrantType>
+        <GrantTypeName>urn:ietf:params:oauth:grant-type:jwt-bearer</GrantTypeName>
+        <GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.grant.jwt.JWTBearerGrantHandler</GrantTypeHandlerImplClass>
+        <GrantTypeValidatorImplClass>org.wso2.carbon.identity.oauth2.grant.jwt.JWTGrantValidator</GrantTypeValidatorImplClass>
+      </SupportedGrantType>
 		</SupportedGrantTypes>
 		<OAuthCallbackHandlers>
 			<OAuthCallbackHandler Class="org.wso2.carbon.identity.oauth.callback.DefaultCallbackHandler"/>
 		</OAuthCallbackHandlers>
-		<!--TokenValidators>
-            <TokenValidator type="bearer" class="org.wso2.carbon.identity.oauth2.validators.DefaultOAuth2TokenValidator"/>
-        </TokenValidators-->
-        <ScopeValidators>
-            <ScopeValidator class="org.wso2.carbon.identity.oauth2.validators.JDBCScopeValidator" />
-        </ScopeValidators>
+		<TokenValidators>
+      <TokenValidator type="bearer" class="org.wso2.carbon.identity.oauth2.validators.DefaultOAuth2TokenValidator"/>
+      <TokenValidator type="jwt" class="org.wso2.carbon.identity.oauth2.validators.OAuth2JWTTokenValidator"/>
+    </TokenValidators>
+    <!-- Scope validators list. The validators registered here wil be executed during token validation. -->
+    <ScopeValidators>
+      <ScopeValidator class="org.wso2.carbon.identity.oauth2.validators.JDBCScopeValidator" />
+    </ScopeValidators>
 
-        <!-- Scope handlers list. The handlers registered here will be executed at the scope validation phase while
-             issuing access tokens. -->
-        <ScopeHandlers>
-            <ScopeHandler class="org.wso2.carbon.identity.oauth2.validators.OIDCScopeHandler" />
-        </ScopeHandlers
+    <!-- Scope handlers list. The handlers registered here will be executed at the scope validation phase while
+      issuing access tokens. -->
+    <ScopeHandlers>
+      <ScopeHandler class="org.wso2.carbon.identity.oauth2.validators.OIDCScopeHandler" />
+    </ScopeHandlers>
 
 		<!-- Assertions can be used to embedd parameters into access token. -->
 		<EnableAssertions>
@@ -291,13 +308,12 @@
             Only Local Users can access claims from local userstore. LEGACY users will have to have tenant domain appended username.
             They will not be able to access claims from local userstore. To get claims by mapping users with exact same username from local
             userstore (for non LOCAL scenarios) use mapFederatedUsersToLocal config -->
-            <UserType>LOCAL</UserType>
-            <!--UserType>FEDERATED</UserType-->
+            <!--<UserType>LOCAL</UserType>-->
+            <UserType>FEDERATED</UserType>
             <!--UserType>LEGACY</UserType-->
         </SAML2Grant>
 		<OpenIDConnect>
 			<IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
-            <IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
              <SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm>
 			<!-- Comment out to add Audience values to the JWT token (id_token)  -->
 			<!--Audiences>
@@ -317,8 +333,8 @@
 			<UserInfoEndpointAccessTokenValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoISAccessTokenValidator</UserInfoEndpointAccessTokenValidator>
 			<UserInfoEndpointResponseBuilder>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoJSONResponseBuilder</UserInfoEndpointResponseBuilder>
 			<SkipUserConsent><%= @oAuth['openIDConnect_skip_user_consent'] %></SkipUserConsent>
-            <!-- Sign the ID Token with Service Provider Tenant Private Key-->
-            <SignJWTWithSPKey><%= @oAuth['sign_jwt_spey'] %>/SignJWTWithSPKey>
+      <!-- Sign the ID Token with Service Provider Tenant Private Key-->
+      <SignJWTWithSPKey><%= @oAuth['sign_jwt_spey'] %></SignJWTWithSPKey>
 
 		</OpenIDConnect>
 
@@ -490,6 +506,11 @@
 	       <ExpiryTime>1440</ExpiryTime>
 	    </VerificationCode>
     </SelfRegistration-->
+
+    <EnableAskPasswordAdminUI>true</EnableAskPasswordAdminUI>
+    <EnableRecoveryEndpoint>true</EnableRecoveryEndpoint>
+    <EnableSelfSignUpEndpoint>true</EnableSelfSignUpEndpoint>
+
     <AuthenticationPolicy>
         <CheckAccountExist>true</CheckAccountExist>
     </AuthenticationPolicy>
@@ -511,7 +532,7 @@
 
         <EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
                        name="org.wso2.carbon.identity.scim2.common.listener.SCIMUserOperationListener"
-                       orderId="93" enable="<%= @evenet_listeners['identity_scim2_user_operation_listener'] %>""/>
+                       orderId="93" enable="<%= @evenet_listeners['identity_scim2_user_operation_listener'] %>"/>
 
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
@@ -520,7 +541,7 @@
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 		               name="org.wso2.carbon.identity.governance.listener.IdentityStoreEventListener"
 					   orderId="97" enable="<%= @evenet_listeners['identity_store_event_listener'] %>">
-			<Property name="Data.Store">org.wso2.carbon.identity.governance.store.UserStoreBasedIdentityDataStore</Property>
+			<Property name="Data.Store">org.wso2.carbon.identity.governance.store.JDBCIdentityDataStore</Property>
 		</EventListener>
 		<EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
 					   name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASLoginDataPublisherImpl"
@@ -544,9 +565,10 @@
             <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
-            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="900" capacity="5000" isDistributed="false"/>
             <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="OAuthCache" enable="<%= @cache['oauth_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthScopeCache" enable="<%= @cache['oauth_scope_cache'] %>"  timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
             <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
@@ -577,6 +599,18 @@
         <Resource context="(.*)/api/identity/user/(.*)" secured="true" http-method="all"/>
         <Resource context="(.*)/api/identity/recovery/(.*)" secured="true" http-method="all"/>
         <Resource context="(.*)/.well-known(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/api/identity/oauth2/dcr/v1.0/register(.*)" secured="true" http-method="POST">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/oauth2/dcr/v1.0/register(.*)" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/oauth2/dcr/v1.0/register(.*)" secured="true" http-method="PUT">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/oauth2/dcr/v1.0/register(.*)" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/view</Permissions>
+        </Resource>
         <Resource context="(.*)/identity/register(.*)" secured="true" http-method="all">
             <Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
         </Resource>
@@ -637,6 +671,9 @@
         <Resource context="(.*)/scim2/Me" secured="true"   http-method="PATCH">
             <Permissions>/permission/admin/login</Permissions>
         </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true" http-method="POST">
+            <Permissions>/permission/admin/manage/identity/usermgt/create</Permissions>
+        </Resource>
         <Resource context="/scim2/ServiceProviderConfig" secured="false" http-method="all">
             <Permissions></Permissions>
         </Resource>
@@ -657,12 +694,12 @@
 
     <TenantContextsToRewrite>
         <WebApp>
-            <Context>/api/identity/user/v0.9</Context>
-            <Context>/api/identity/recovery/v0.9</Context>
-            <Context>/oauth2</Context>
-            <Context>/scim2</Context>
-            <Context>/api/identity/entitlement</Context>
-            <Context>/api/identity/oauth2/dcr/v1.0</Context>
+            <Context>/api/identity/user/v0.9/</Context>
+            <Context>/api/identity/recovery/v0.9/</Context>
+            <Context>/oauth2/</Context>
+            <Context>/scim2/</Context>
+            <Context>/api/identity/entitlement/</Context>
+            <Context>/api/identity/oauth2/dcr/v1.0/</Context>
         </WebApp>
         <Servlet>
             <Context>/identity/(.*)</Context>

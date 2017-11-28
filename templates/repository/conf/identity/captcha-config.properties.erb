@@ -24,7 +24,7 @@ recaptcha.enabled=false
 # reCaptcha API URL
 recaptcha.api.url=https://www.google.com/recaptcha/api.js
 
-# reCaptcha verification URLa
+# reCaptcha verification URL
 recaptcha.verify.url=https://www.google.com/recaptcha/api/siteverify
 
 # reCaptcha site key
@@ -32,18 +32,3 @@ recaptcha.site.key=6LeL8iATAAAAABEWUx1LwFAiSCT06fY7Kfra5WcT
 
 # reCaptcha secret key
 recaptcha.secret.key=6LeL8iATAAAAAJUgXu_ZgEm_dOC3AT4gmWRstil4
-
-# SSO Login Connector Properties
-sso.login.recaptcha.enable=false
-sso.login.recaptcha.connector.identifier.attribute=username,password
-sso.login.recaptcha.user.identifier.attribute=username
-sso.login.recaptcha.verification.claim=http://wso2.org/claims/identity/failedLoginAttempts
-sso.login.recaptcha.on.max.failed.attempts=3
-sso.login.recaptcha.secured.destinations=/samlsso
-sso.login.recaptcha.on.fail.redirect.url=/authenticationendpoint/retry.do
-
-# Path Based Connector Properties
-path.based.recaptcha.enable=false
-path.based.recaptcha.secured.pages=/accountrecoveryendpoint/register.do
-path.based.recaptcha.secured.destinations=/accountrecoveryendpoint/processregistration.do
-path.based.recaptcha.on.fail.redirect.url=/authenticationendpoint/retry.do

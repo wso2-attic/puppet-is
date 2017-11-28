@@ -20,7 +20,7 @@ class wso2is_analytics (
   $analytics_datasources  = $wso2is_analytics::params::analytics_datasources,
   $metrics_datasources    = $wso2is_analytics::params::metrics_datasources,
   $spark                  = $wso2is_analytics::params::spark,
-  $is_datasource          = $wso2is_analytics::params::is_datasource,
+  $identity_datasource    = $wso2is_analytics::params::identity_datasource,
   $ha_deployment          = $wso2is_analytics::params::ha_deployment,
   $portal                 = $wso2is_analytics::params::portal,
 
@@ -81,7 +81,7 @@ class wso2is_analytics (
   validate_hash($analytics_datasources)
   validate_hash($metrics_datasources)
   validate_hash($spark)
-  validate_string($is_datasource)
+  validate_string($identity_datasource)
   validate_hash($ha_deployment)
   validate_hash($portal)
 

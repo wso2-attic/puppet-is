@@ -27,8 +27,10 @@ class wso2is::params {
     $am_datasources           = hiera('wso2::am_datasources')
     $bps_datasources          = hiera('wso2::bps_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
-    $is_datasource            = hiera('wso2::is_datasource')
-    $reg_datasource           = hiera('wso2::reg_datasource')
+    $identity_datasource      = hiera('wso2::identity_datasource')
+    $bps_datasource           = hiera('wso2::bps_datasource')
+    $metrics_datasource       = hiera('wso2::metrics_datasource')
+    $reg_datasource           = hiera('wso2::reg_datasource', undef)
     $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
     $enable_thrift_service    = hiera('wso2::enable_thrift_service')
 
@@ -88,7 +90,7 @@ class wso2is::params {
     $time_config              = hiera('wso2::time_config', undef)
     $oAuth                    = hiera('wso2::oAuth', undef)
     $sso                      = hiera('wso2::sso', undef)
-    $passiveSTS               = hiera('wso2:: passiveSTS', undef)
+    $passiveSTS               = hiera('wso2::passiveSTS', undef)
     $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
     $cache                    = hiera('wso2::cache', undef)
     $key_stores               = hiera('wso2::key_stores')
@@ -154,7 +156,6 @@ class wso2is::params {
         validation_interval => '30000'
       }
     }
-    $is_datasource            = 'wso2_carbon_db'
     $enable_thrift_service    = false
 
     $java_prefs_system_root   = '/home/wso2user/.java'
@@ -174,7 +175,6 @@ class wso2is::params {
       'repository/conf/identity/sso-idp-config.xml',
       'repository/conf/identity/application-authentication.xml',
       'repository/conf/identity/EndpointConfig.properties',
-      'repository/conf/datasources/am-datasources.xml',
       'repository/conf/carbon.xml',
       'repository/conf/user-mgt.xml',
       'repository/conf/registry.xml',
@@ -227,7 +227,9 @@ class wso2is::params {
     $service_template         = 'wso2base/wso2service.erb'
     $usermgt_datasource       = 'wso2_carbon_db'
     $local_reg_datasource     = 'wso2_carbon_db'
-    $is_datasource            = 'wso2_carbon_db'
+    $identity_datasource      = 'wso2_carbon_db'
+    $bps_datasource           = 'bps_ds'
+    $metrics_datasource       = 'wso2_metrics_db'
 
     $clustering               = {
       enabled           => false,
@@ -333,6 +335,7 @@ class wso2is::params {
       app_info_cache                                => true,
       authorization_grant_cache                     => true,
       oauth_cache                                   => true,
+      oauth_scope_cache                             => true,
       oauth_session_data_cache                      => true,
       samalsso_participant_cache                    => true,
       samalsso_session_index_cache                  => true,

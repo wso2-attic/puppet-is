@@ -54,7 +54,7 @@
                 This data source should be defined in a *-datasources.xml
                 file in conf/datasources directory.
             -->
-            <DataSourceName>jdbc/WSO2MetricsDB</DataSourceName>
+            <DataSourceName><%= @metrics_datasources[@metrics_datasource]['jndi_config'] %></DataSourceName>
             <!-- Polling Period in seconds.
                 This is the period for polling metrics from the metric registry and
                 updating the database with the values -->

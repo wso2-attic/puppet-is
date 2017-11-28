@@ -99,7 +99,7 @@ wso2::registry_mounts:
     enable_cache: true
 
 wso2::usermgt_datasource: wso2_user_db
-wso2::is_datasource: wso2_carbon_db
+wso2::identity_datasource: wso2_carbon_db
 
 # SSO Configuration
 wso2::sso_authentication:
@@ -174,7 +174,7 @@ wso2::bps_datasources:
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
 wso2::metrics_datasources:
-  metrics_ds:
+  wso2_metrics_db:
     name: WSO2_METRICS_DB
     description: The default datasource used for WSO2 Carbon Metrics
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"

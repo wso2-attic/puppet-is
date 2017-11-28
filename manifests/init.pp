@@ -19,8 +19,10 @@ class wso2is (
   # wso2is specific configuration data
   $am_datasources           = $wso2is::params::am_datasources,
   $bps_datasources          = $wso2is::params::bps_datasources,
+  $bps_datasource           = $wso2is::params::bps_datasource,
   $metrics_datasources      = $wso2is::params::metrics_datasources,
-  $is_datasource            = $wso2is::params::is_datasource,
+  $metrics_datasource       = $wso2is::params::metrics_datasource,
+  $identity_datasource      = $wso2is::params::identity_datasource,
   $sso_service_providers    = $wso2is::params::sso_service_providers,
   $enable_thrift_service    = $wso2is::params::enable_thrift_service,
 
@@ -79,8 +81,10 @@ class wso2is (
 
   validate_hash($am_datasources)
   validate_hash($bps_datasources)
+  validate_string($bps_datasource)
   validate_hash($metrics_datasources)
-  validate_string($is_datasource)
+  validate_string($metrics_datasource)
+  validate_string($identity_datasource)
   validate_bool($enable_thrift_service)
   if $sso_service_providers != undef {
     validate_hash($sso_service_providers)

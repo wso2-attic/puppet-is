@@ -27,7 +27,7 @@ class wso2is_analytics::params {
     $analytics_datasources    = hiera('wso2::analytics_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
     $spark                    = hiera('wso2::spark')
-    $is_datasource            = hiera('wso2::is_datasource', undef)
+    $identity_datasource      = hiera('wso2::identity_datasource', undef)
     $ha_deployment            = hiera('wso2::ha_deployment')
     $portal                   = hiera('wso2::portal')
 
@@ -166,7 +166,7 @@ class wso2is_analytics::params {
       hostname      => $ipaddress
     }
 
-    $is_datasource   = 'wso2_carbon_db'
+    $identity_datasource   = 'wso2_carbon_db'
 
     $single_node_deployment = {
       enabled  => true

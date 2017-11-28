@@ -20,7 +20,7 @@
     <!-- Database Configuration for WSO2 BPS BPEL Engine's Persistence Storage  -->
     <tns:DataBaseConfig>
         <!-- Data source configuration. Use data sources created in data sources component. -->
-        <tns:DataSource name="bpsds">
+        <tns:DataSource name="<%= @bps_datasources[@bps_datasource]['jndi_config'] %>">
           <!--tns:JNDI contextFactory="com.sun.jndi.rmi.registry.RegistryContextFactory" providerURL="rmi://localhost:2199"/-->
         </tns:DataSource>
     </tns:DataBaseConfig>
