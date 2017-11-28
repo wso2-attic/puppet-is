@@ -56,7 +56,6 @@ class wso2is::params {
     $maintenance_mode         = hiera('wso2::maintenance_mode')
     $install_mode             = hiera('wso2::install_mode')
 
-    $userstore_config         = hiera('wso2::userstore_config')
     if $install_mode == 'file_repo' {
       $remote_file_url        = hiera('remote_file_url')
     }
@@ -93,13 +92,11 @@ class wso2is::params {
     $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
     $cache                    = hiera('wso2::cache', undef)
     $key_stores               = hiera('wso2::key_stores')
-    $cleanup_task             = hiera('wso2::cleanup_task')
-  
+
     # catalina-server.xml configurations
-   
+
     $tomcat                  = hiera('wso2::tomcat')
-    
-   
+
 
   } else {
 
@@ -230,6 +227,7 @@ class wso2is::params {
     $service_template         = 'wso2base/wso2service.erb'
     $usermgt_datasource       = 'wso2_carbon_db'
     $local_reg_datasource     = 'wso2_carbon_db'
+    $is_datasource            = 'wso2_carbon_db'
 
     $clustering               = {
       enabled           => false,
@@ -256,18 +254,20 @@ class wso2is::params {
     $session_cleanUp       = {
       enabled           => true,
       timeout           => 20160,
-      period            => 1140
+      period            => 1140,
+      delete_chunk_size => 50000
     }
 
     $operation_cleanUp       = {
       enabled           => true,
-      period            => 720
-    }
+     }
 
     $openID       = {
       skip_user_consent => false,
       remember_me_timeout  => 7200,
-      disable_dumbmode   => false
+      disable_dumbmode   => false,
+      remember_me_expir => 7200
+
     }
 
     $time_config       = {
@@ -284,8 +284,7 @@ class wso2is::params {
       access_token_default_validity_period => 3600,
       user_access_token_default_validity_period   => 3600,
       refresh_token_validity_period  =>84600,
-      time_stamp_skew   => 300,
-      enable_OAuth_cache => false,
+      time_stamp_skew   => 0,
       renew_refresh_token_for_refresh_grant => true,
       strict_client_credential_validation   => false,
       enable_assertions_UserName => false,
@@ -293,7 +292,11 @@ class wso2is::params {
       auth_context_token_generation_enabled => false,
       auth_context_token_generation_TTL => 15,
       id_token_expiration => 3600,
-      openIDConnect_skip_user_consent => false
+      openIDConnect_skip_user_consent => false,
+      sign_jwt_spey => false,
+      token_persistence_enable => true,
+      token_persistence_pool_size => 0,
+      token_persistence_retry_count => 5
     }
 
     $sso      = {
@@ -303,7 +306,8 @@ class wso2is::params {
       single_logout_retry_interval   => 60000,
       sAMLresponse_validity_period=> 5,
       use_authenticated_user_domain_crypto => false,
-      slo_host_name_verifi_enabled => true
+      slo_host_name_verifi_enabled => true,
+      tenant_partitioning_enabled => false
     }
 
     $passiveSTS      = {
@@ -318,24 +322,25 @@ class wso2is::params {
       identity_store_event_listener => true,
       daslogin_data_publisher => false,
       dassession_data_publisher => false,
-      authn_data_publisher_proxy => true
+      authn_data_publisher_proxy => true,
+      identity_scim2_user_operation_listener => false
     }
 
     $cache      = {
-      appauth_framework_session_context             => false,
-      authentication_context_cache                  => false,
-      authentication_request_cache                  => false,
-      app_info_cache                                => false,
-      authorization_grant_cache                     => false,
-      oauth_cache                                   => false,
-      oauth_session_data_cache                      => false,
-      samalsso_participant_cache                    => false,
-      samalsso_session_index_cache                  => false,
-      samalsso_session_data_cache                   => false,
+      appauth_framework_session_context             => true,
+      authentication_context_cache                  => true,
+      authentication_request_cache                  => true,
+      app_info_cache                                => true,
+      authorization_grant_cache                     => true,
+      oauth_cache                                   => true,
+      oauth_session_data_cache                      => true,
+      samalsso_participant_cache                    => true,
+      samalsso_session_index_cache                  => true,
+      samalsso_session_data_cache                   => true,
       service_provider_cache                        => true,
       provisioning_connector_cache                  => true,
-      provisioning_entity_cache                     => false,
-      service_provider_provisioning_connector_cache => false,
+      provisioning_entity_cache                     => true,
+      service_provider_provisioning_connector_cache => true,
       idP_cache_byauth_property                     => true,
       idp_cache_byhri                               => true,
       idp_cache_by_name                             => true

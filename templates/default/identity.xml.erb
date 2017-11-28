@@ -36,10 +36,12 @@
                 <Enable><%= @session_cleanUp['enabled'] %></Enable>
                 <CleanUpTimeout><%= @session_cleanUp['timeout'] %></CleanUpTimeout>
                 <CleanUpPeriod><%= @session_cleanUp['period'] %></CleanUpPeriod>
+                <!--Instead of deleting all the records at once, we are deleting the records in chunks to prevent the -->
+                <!--possible deadlock and lock scenarios. The following property defines the chunk size.-->
+                <DeleteChunkSize><%= @session_cleanUp['delete_chunk_size'] %></DeleteChunkSize>
             </SessionDataCleanUp>
             <OperationDataCleanUp>
                 <Enable><%= @operation_cleanUp['enabled'] %></Enable>
-                <CleanUpPeriod><%= @operation_cleanUp['period'] %></CleanUpPeriod>
             </OperationDataCleanUp>
         </SessionDataPersist>
 	</JDBCPersistenceManager>
@@ -52,15 +54,6 @@
 
 	<!-- Security configurations -->
 	<Security>
-		<UserTrustedRPStore>
-			<Location>${carbon.home}/<%= @key_stores['user_trusted_rp_store']['location'] %></Location>
-			<!-- Keystore type (JKS/PKCS12 etc.) -->
-			<Type><%= @key_stores['user_trusted_rp_store']['type'] %></Type>
-			<!-- Keystore password -->
-			<Password><%= @key_stores['user_trusted_rp_store']['password'] %></Password>
-			<!-- Private Key password -->
-			<KeyPassword><%= @key_stores['user_trusted_rp_store']['key_password'] %></KeyPassword>
-		</UserTrustedRPStore>
 
 		<!-- The directory under which all other KeyStore files will be stored -->
 		<KeyStoresDir>${carbon.home}/conf/keystores</KeyStoresDir>
@@ -80,6 +73,7 @@
 	</Identity>
 
 	<OpenID>
+
 		<!--
             Default values for OpenIDServerUrl and OpenIDUSerPattern are built in following format
             https://<HostName>:<MgtTrpProxyPort except 443>/<ProxyContextPath>/<context>
@@ -112,7 +106,7 @@
 
 		<!-- The expiration time (in minutes) for the OpenID association -->
 		<!--
-        <OpenIDAssociationExpiryTime>15/OpenIDAssociationExpiryTime>
+        <OpenIDAssociationExpiryTime>15</OpenIDAssociationExpiryTime>
     -->
 
 		<!-- Configs specific to PrivateAssociationCryptoStore -->
@@ -137,6 +131,24 @@
 		<SessionDataCacheTimeout><%= @oAuth['session_data_cache_timeout'] %></SessionDataCacheTimeout>
 		<ClaimCacheTimeout><%= @oAuth['claim_cache_timeout'] %></ClaimCacheTimeout>
 
+        <!-- Specify the Token issuer class to be used.
+             Default: org.wso2.carbon.identity.oauth2.token.OauthTokenIssuerImpl.
+             Applicable values: org.wso2.carbon.identity.oauth2.token.JWTTokenIssuer
+        -->
+        <!--<IdentityOAuthTokenGenerator>org.wso2.carbon.identity.oauth2.token.JWTTokenIssuer</IdentityOAuthTokenGenerator>-->
+
+        <!-- This configuration is used to specify the access token value generator.
+             Default: org.apache.oltu.oauth2.as.issuer.UUIDValueGenerator
+             Applicable values: org.apache.oltu.oauth2.as.issuer.UUIDValueGenerator,
+                                org.apache.oltu.oauth2.as.issuer.MD5Generator,
+                                org.wso2.carbon.identity.oauth.tokenvaluegenerator.SHA256Generator-->
+        <!--<AccessTokenValueGenerator>org.wso2.carbon.identity.oauth.tokenvaluegenerator.SHA256Generator</AccessTokenValueGenerator>-->
+
+        <!-- This configuration is used to specify whether the Service Provider tenant domain should be used when generating
+             access token. Otherwise user domain will be used. Currently this value is only supported by the JWTTokenIssuer.-->
+        <!--<UseSPTenantDomain>True</UseSPTenantDomain>-->
+
+
 		<!--
             Default values for OAuth1RequestTokenUrl, OAuth1AccessTokenUrl, OAuth1AuthorizeUrl
             OAuth2AuthzEPUrl, OAuth2TokenEPUrl and OAuth2UserInfoEPUrl are built in following format
@@ -148,6 +160,8 @@
 		<OAuth1AccessTokenUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth/access-token</OAuth1AccessTokenUrl>
 		<OAuth2AuthzEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/authorize</OAuth2AuthzEPUrl>
 		<OAuth2TokenEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</OAuth2TokenEPUrl>
+        <OAuth2RevokeEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/revoke</OAuth2RevokeEPUrl>
+        <OAuth2IntrospectEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/introspect</OAuth2IntrospectEPUrl>
 		<OAuth2UserInfoEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/userinfo</OAuth2UserInfoEPUrl>
 		<OIDCCheckSessionEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oidc/checksession</OIDCCheckSessionEPUrl>
 		<OIDCLogoutEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oidc/logout</OIDCLogoutEPUrl>
@@ -156,6 +170,13 @@
 		<OIDCConsentPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_consent.do</OIDCConsentPage>
 		<OIDCLogoutConsentPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_logout_consent.do</OIDCLogoutConsentPage>
 		<OIDCLogoutPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/oauth2_logout.do</OIDCLogoutPage>
+
+        <OIDCWebFingerEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/.well-known/webfinger</OIDCWebFingerEPUrl>
+
+        <!-- For tenants below urls will be modified as https://<hostname>:<port>/t/<tenant domain>/<path>-->
+        <OAuth2DCREPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/identity/connect/register</OAuth2DCREPUrl>
+        <OAuth2JWKSPage>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/jwks</OAuth2JWKSPage>
+        <OIDCDiscoveryEPUrl>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/oidcdiscovery</OIDCDiscoveryEPUrl>
 
 		<!-- Default validity period for Authorization Code in seconds -->
 		<AuthorizationCodeDefaultValidityPeriod><%= @oAuth['auth_code_default_validity_period'] %></AuthorizationCodeDefaultValidityPeriod>
@@ -167,12 +188,12 @@
 		<RefreshTokenValidityPeriod><%= @oAuth['refresh_token_validity_period'] %></RefreshTokenValidityPeriod>
 		<!-- Timestamp skew in seconds -->
 		<TimestampSkew><%= @oAuth['time_stamp_skew'] %></TimestampSkew>
-		<!-- Enable OAuth caching -->
-		<EnableOAuthCache><%= @oAuth['enable_OAuth_cache'] %></EnableOAuthCache>
 		<!-- Enable renewal of refresh token for refresh_token grant -->
 		<RenewRefreshTokenForRefreshGrant><%= @oAuth['renew_refresh_token_for_refresh_grant'] %></RenewRefreshTokenForRefreshGrant>
 		<!-- Process the token before storing it in database, e.g. encrypting -->
 		<TokenPersistenceProcessor>org.wso2.carbon.identity.oauth.tokenprocessor.PlainTextPersistenceProcessor</TokenPersistenceProcessor>
+        <!-- If the user is a federated, user will not be able to access claims from local userstore even if the username matches -->
+        <MapFederatedUsersToLocal>false</MapFederatedUsersToLocal>
 		<!-- Supported Client Authentication Methods -->
 		<ClientAuthHandlers>
 			<ClientAuthHandler Class="org.wso2.carbon.identity.oauth2.token.handlers.clientauth.BasicAuthClientAuthHandler">
@@ -231,6 +252,16 @@
 		<!--TokenValidators>
             <TokenValidator type="bearer" class="org.wso2.carbon.identity.oauth2.validators.DefaultOAuth2TokenValidator"/>
         </TokenValidators-->
+        <ScopeValidators>
+            <ScopeValidator class="org.wso2.carbon.identity.oauth2.validators.JDBCScopeValidator" />
+        </ScopeValidators>
+
+        <!-- Scope handlers list. The handlers registered here will be executed at the scope validation phase while
+             issuing access tokens. -->
+        <ScopeHandlers>
+            <ScopeHandler class="org.wso2.carbon.identity.oauth2.validators.OIDCScopeHandler" />
+        </ScopeHandlers
+
 		<!-- Assertions can be used to embedd parameters into access token. -->
 		<EnableAssertions>
 			<UserName><%= @oAuth['enable_assertions_UserName'] %></UserName>
@@ -254,9 +285,16 @@
 			<SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm>
 			<AuthorizationContextTTL><%= @oAuth['auth_context_token_generation_TTL'] %></AuthorizationContextTTL>
 		</AuthorizationContextTokenGeneration>
-		<SAML2Grant>
-			<!--SAML2TokenHandler></SAML2TokenHandler-->
-		</SAML2Grant>
+        <SAML2Grant>
+            <!--SAML2TokenHandler></SAML2TokenHandler-->
+            <!-- UserType conifg decides whether the SAML assertion carrying user is local user or a federated user.
+            Only Local Users can access claims from local userstore. LEGACY users will have to have tenant domain appended username.
+            They will not be able to access claims from local userstore. To get claims by mapping users with exact same username from local
+            userstore (for non LOCAL scenarios) use mapFederatedUsersToLocal config -->
+            <UserType>LOCAL</UserType>
+            <!--UserType>FEDERATED</UserType-->
+            <!--UserType>LEGACY</UserType-->
+        </SAML2Grant>
 		<OpenIDConnect>
 			<IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
             <IDTokenBuilder>org.wso2.carbon.identity.openidconnect.DefaultIDTokenBuilder</IDTokenBuilder>
@@ -273,13 +311,24 @@
 			<IDTokenIssuerID>${carbon.protocol}://${carbon.host}:${carbon.management.port}/oauth2/token</IDTokenIssuerID>
 			<IDTokenCustomClaimsCallBackHandler>org.wso2.carbon.identity.openidconnect.SAMLAssertionClaimsCallback</IDTokenCustomClaimsCallBackHandler>
 			<IDTokenExpiration><%= @oAuth['id_token_expiration'] %></IDTokenExpiration>
+			<UserInfoJWTSignatureAlgorithm>SHA256withRSA</UserInfoJWTSignatureAlgorithm>
 			<UserInfoEndpointClaimRetriever>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoUserStoreClaimRetriever</UserInfoEndpointClaimRetriever>
 			<UserInfoEndpointRequestValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInforRequestDefaultValidator</UserInfoEndpointRequestValidator>
 			<UserInfoEndpointAccessTokenValidator>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoISAccessTokenValidator</UserInfoEndpointAccessTokenValidator>
 			<UserInfoEndpointResponseBuilder>org.wso2.carbon.identity.oauth.endpoint.user.impl.UserInfoJSONResponseBuilder</UserInfoEndpointResponseBuilder>
 			<SkipUserConsent><%= @oAuth['openIDConnect_skip_user_consent'] %></SkipUserConsent>
+            <!-- Sign the ID Token with Service Provider Tenant Private Key-->
+            <SignJWTWithSPKey><%= @oAuth['sign_jwt_spey'] %>/SignJWTWithSPKey>
+
 		</OpenIDConnect>
-	</OAuth>
+
+            <!-- Configs related to OAuth2 token persistence -->
+            <TokenPersistence>
+                <Enable><%= @oAuth['token_persistence_enable'] %></Enable>
+                <PoolSize><%= @oAuth['token_persistence_pool_size'] %></PoolSize>
+                <RetryCount><%= @oAuth['token_persistence_retry_count'] %></RetryCount>
+            </TokenPersistence>
+		</OAuth>
 
 	<MultifactorAuthentication>
 		<!--Enable>false</Enable-->
@@ -312,18 +361,21 @@
 		<!-- in milli seconds -->
 		<TenantPartitioningEnabled><%= @sso['tenant_partitioning_enabled'] %></TenantPartitioningEnabled>
 		<AttributesClaimDialect>http://wso2.org/claims</AttributesClaimDialect>
-		<SAMLSSOAssertionBuilder>org.wso2.carbon.identity.sso.saml.builders.assertion.ExtendedDefaultAssertionBuilder</SAMLSSOAssertionBuilder>
-		<SAMLSSOEncrypter>org.wso2.carbon.identity.sso.saml.builders.encryption.DefaultSSOEncrypter</SAMLSSOEncrypter>
+        <!--<SAMLSSOAssertionBuilder>org.wso2.carbon.identity.sso.saml.builders.assertion.ExtendedDefaultAssertionBuilder</SAMLSSOAssertionBuilder>-->
+        <SAMLSSOAssertionBuilder>org.wso2.carbon.identity.sso.saml.builders.assertion.DefaultSAMLAssertionBuilder</SAMLSSOAssertionBuilder>
+        <SAMLSSOEncrypter>org.wso2.carbon.identity.sso.saml.builders.encryption.DefaultSSOEncrypter</SAMLSSOEncrypter>
 		<SAMLSSOSigner>org.wso2.carbon.identity.sso.saml.builders.signature.DefaultSSOSigner</SAMLSSOSigner>
 		<SAML2HTTPRedirectSignatureValidator>org.wso2.carbon.identity.sso.saml.validators.SAML2HTTPRedirectDeflateSignatureValidator</SAML2HTTPRedirectSignatureValidator>
 		<!--SAMLSSOResponseBuilder>org.wso2.carbon.identity.sso.saml.builders.DefaultResponseBuilder</SAMLSSOResponseBuilder-->
 
-		<!-- SAML Token validity period in minutes -->
-		<SAMLResponseValidityPeriod><%= @sso['sAMLresponse_validity_period'] %></SAMLResponseValidityPeriod>
-		<UseAuthenticatedUserDomainCrypto><%= @sso['use_authenticated_user_domain_crypto'] %></UseAuthenticatedUserDomainCrypto>
-		<SAMLDefaultSigningAlgorithmURI>http://www.w3.org/2000/09/xmldsig#rsa-sha1</SAMLDefaultSigningAlgorithmURI>
-		<SAMLDefaultDigestAlgorithmURI>http://www.w3.org/2000/09/xmldsig#sha1</SAMLDefaultDigestAlgorithmURI>
-		<SLOHostNameVerificationEnabled><%= @sso['SLOHost_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
+        <!-- SAML Token validity period in minutes -->
+        <SAMLResponseValidityPeriod>5</SAMLResponseValidityPeriod>
+        <UseAuthenticatedUserDomainCrypto>false</UseAuthenticatedUserDomainCrypto>
+        <SAMLDefaultSigningAlgorithmURI>http://www.w3.org/2000/09/xmldsig#rsa-sha1</SAMLDefaultSigningAlgorithmURI>
+        <SAMLDefaultDigestAlgorithmURI>http://www.w3.org/2000/09/xmldsig#sha1</SAMLDefaultDigestAlgorithmURI>
+        <SAMLDefaultAssertionEncryptionAlgorithmURI>http://www.w3.org/2001/04/xmlenc#aes256-cbc</SAMLDefaultAssertionEncryptionAlgorithmURI>
+        <SAMLDefaultKeyEncryptionAlgorithmURI>http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p</SAMLDefaultKeyEncryptionAlgorithmURI>
+        <SLOHostNameVerificationEnabled>true</SLOHostNameVerificationEnabled>
 	</SSOService>
 
 	<SecurityTokenService>
@@ -344,7 +396,7 @@
 		<IdentityProviderURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/passivests</IdentityProviderURL>
 		<RetryURL>${carbon.protocol}://${carbon.host}:${carbon.management.port}/authenticationendpoint/retry.do</RetryURL>
 		<TokenStoreClassName>org.wso2.carbon.identity.sts.passive.utils.NoPersistenceTokenStore</TokenStoreClassName>
-		<SLOHostNameVerificationEnabled><%= @passiveSTS['slo_host_name_verifi_enabled'] %></SLOHostNameVerificationEnabled>
+		<SLOHostNameVerificationEnabled>true</SLOHostNameVerificationEnabled>
 	</PassiveSTS>
 
 	<EntitlementSettings>
@@ -396,17 +448,17 @@
         <Question>
             <Password>
                 <Enable>false</Enable>
-                <NotifyStart>true</NotifyStart>
+                <NotifyStart>false</NotifyStart>
                 <Separator>!</Separator>
                 <MinAnswers>2</MinAnswers>
                 <ReCaptcha>
                     <Enable>true</Enable>
-                    <MaxFailedAttempts>3</MaxFailedAttempts>
+                    <MaxFailedAttempts>2</MaxFailedAttempts>
                 </ReCaptcha>
             </Password>
         </Question>
-        <ExpiryTime>3</ExpiryTime>
-        <NotifySuccess>true</NotifySuccess>
+        <ExpiryTime>1440</ExpiryTime>
+        <NotifySuccess>false</NotifySuccess>
         <AdminPasswordReset>
             <Offline>false</Offline>
             <OTP>false</OTP>
@@ -416,25 +468,33 @@
 
     <EmailVerification>
         <Enable>false</Enable>
-        <LockOnCreation>false</LockOnCreation>
+            <ExpiryTime>1440</ExpiryTime>
+        <LockOnCreation>true</LockOnCreation>
         <Notification>
             <InternallyManage>true</InternallyManage>
         </Notification>
+         <AskPassword>
+ 	        <ExpiryTime>1440</ExpiryTime>
+ 	        <PasswordGenerator>org.wso2.carbon.user.mgt.common.DefaultPasswordGenerator</PasswordGenerator>
+         </AskPassword>
     </EmailVerification>
 
     <SelfRegistration>
         <Enable>false</Enable>
-        <LockOnCreation>false</LockOnCreation>
+        <LockOnCreation>true</LockOnCreation>
         <Notification>
             <InternallyManage>true</InternallyManage>
         </Notification>
-        <ReCaptcha>false</ReCaptcha>
+        <ReCaptcha>true</ReCaptcha>
+	    <VerificationCode>
+	       <ExpiryTime>1440</ExpiryTime>
+	    </VerificationCode>
     </SelfRegistration-->
+    <AuthenticationPolicy>
+        <CheckAccountExist>true</CheckAccountExist>
+    </AuthenticationPolicy>
 
-	<!--SessionContextCache>
-        <Enable>true</Enable>
-        <Capacity>100000</Capacity>
-    </SessionContextCache-->
+
 
 	<EventListeners>
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
@@ -444,11 +504,19 @@
 					   name="org.wso2.carbon.identity.mgt.IdentityMgtEventListener"
 					   orderId="50" enable="<%= @evenet_listeners['identity_mgt_event_listener'] %>"/>
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
-					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
-					   orderId="95" enable="<%= @evenet_listeners['identity_governance_event_listener'] %>"/>
-		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 		               name="org.wso2.carbon.identity.scim.common.listener.SCIMUserOperationListener"
 					   orderId="90" enable="<%= @evenet_listeners['scimuser_operation_listener'] %>"/>
+
+        <!-- Enable the following SCIM2 event listener and disable the above SCIM event listener if SCIM2 is used. -->
+
+        <EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+                       name="org.wso2.carbon.identity.scim2.common.listener.SCIMUserOperationListener"
+                       orderId="93" enable="<%= @evenet_listeners['identity_scim2_user_operation_listener'] %>""/>
+
+		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
+					   name="org.wso2.carbon.identity.governance.listener.IdentityMgtEventListener"
+					   orderId="95" enable="<%= @evenet_listeners['identity_governance_event_listener'] %>"/>
+
 		<EventListener type="org.wso2.carbon.user.core.listener.UserOperationEventListener"
 		               name="org.wso2.carbon.identity.governance.listener.IdentityStoreEventListener"
 					   orderId="97" enable="<%= @evenet_listeners['identity_store_event_listener'] %>">
@@ -466,25 +534,37 @@
 	</EventListeners>
 
     <CacheConfig>
-        <CacheManager name="IdentityApplicationManagementCacheManager">
-            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%= @cache['service_provider_provisioning_connector_cache'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri'] %>" timeout="1" capacity="5000" isDistributed="false"/>
-            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name'] %>" timeout="1" capacity="5000" isDistributed="false"/>
+        <!-- Identity cache configuration.
+             Timeouts are in seconds.
+             Capacity is the maximum cache size.
+             Unless specifically mentioned, you do not need to set the isDistributed flag.
+         -->
+           <CacheManager name="IdentityApplicationManagementCacheManager">
+            <Cache name="AppAuthFrameworkSessionContextCache" enable="<%= @cache['appauth_framework_session_context'] %> " timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationContextCache" enable="<%= @cache['authentication_context_cache'] %> " timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationRequestCache" enable="<%= @cache['appauth_framework_session_contex'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthenticationResultCache" enable="<%= @cache['authentication_request_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AppInfoCache" enable="<%= @cache['app_info_cache'] %>"  timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="AuthorizationGrantCache" enable="<%= @cache['authorization_grant_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthCache" enable="<%= @cache['oauth_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="OAuthSessionDataCache" enable="<%= @cache['oauth_session_data_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOParticipantCache" enable="<%= @cache['samalsso_participant_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionIndexCache" enable="<%= @cache['samalsso_session_index_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="SAMLSSOSessionDataCache" enable="<%= @cache['samalsso_session_data_cache'] %>" timeout="300" capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderCache" enable="<%= @cache['service_provider_cache'] %>" timeout="900"
+            capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningConnectorCache" enable="<%= @cache['provisioning_connector_cache'] %>"
+            timeout="900" capacity="5000" isDistributed="false"/>
+            <Cache name="ProvisioningEntityCache" enable="<%= @cache['provisioning_entity_cache'] %>" timeout="900"
+            capacity="5000" isDistributed="false"/>
+            <Cache name="ServiceProviderProvisioningConnectorCache" enable="<%=
+            @cache['service_provider_provisioning_connector_cache'] %>" timeout="900" capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByAuthProperty" enable="<%= @cache['idP_cache_byauth_property'] %>" timeout="900"
+            capacity="5000" isDistributed="false"/>
+            <Cache name="IdPCacheByHRI" enable="<%= @cache['idp_cache_byhri'] %>" timeout="900" capacity="5000"
+            isDistributed="false"/>
+            <Cache name="IdPCacheByName" enable="<%= @cache['idp_cache_by_name'] %>" timeout="900" capacity="5000"
+            isDistributed="false"/>
          </CacheManager>
     </CacheConfig>
 
@@ -494,37 +574,100 @@
 
 
 	<ResourceAccessControl>
-		<Resource context="(.*)/api/identity/user/(.*)" secured="true" http-method="all"/>
-		<Resource context="(.*)/api/identity/recovery/(.*)" secured="true" http-method="all"/>
-		<Resource context="(.*)/identity/register/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
-		</Resource>
-		<Resource context="(.*)/identity/connect/register/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/applicationmgt/create</Permissions>
-		</Resource>
-		<Resource context="(.*)/oauth2/introspect/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/applicationmgt/view</Permissions>
-		</Resource>
-		<Resource context="(.*)/api/identity/entitlement/(.*)" secured="true" http-method="all">
-			<Permissions>/permission/admin/manage/identity/pep</Permissions>
-		</Resource>
+        <Resource context="(.*)/api/identity/user/(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/api/identity/recovery/(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/.well-known(.*)" secured="true" http-method="all"/>
+        <Resource context="(.*)/identity/register(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/identity/connect/register(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/oauth2/introspect(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/entitlement/(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/pep</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users" secured="true" http-method="POST">
+            <Permissions>/permission/admin/manage/identity/usermgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/usermgt/list</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups" secured="true" http-method="POST">
+            <Permissions>/permission/admin/manage/identity/rolemgt/create</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/rolemgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/usermgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="PUT">
+            <Permissions>/permission/admin/manage/identity/usermgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="PATCH">
+            <Permissions>/permission/admin/manage/identity/usermgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Users/(.*)" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/usermgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="GET">
+            <Permissions>/permission/admin/manage/identity/rolemgt/view</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="PUT">
+            <Permissions>/permission/admin/manage/identity/rolemgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="PATCH">
+            <Permissions>/permission/admin/manage/identity/rolemgt/update</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Groups/(.*)" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/rolemgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true"    http-method="GET">
+            <Permissions>/permission/admin/login</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true" http-method="DELETE">
+            <Permissions>/permission/admin/manage/identity/usermgt/delete</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true"    http-method="PUT">
+            <Permissions>/permission/admin/login</Permissions>
+        </Resource>
+        <Resource context="(.*)/scim2/Me" secured="true"   http-method="PATCH">
+            <Permissions>/permission/admin/login</Permissions>
+        </Resource>
+        <Resource context="/scim2/ServiceProviderConfig" secured="false" http-method="all">
+            <Permissions></Permissions>
+        </Resource>
+        <Resource context="/scim2/ResourceType" secured="false" http-method="all">
+            <Permissions></Permissions>
+        </Resource>
+        <Resource context="/scim2/Bulk" secured="true"  http-method="all">
+            <Permissions>/permission/admin/manage/identity/usermgt</Permissions>
+        </Resource>
+        <Resource context="(.*)/api/identity/oauth2/dcr/(.*)" secured="true" http-method="all">
+            <Permissions>/permission/admin/manage/identity/applicationmgt</Permissions>
+        </Resource>
 	</ResourceAccessControl>
 
 	<ClientAppAuthentication>
 		<Application name="dashboard" hash="66cd9688a2ae068244ea01e70f0e230f5623b7fa4cdecb65070a09ec06452262"/>
 	</ClientAppAuthentication>
 
-	<TenantContextsToRewrite>
-		<WebApp>
-			<Context>/api/identity/user/v0.9</Context>
-			<Context>/api/identity/recovery/v0.9</Context>
-			<Context>/oauth2/introspect</Context>
-			<Context>/entitlement</Context>
-		</WebApp>
-		<Servlet>
-			<Context>/identity/(.*)</Context>
-		</Servlet>
-	</TenantContextsToRewrite>
+    <TenantContextsToRewrite>
+        <WebApp>
+            <Context>/api/identity/user/v0.9</Context>
+            <Context>/api/identity/recovery/v0.9</Context>
+            <Context>/oauth2</Context>
+            <Context>/scim2</Context>
+            <Context>/api/identity/entitlement</Context>
+            <Context>/api/identity/oauth2/dcr/v1.0</Context>
+        </WebApp>
+        <Servlet>
+            <Context>/identity/(.*)</Context>
+        </Servlet>
+    </TenantContextsToRewrite>
 
 	<!-- Server Synchronization Tolerance Configuration in seconds -->
 	<ClockSkew>300</ClockSkew>
