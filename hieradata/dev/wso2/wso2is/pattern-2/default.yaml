@@ -28,6 +28,8 @@ wso2::template_list:
   - repository/conf/identity/identity.xml
   - repository/conf/user-mgt.xml
   - repository/conf/registry.xml
+  - repository/conf/bps.xml
+  - repository/conf/metrics.xml
   - repository/conf/carbon.xml
   - repository/conf/tomcat/catalina-server.xml
   - repository/conf/axis2/axis2.xml
@@ -72,7 +74,7 @@ wso2::clustering:
   wka:
     members:
       -
-        hostname: "%{::ipaddress}"
+        hostname: 192.168.48.194
         port: 4000
       -
         hostname: 192.168.48.195
@@ -165,7 +167,7 @@ wso2::bps_datasources:
     url: jdbc:mysql://192.168.100.1:3306/WSO2_BPS_DB?autoReconnect=true
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: WSO2_BPS_DB
+    jndi_config: bpsds
     max_active: "%{hiera('wso2::datasources::common::max_active')}"
     max_idle: "%{hiera('wso2::datasources::common::max_idle')}"
     max_wait: "%{hiera('wso2::datasources::common::max_wait')}"

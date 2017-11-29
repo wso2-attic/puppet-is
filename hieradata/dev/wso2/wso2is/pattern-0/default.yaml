@@ -25,12 +25,8 @@ wso2::template_list:
   - repository/conf/carbon.xml
   - bin/wso2server.sh
 
-#  - repository/conf/security/cipher-text.properties
-#  - repository/conf/security/cipher-tool.properties
-#  - bin/ciphertool.sh
-
 # Provide the server list for setting up sso
-#wso2::sso_service_providers:
+# wso2::sso_service_providers:
 #    wso2esb:
 #      assertion_consumer_service_url: https://esb.dev.wso2.org:9443/acs
 #      default_assertion_consumer_service_url: https://esb.dev.wso2.org:9443/acs
@@ -51,9 +47,7 @@ wso2::template_list:
 #  - repository/conf/security/secret-conf.properties
 
 # Files to be copied to the product folder when restarting the system service
-#wso2::service_refresh_file_list:
-#  - password-tmp
-#  - "repository/components/lib/%{hiera('wso2::datasources::mysql::connector_jar')}"
+# wso2::service_refresh_file_list:
 
 wso2::clustering:
   enabled: false
@@ -65,7 +59,7 @@ wso2::clustering:
   wka:
     members:
       -
-        hostname: 192.168.48.196
+        hostname: 192.168.48.194
         port: 4000
       -
         hostname: 192.168.48.195
@@ -149,8 +143,8 @@ wso2::openID:
   remember_me_expir: 7200
 
 wso2::time_config:
-  session_idle_timeout : 15,
-  remember_me_timeout  : 20160,
+  session_idle_timeout : 15
+  remember_me_timeout  : 20160
 
 wso2::oAuth:
   app_info_cache_timeout : -1
@@ -159,8 +153,8 @@ wso2::oAuth:
   claim_cache_timeout   : -1
   auth_code_default_validity_period : 300
   access_token_default_validity_period : 3600
-  user_access_token_default_validity_period : 3600,
-  refresh_token_validity_period : 84600,
+  user_access_token_default_validity_period : 3600
+  refresh_token_validity_period : 84600
   time_stamp_skew   : 0
   renew_refresh_token_for_refresh_grant : true
   strict_client_credential_validation   : false
@@ -168,11 +162,11 @@ wso2::oAuth:
   enable_access_token_partitioning : false
   auth_context_token_generation_enabled : false
   auth_context_token_generation_TTL : 15
-  id_token_expiration : 3600,
+  id_token_expiration : 3600
   openIDConnect_skip_user_consent: false
   sign_jwt_spey: false
   token_persistence_enable: true
-  token_persistence_pool_size: 0,
+  token_persistence_pool_size: 0
   token_persistence_retry_count: 5
 
 wso2::sso:
@@ -225,8 +219,8 @@ wso2::tomcat:
  acceptCount : 500
 
 # Secure vault configuration
-#wso2::enable_secure_vault: false
-#wso2::secure_vault_configs:
+# wso2::enable_secure_vault: false
+# wso2::secure_vault_configs:
 #  key_store_password:
 #    secret_alias: Carbon.Security.KeyStore.Password
 #    secret_alias_value: repository/conf/carbon.xml//Server/Security/KeyStore/Password,false

@@ -22,15 +22,19 @@ wso2::mgt_hostname: is.dev.wso2.org
 wso2::enable_thrift_service: false
 
 wso2::template_list:
+  - repository/conf/datasources/master-datasources.xml
+  - repository/conf/datasources/bps-datasources.xml
+  - repository/conf/datasources/metrics-datasources.xml
+  - repository/conf/identity/identity.xml
+  - repository/conf/user-mgt.xml
+  - repository/conf/registry.xml
+  - repository/conf/bps.xml
+  - repository/conf/metrics.xml
   - repository/conf/carbon.xml
   - bin/wso2server.sh
 
-#  - repository/conf/security/cipher-text.properties
-#  - repository/conf/security/cipher-tool.properties
-#  - bin/ciphertool.sh
-
 # Provide the server list for setting up sso
-#wso2::sso_service_providers:
+# wso2::sso_service_providers:
 #    wso2esb:
 #      assertion_consumer_service_url: https://esb.dev.wso2.org:9443/acs
 #      default_assertion_consumer_service_url: https://esb.dev.wso2.org:9443/acs
@@ -52,7 +56,7 @@ wso2::file_list:
 #  - repository/conf/security/secret-conf.properties
 
 # Files to be copied to the product folder when restarting the system service
-#wso2::service_refresh_file_list:
+# wso2::service_refresh_file_list:
 
 wso2::clustering:
   enabled: false
@@ -64,7 +68,7 @@ wso2::clustering:
   wka:
     members:
       -
-        hostname: 192.168.48.196
+        hostname: 192.168.48.194
         port: 4000
       -
         hostname: 192.168.48.195
@@ -157,7 +161,7 @@ wso2::bps_datasources:
     url: jdbc:mysql://192.168.100.1:3306/WSO2_BPS_DB?autoReconnect=true
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: WSO2_BPS_DB
+    jndi_config: bpsds
     max_active: "%{hiera('wso2::datasources::common::max_active')}"
     max_idle: "%{hiera('wso2::datasources::common::max_idle')}"
     max_wait: "%{hiera('wso2::datasources::common::max_wait')}"

@@ -1,4 +1,4 @@
-# WSO2 Identity Server Pattern-3
+# WSO2 Identity Server Pattern-2
 
 This pattern can be used to deploy WSO2 Identity Server in a cluster. In this pattern datasources used in WSO2 Identity 
 Server are externalized and registry mounting is used. 
@@ -15,5 +15,5 @@ environment=production
 vm_type=openstack
 use_hieradata=true
 platform=default
-pattern=pattern-3
+pattern=pattern-2
 ```
