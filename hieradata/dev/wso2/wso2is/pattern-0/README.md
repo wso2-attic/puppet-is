@@ -3,10 +3,10 @@
 
 This pattern can be used to deploy the stand alone WSO2 Identity Server, in a single node. In this deployment WSO2 
 Identity Server will use the embedded H2 database.
-Please note that this pattern is not production recommended and introduced such that it can be used to try out WSO2 
-Identity Server deployment with puppet easily.
+Please note that this pattern is not production recommended. It is available as it can be used to try out WSO2 
+Identity Server deployment, with puppet easily.
 
-To use this pattern the /opt/deployment.conf file that needs to be configured in puppent agent should be as below:
+To use this pattern, configure the /opt/deployment.conf file in puppent agent as below:
 ```
 product_name=wso2is
 product_version=5.4.0
