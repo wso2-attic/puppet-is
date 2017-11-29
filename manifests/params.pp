@@ -24,14 +24,15 @@ class wso2is::params {
   # use_hieradata facter flags whether parameter lookup should be done via Hiera
   if $::use_hieradata == 'true' {
 
-    $am_datasources           = hiera('wso2::am_datasources')
     $bps_datasources          = hiera('wso2::bps_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
+    $userstores               = hiera('wso2::userstores', undef)
+    $am_datasources           = hiera('wso2::am_datasources', undef)
+    $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
+    $primary_userstore        = hiera('wso2::primary_userstore', undef)
     $identity_datasource      = hiera('wso2::identity_datasource')
     $bps_datasource           = hiera('wso2::bps_datasource')
     $metrics_datasource       = hiera('wso2::metrics_datasource')
-    $reg_datasource           = hiera('wso2::reg_datasource', undef)
-    $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
     $enable_thrift_service    = hiera('wso2::enable_thrift_service')
 
     $java_prefs_system_root   = hiera('java_prefs_system_root')

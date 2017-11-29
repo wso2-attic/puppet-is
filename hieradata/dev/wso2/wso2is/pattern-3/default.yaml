@@ -110,7 +110,6 @@ wso2::registry_mounts:
 
 wso2::usermgt_datasource: wso2_user_db
 wso2::identity_datasource: wso2_identity_db
-wso2::reg_datasource: wso2_reg_db
 
 # SSO Configuration
 wso2::sso_authentication:

@@ -23,6 +23,8 @@ class wso2is (
   $metrics_datasources      = $wso2is::params::metrics_datasources,
   $metrics_datasource       = $wso2is::params::metrics_datasource,
   $identity_datasource      = $wso2is::params::identity_datasource,
+  $userstores               = $wso2is::params::userstores,
+  $primary_userstore        = $wso2is::params::primary_userstore,
   $sso_service_providers    = $wso2is::params::sso_service_providers,
   $enable_thrift_service    = $wso2is::params::enable_thrift_service,
 
@@ -79,21 +81,36 @@ class wso2is (
   $user_management        = $wso2is::params::user_management,
 ) inherits wso2is::params {
 
-  validate_hash($am_datasources)
+  validate_hash($master_datasources)
   validate_hash($bps_datasources)
-  validate_string($bps_datasource)
   validate_hash($metrics_datasources)
-  validate_string($metrics_datasource)
+
   validate_string($identity_datasource)
+  validate_string($bps_datasource)
+  validate_string($metrics_datasource)
+
   validate_bool($enable_thrift_service)
+
+  if $userstores != undef {
+    validate_hash($userstores)
+  }
+
+  if $am_datasources != undef {
+    validate_hash($am_datasources)
+  }
+
+  if $registry_mounts != undef {
+    validate_hash($registry_mounts)
+  }
+
   if $sso_service_providers != undef {
     validate_hash($sso_service_providers)
   }
 
-  validate_hash($master_datasources)
-  if $registry_mounts != undef {
-    validate_hash($registry_mounts)
+  if $primary_userstore != undef {
+    validate_string($primary_userstore)
   }
+
   validate_string($hostname)
   validate_string($mgt_hostname)
   validate_bool($worker_node)
