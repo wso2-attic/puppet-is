@@ -117,7 +117,7 @@ wso2::dep_sync:
      password: password
      append_tenant_id: true
 
-wso2::is_datasource: wso2_carbon_db
+wso2::identity_datasource: wso2_carbon_db
 
 wso2::master_datasources:
   wso2_config_db:

@@ -1,10 +1,11 @@
-# WSO2 IDENTITY SERVER Pattern-1
+# WSO2 Identity Server Pattern-1
 
-
-This pattern consist of a stand-alone IS setup with a single node deployment. The databases used in this pattern are the embedded H2 databases. The only difference between this pattern-1 and pattern-2 is that, pattern-1 uses embedded H2 databases and pattern-1 is configured to use external mysql databases.
-
-Content of /opt/deployment.conf file should be similar to below to run the agent and setup this pattern in Puppet Agent.
-
+This pattern can be used to deploy WSO2 Identity Server, in a single node. This deployment pattern modularizes the 
+datasources used in WSO2 Identity Server deployment and includes registry mounting. Thus, any external datasource of 
+the supported database vendor types  can be plugged to WSO2 Identity Server using this pattern. 
+Default datasource related configurations are done with respect to MYSQL.
+  
+To use this pattern, configure the /opt/deployment.conf file in puppent agent as below:
 ```
 product_name=wso2is
 product_version=5.4.0

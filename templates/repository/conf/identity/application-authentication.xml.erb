@@ -56,25 +56,25 @@
 		authenticator in place of an authenticator that gets packed with the
 		distribution.
 	-->
-	<AuthenticatorNameMappings>
-		<AuthenticatorNameMapping name="BasicAuthenticator" alias="basic" />
-		<AuthenticatorNameMapping name="OAuthRequestPathAuthenticator" alias="oauth-bearer" />
-		<AuthenticatorNameMapping name="BasicAuthRequestPathAuthenticator" alias="basic-auth" />
-		<AuthenticatorNameMapping name="IWAAuthenticator" alias="iwa" />
-		<AuthenticatorNameMapping name="SAMLSSOAuthenticator" alias="samlsso" />
-		<AuthenticatorNameMapping name="OpenIDConnectAuthenticator" alias="openidconnect" />
-		<AuthenticatorNameMapping name="OpenIDAuthenticator" alias="openid" />
-		<AuthenticatorNameMapping name="PassiveSTSAuthenticator" alias="passive-sts" />
-	</AuthenticatorNameMappings>
+    <AuthenticatorNameMappings>
+        <AuthenticatorNameMapping name="BasicAuthenticator" alias="basic" />
+        <AuthenticatorNameMapping name="OAuthRequestPathAuthenticator" alias="oauth-bearer" />
+        <AuthenticatorNameMapping name="BasicAuthRequestPathAuthenticator" alias="basic-auth" />
+        <AuthenticatorNameMapping name="IWAAuthenticator" alias="iwa" />
+        <AuthenticatorNameMapping name="SAMLSSOAuthenticator" alias="samlsso" />
+        <AuthenticatorNameMapping name="OpenIDConnectAuthenticator" alias="openidconnect" />
+        <AuthenticatorNameMapping name="OpenIDAuthenticator" alias="openid" />
+        <AuthenticatorNameMapping name="PassiveSTSAuthenticator" alias="passive-sts" />
+    </AuthenticatorNameMappings>
 
-	<!--
-        AuthenticatorConfigs allow specifying various configurations needed
-        by the authenticators by using any number of \'Parameter\' elements
-        E.g.
-        <AuthenticatorConfig name="CustomAuthenticator" enabled="true" />
-            <Parameter name="paramName1">paramValue</Parameter>
-            <Parameter name="paramName2">paramValue</Parameter>
-        </AuthenticatorConfig>
+    <!--
+		AuthenticatorConfigs allow specifying various configurations needed
+		by the authenticators by using any number of \'Parameter\' elements
+		E.g.
+		<AuthenticatorConfig name="CustomAuthenticator" enabled="true" />
+			<Parameter name="paramName1">paramValue</Parameter>
+			<Parameter name="paramName2">paramValue</Parameter>
+		</AuthenticatorConfig>
     -->
 	<AuthenticatorConfigs>
 		<AuthenticatorConfig name="BasicAuthenticator" enabled="true">
@@ -83,7 +83,7 @@
 		</AuthenticatorConfig>
 		<AuthenticatorConfig name="OAuthRequestPathAuthenticator" enabled="true" />
 		<AuthenticatorConfig name="BasicAuthRequestPathAuthenticator" enabled="true" />
-		<AuthenticatorConfig name="SAMLSSOAuthenticator" enabled="true">
+ 		<AuthenticatorConfig name="SAMLSSOAuthenticator" enabled="true">
 			<!--Parameter name="SignAuth2SAMLUsingSuperTenant">true</Parameter-->
 			<!--Parameter name="SAML2SSOManager">org.wso2.carbon.identity.application.authenticator.samlsso.manager.DefaultSAML2SSOManager</Parameter-->
 		</AuthenticatorConfig>
@@ -125,37 +125,55 @@
 			<Parameter name="MobileConnectKey">mobileConnectClientId</Parameter>
 			<Parameter name="MobileConnectSecret">mobileConnectClientSecret</Parameter>
 		</AuthenticatorConfig>
-		<AuthenticatorConfig name="EmailOTP" enabled="true">
-			<Parameter name="GmailClientId">gmailClientIdValue</Parameter>
-			<Parameter name="GmailClientSecret">gmailClientSecretValue</Parameter>
-			<Parameter name="SendgridAPIKey">sendgridAPIKeyValue</Parameter>
-			<Parameter name="GmailRefreshToken">gmailRefreshTokenValue</Parameter>
-			<Parameter name="GmailEmailEndpoint">https://www.googleapis.com/gmail/v1/users/[userId]/messages/send</Parameter>
-			<Parameter name="SendgridEmailEndpoint">https://api.sendgrid.com/api/mail.send.json</Parameter>
-			<Parameter name="accessTokenRequiredAPIs">Gmail</Parameter>
-			<Parameter name="apiKeyHeaderRequiredAPIs">Sendgrid</Parameter>
-			<Parameter name="SendgridFormData">sendgridFormDataValue</Parameter>
-			<Parameter name="SendgridURLParams">sendgridURLParamsValue</Parameter>
-			<Parameter name="GmailAuthTokenType">Bearer</Parameter>
-			<Parameter name="GmailTokenEndpoint">https://www.googleapis.com/oauth2/v3/token</Parameter>
-			<Parameter name="SendgridAuthTokenType">Bearer</Parameter>
-		</AuthenticatorConfig>
-		<AuthenticatorConfig name="x509CertificateAuthenticator" enabled="true">
-			<Parameter name="AuthenticationEndpoint">https://localhost:8443/x509-certificate-servlet</Parameter>
-		</AuthenticatorConfig>
-		<AuthenticatorConfig name="totp" enabled="true">
-			<Parameter name="encodingMethod">Base32</Parameter>
-			<Parameter name="timeStepSize">30</Parameter>
-			<Parameter name="windowSize">3</Parameter>
-			<Parameter name="enableTOTP">false</Parameter>
-		</AuthenticatorConfig>
+        <AuthenticatorConfig name="EmailOTP" enabled="true">
+            <Parameter name="GmailClientId">gmailClientIdValue</Parameter>
+            <Parameter name="GmailClientSecret">gmailClientSecretValue</Parameter>
+            <Parameter name="SendgridAPIKey">sendgridAPIKeyValue</Parameter>
+            <Parameter name="GmailRefreshToken">gmailRefreshTokenValue</Parameter>
+            <Parameter name="GmailEmailEndpoint">https://www.googleapis.com/gmail/v1/users/[userId]/messages/send</Parameter>
+            <Parameter name="SendgridEmailEndpoint">https://api.sendgrid.com/api/mail.send.json</Parameter>
+            <Parameter name="accessTokenRequiredAPIs">Gmail</Parameter>
+            <Parameter name="apiKeyHeaderRequiredAPIs">Sendgrid</Parameter>
+            <Parameter name="SendgridFormData">sendgridFormDataValue</Parameter>
+            <Parameter name="SendgridURLParams">sendgridURLParamsValue</Parameter>
+            <Parameter name="GmailAuthTokenType">Bearer</Parameter>
+            <Parameter name="GmailTokenEndpoint">https://www.googleapis.com/oauth2/v3/token</Parameter>
+            <Parameter name="SendgridAuthTokenType">Bearer</Parameter>
+        </AuthenticatorConfig>
+        <AuthenticatorConfig name="SMSOTP" enabled="true">
+            <Parameter name="SMSOTPAuthenticationEndpointURL">smsotpauthenticationendpoint/smsotp.jsp</Parameter>
+            <Parameter name="SMSOTPAuthenticationEndpointErrorPage">smsotpauthenticationendpoint/smsotpError.jsp</Parameter>
+            <Parameter name="MobileNumberRegPage">smsotpauthenticationendpoint/mobile.jsp</Parameter>
+            <Parameter name="RetryEnable">true</Parameter>
+            <Parameter name="ResendEnable">true</Parameter>
+            <Parameter name="BackupCode">true</Parameter>
+            <Parameter name="SMSOTPEnableByUserClaim">true</Parameter>
+            <Parameter name="SMSOTPMandatory">false</Parameter>
+            <Parameter name="CaptureAndUpdateMobileNumber">true</Parameter>
+            <Parameter name="SendOTPDirectlyToMobile">false</Parameter>
+        </AuthenticatorConfig>
+        <AuthenticatorConfig name="x509CertificateAuthenticator" enabled="true">
+            <Parameter name="AuthenticationEndpoint">https://localhost:8443/x509-certificate-servlet</Parameter>
+        </AuthenticatorConfig>
+        <AuthenticatorConfig name="totp" enabled="true">
+            <Parameter name="encodingMethod">Base32</Parameter>
+            <Parameter name="timeStepSize">30</Parameter>
+            <Parameter name="windowSize">3</Parameter>
+            <Parameter name="authenticationMandatory">true</Parameter>
+            <Parameter name="enrolUserInAuthenticationFlow">true</Parameter>
+            <Parameter name="usecase">local</Parameter>
+            <Parameter name="secondaryUserstore">primary</Parameter>
+            <Parameter name="TOTPAuthenticationEndpointURL">totpauthenticationendpoint/totp.jsp</Parameter>
+            <Parameter name="TOTPAuthenticationEndpointErrorPage">totpauthenticationendpoint/totpError.jsp</Parameter>
+            <Parameter name="TOTPAuthenticationEndpointEnableTOTPPage">totpauthenticationendpoint/enableTOTP.jsp</Parameter>
+        </AuthenticatorConfig>
 	</AuthenticatorConfigs>
 
-	<!--
-        Sequences allow specifying authentication flows for different
-        registered applications. \'default\' sequence is taken if an
-        application specific sequence doesn't exist in this file or
-        in the Application Mgt module.
+    <!--
+		Sequences allow specifying authentication flows for different
+		registered applications. \'default\' sequence is taken if an
+		application specific sequence doesn't exist in this file or
+		in the Application Mgt module.
     -->
 	<Sequences>
 		<!-- Default Sequence. This is mandatory -->
@@ -177,15 +195,15 @@
         	'sessionDataKey', 'type', 'relyingParty', 'sp' and 'authenticators'
         	parameters will be always sent. They should not be specified here.
     	-->
-	<AuthenticationEndpointQueryParams action="exclude">
-		<AuthenticationEndpointQueryParam name="username"/>
-		<AuthenticationEndpointQueryParam name="password"/>
-		<AuthenticationEndpointQueryParam name="SAMLRequest"/>
-	</AuthenticationEndpointQueryParams>
+    	<AuthenticationEndpointQueryParams action="exclude">
+        	<AuthenticationEndpointQueryParam name="username"/>
+        	<AuthenticationEndpointQueryParam name="password"/>
+            <AuthenticationEndpointQueryParam name="SAMLRequest"/>
+        </AuthenticationEndpointQueryParams>
 
-	<!--TenantDomainDropDownEnabled>true</TenantDomainDropDownEnabled>
-    <TenantDataListenerURLs>
-      <TenantDataListenerURL>/authenticationendpoint/tenantlistrefresher.do</TenantDataListenerURL>
-    </TenantDataListenerURLs-->
+	    <!--TenantDomainDropDownEnabled>true</TenantDomainDropDownEnabled>
+	    <TenantDataListenerURLs>
+		  <TenantDataListenerURL>/authenticationendpoint/tenantlistrefresher.do</TenantDataListenerURL>
+	    </TenantDataListenerURLs-->
 
 </ApplicationAuthentication>

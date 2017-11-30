@@ -30,27 +30,25 @@
         <dataSource><%= @master_datasources[@local_reg_datasource]['jndi_config'] %></dataSource>
     </dbConfig>
 
- <dbConfig name="WSO2_SHARED_REG">
-        <dataSource><%= @master_datasources[@reg_datasource]['jndi_config'] %></dataSource>
+    <% if @registry_mounts and !@registry_mounts.empty? -%>
+    <%- @registry_mounts.each do |datasource_name, registry_mount| -%>
+    <dbConfig name="<%= @master_datasources[datasource_name]['name'] %>">
+        <dataSource><%= @master_datasources[datasource_name]['jndi_config'] %></dataSource>
     </dbConfig>
     <remoteInstance url="https://localhost:9443/registry">
-        <id><%= @master_datasources[@reg_datasource]['name'] %></id>
-        <dbConfig>WSO2_SHARED_REG</dbConfig>
-        <readOnly>false</readOnly>
-        <registryRoot>/</registryRoot>
-        <enableCache>true</enableCache>
-        <cacheId><%= @master_datasources[@reg_datasource]['username'] %>@<%= @master_datasources[@reg_datasource]['url'] %></cacheId>
+        <id><%= @master_datasources[datasource_name]['name'] %></id>
+        <dbConfig><%= @master_datasources[datasource_name]['name'] %></dbConfig>
+        <readOnly><%= registry_mount['read_only'] %></readOnly>
+        <registryRoot><%= registry_mount['registry_root'] %></registryRoot>
+        <enableCache><%= registry_mount['enable_cache'] %></enableCache>
+        <cacheId><%= @master_datasources[datasource_name]['username'] %>@<%= @master_datasources[datasource_name]['url'] %></cacheId>
     </remoteInstance>
-
-   <% if @registry_mounts and !@registry_mounts.empty? -%>
-  <%- @registry_mounts.each do |datasource_name, registry_mount| -%>
     <mount path="<%= registry_mount['path'] %>" overwrite="virtual">
-           <instanceId><%= @master_datasources[@reg_datasource]['name'] %></instanceId>
-           <targetPath><%= registry_mount['target_path'] %></targetPath>
+        <instanceId><%= @master_datasources[datasource_name]['name'] %></instanceId>
+        <targetPath><%= registry_mount['target_path'] %></targetPath>
     </mount>
-   <%- end -%>
-  <%- end -%>
-
+    <%- end -%>
+    <% end -%>
 
    <handler class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyHandler">
  <filter class="org.wso2.carbon.identity.entitlement.policy.finder.registry.RegistryPolicyMediaTypeMatcher">

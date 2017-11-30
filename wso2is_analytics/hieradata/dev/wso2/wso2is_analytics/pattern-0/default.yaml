@@ -105,7 +105,7 @@ wso2::portal:
 #  port: ""
 #  protocol: ""
 
-wso2::is_datasource: wso2_carbon_db
+wso2::identity_datasource: wso2_carbon_db
 
 #wso2::master_datasources:
 #  wso2_config_db:
