@@ -42,10 +42,10 @@ wso2::template_list:
 #      assertion_consumer_service_url: https://as.dev.wso2.org:9443/acs
 #      default_assertion_consumer_service_url: https://as.dev.wso2.org:9443/acs
 
-# wso2::ports:
-#   proxyPort:
-#     http: 80
-#     https: 443
+wso2::ports:
+  proxyPort:
+    https: 443
+# http: 80
 
 # File list to be copied to the product folder, if there are changes found in the files, the system
 # service will be restarted
