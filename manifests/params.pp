@@ -27,7 +27,6 @@ class wso2is::params {
     $bps_datasources          = hiera('wso2::bps_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
     $userstores               = hiera('wso2::userstores', undef)
-    $am_datasources           = hiera('wso2::am_datasources', undef)
     $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
     $primary_userstore        = hiera('wso2::primary_userstore', undef)
     $identity_datasource      = hiera('wso2::identity_datasource')
@@ -103,23 +102,6 @@ class wso2is::params {
 
   } else {
 
-    $am_datasources       = {
-      wso2_am_db => {
-        name                => 'WSO2AM_DB',
-        description         => 'The datasource used for IS as Key Manager database',
-        driver_class_name   => 'org.h2.Driver',
-        url                 => 'jdbc:h2:repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE',
-        username            => 'wso2carbon',
-        password            => 'wso2carbon',
-        jndi_config         => 'jdbc/WSO2AM_DB',
-        max_active          => '50',
-        max_wait            => '60000',
-        test_on_borrow      => true,
-        default_auto_commit => false,
-        validation_query    => 'SELECT 1',
-        validation_interval => '30000'
-      }
-    }
     $bps_datasources       = {
       bps_ds => {
         name                    => 'BPS_DS',

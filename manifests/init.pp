@@ -17,7 +17,6 @@
 # Manages WSO2 Identity Server deployment
 class wso2is (
   # wso2is specific configuration data
-  $am_datasources           = $wso2is::params::am_datasources,
   $bps_datasources          = $wso2is::params::bps_datasources,
   $bps_datasource           = $wso2is::params::bps_datasource,
   $metrics_datasources      = $wso2is::params::metrics_datasources,
@@ -93,10 +92,6 @@ class wso2is (
 
   if $userstores != undef {
     validate_hash($userstores)
-  }
-
-  if $am_datasources != undef {
-    validate_hash($am_datasources)
   }
 
   if $registry_mounts != undef {
