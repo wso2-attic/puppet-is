@@ -31,16 +31,13 @@ wso2::template_list:
   - repository/conf/bps.xml
   - repository/conf/metrics.xml
   - repository/conf/carbon.xml
+  - repository/conf/tomcat/catalina-server.xml
+  - repository/conf/axis2/axis2.xml
   - bin/wso2server.sh
 
-# Provide the server list for setting up sso
-# wso2::sso_service_providers:
-#    wso2esb:
-#      assertion_consumer_service_url: https://esb.dev.wso2.org:9443/acs
-#      default_assertion_consumer_service_url: https://esb.dev.wso2.org:9443/acs
-#    wso2as:
-#      assertion_consumer_service_url: https://as.dev.wso2.org:9443/acs
-#      default_assertion_consumer_service_url: https://as.dev.wso2.org:9443/acs
+#  - repository/conf/security/cipher-text.properties
+#  - repository/conf/security/cipher-tool.properties
+#  - bin/ciphertool.sh
 
 wso2::ports:
   proxyPort:
@@ -59,7 +56,7 @@ wso2::file_list:
 # wso2::service_refresh_file_list:
 
 wso2::clustering:
-  enabled: false
+  enabled: true
   local_member_host: "%{::ipaddress}"
   local_member_port: 4000
   domain: is.wso2.domain
@@ -74,63 +71,31 @@ wso2::clustering:
         hostname: 192.168.48.195
         port: 4000
 # AWS membership scheme
-#   membership_scheme: aws
-#   aws:
-#     access_key: access-key
-#     secret_key: secret-key
-#     security_group: security-group
-#     host_header: host-header
-#     region: region
-#     tag_key: tag-key
-#     tag_value: tag-value
+#  membership_scheme: aws
+#  aws:
+#    access_key: access-key
+#    secret_key: secret-key
+#    security_group: security-group
+#    host_header: host-header
+#    region: region
+#    tag_key: tag-key
+#    tag_value: tag-value
 
-# SSO Configuration
-wso2::sso_authentication:
-  enabled: false
-  login_page: /carbon/admin/login.jsp
-  service_provider_id: wso2is
-  sso_service_url: https://is.dev.wso2.org:9443/samlsso
-  consumer_service_url: https://is.dev.wso2.org:9443/acs
+wso2::user_management:
+  add_admin: true
+  admin_role: admin
+  admin_username: "%{hiera('wso2::super_admin::username')}"
+  admin_password: "%{hiera('wso2::super_admin::password')}"
 
 wso2::master_datasources:
-  wso2_config_reg_db:
-    name: WSO2_CONFIG_REG_DB
-    description: The datasource used for config registry
-    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: jdbc:mysql://192.168.57.210:3306/WSO2_CONFIG_REG_DB?autoReconnect=true
-    username: "%{hiera('wso2::datasources::mysql::username')}"
-    password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: jdbc/WSO2_CONFIG_REG_DB
-    max_active: "%{hiera('wso2::datasources::common::max_active')}"
-    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-    default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
-
-  wso2_gov_reg_db:
-    name: WSO2_GOV_REG_DB
-    description: The datasource used for governance registry
-    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: jdbc:mysql://192.168.100.1:3306/WSO2_GOV_REG_DB?autoReconnect=true&amp;useSSL=false
-    username: "%{hiera('wso2::datasources::mysql::username')}"
-    password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: jdbc/WSO2_GOV_REG_DB
-    max_active: "%{hiera('wso2::datasources::common::max_active')}"
-    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-    default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
-
-  wso2_identity_db:
-    name: WSO2_IDENTITY_DB
-    description: The datasource used for identity
+  identity_ds:
+    name: WSO2_IDENTITY_DS
+    description: The datasource used for registry, user management and identity
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
     url: jdbc:mysql://192.168.100.1:3306/WSO2_IDENTITY_DB?autoReconnect=true&amp;useSSL=false
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: jdbc/WSO2_IDENTITY_DB
+    jndi_config: jdbc/WSO2IdentityDS
     max_active: "%{hiera('wso2::datasources::common::max_active')}"
     max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
     test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
@@ -155,7 +120,7 @@ wso2::master_datasources:
 
 wso2::bps_datasources:
   bps_ds:
-    name: WSO2_BPS_DB
+    name: WSO2_BPS_DS
     description: The datasource used for bps
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
     url: jdbc:mysql://192.168.100.1:3306/WSO2_BPS_DB?autoReconnect=true
@@ -174,20 +139,20 @@ wso2::bps_datasources:
 wso2::metrics_datasources:
   # Metrics are to be stored local to the server. Thus an embedded H2 database is used here.
   # If necessary can be pointed to an external datasource.
-  wso2_metrics_db:
-      name: WSO2_METRICS_DB
-      description: The default datasource used for carbon metrics
-      driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
-      url: jdbc:h2:repository/database/WSO2METRICS_DB;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
-      username: "%{hiera('wso2::datasources::common::username')}"
-      password: "%{hiera('wso2::datasources::common::password')}"
-      jndi_config: jdbc/WSO2_METRICS_DB
-      max_active: "%{hiera('wso2::datasources::common::max_active')}"
-      max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-      test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-      default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-      validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-      validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
+  metrics_ds:
+    name: WSO2_METRICS_DS
+    description: The default datasource used for carbon metrics
+    driver_class_name: "%{hiera('wso2::datasources::h2::driver_class_name')}"
+    url: jdbc:h2:repository/database/WSO2METRICS_DB;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    username: "%{hiera('wso2::datasources::common::username')}"
+    password: "%{hiera('wso2::datasources::common::password')}"
+    jndi_config: jdbc/WSO2_METRICS_DS
+    max_active: "%{hiera('wso2::datasources::common::max_active')}"
+    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
+    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
+    default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
+    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
+    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
 # todo: This needs to be improved with direct mappings for user store properties in user-mgt.xml.
 # todo: Then the user store type can be identified for its class and templates can be populated accordingly.
@@ -214,26 +179,30 @@ wso2::userstores:
       connection_password: admin
 
 wso2::usermgt_datasource: wso2_user_db
-wso2::identity_datasource: wso2_identity_db
+wso2::identity_datasource: identity_ds
 wso2::bps_datasource: bps_ds
-wso2::metrics_datasource: wso2_metrics_db
+wso2::metrics_datasource: metrics_ds
 wso2::primary_userstore: primary_jdbc
 
-wso2::registry_mounts:
-  wso2_config_reg_db:
-    path: /_system/config
-    target_path: /_system/config/is
+wso2::registry_instances:
+  shared_registry:
+    datasource: identity_ds
     read_only: false
     registry_root: /
     enable_cache: true
     overwrite: true
 
-  wso2_gov_reg_db:
+wso2::registry_mounts:
+  config_registry:
+    instance_id: shared_registry
+    path: /_system/config
+    target_path: /_system/config
+    overwrite: true
+
+  governance_registry:
+    instance_id: shared_registry
     path: /_system/governance
     target_path: /_system/governance
-    read_only: false
-    registry_root: /
-    enable_cache: true
     overwrite: true
 
 # Properties in identity.xml
@@ -277,7 +246,7 @@ wso2::oAuth:
   enable_access_token_partitioning : false
   auth_context_token_generation_enabled : false
   auth_context_token_generation_TTL : 15
-  id_token_expiration : 3600,
+  id_token_expiration : 3600
   openIDConnect_skip_user_consent: false
   sign_jwt_spey: false
   token_persistence_enable: true
@@ -334,8 +303,8 @@ wso2::tomcat:
  acceptCount : 500
 
 # Secure vault configuration
-#wso2::enable_secure_vault: true
-#wso2::secure_vault_configs:
+# wso2::enable_secure_vault: true
+# wso2::secure_vault_configs:
 #  key_store_password:
 #    secret_alias: Carbon.Security.KeyStore.Password
 #    secret_alias_value: repository/conf/carbon.xml//Server/Security/KeyStore/Password,false
@@ -366,35 +335,20 @@ wso2::tomcat:
 #    secret_alias_value: repository/conf/tomcat/catalina-server.xml//Server/Service/Connector[@keystorePass],true
 #    password: "%{hiera('wso2::key_stores::connector_key_store::password')}"
 #
-#  bps_ds_db_password:
+#  identity_ds_password:
+#    secret_alias: Datasources.WSO2_IDENTITY_DS.Configuration.Password
+#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_IDENTITY_DS']/definition[@type='RDBMS']/configuration/password,false
+#    password: "%{hiera('wso2::datasources::mysql::password')}"
+#
+#  bps_ds_password:
 #    secret_alias: Datasources.BPS_DS.Configuration.Password
 #    secret_alias_value: repository/conf/datasources/bps-datasources.xml//datasources-configuration/datasources/datasource[name='BPS_DS']/definition[@type='RDBMS']/configuration/password,false
 #    password: "%{hiera('wso2::datasources::common::password')}"
 #
-#  wso2_metrics_db_password:
-#    secret_alias: Datasources.WSO2_METRICS_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/metrics-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_METRICS_DB']/definition[@type='RDBMS']/configuration/password,false
+#  metrics_ds_password:
+#    secret_alias: Datasources.WSO2_METRICS_DS.Configuration.Password
+#    secret_alias_value: repository/conf/datasources/metrics-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_METRICS_DS']/definition[@type='RDBMS']/configuration/password,false
 #    password: "%{hiera('wso2::datasources::common::password')}"
-#
-#  wso2_config_db_password:
-#    secret_alias: Datasources.WSO2_CONFIG_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_CONFIG_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  wso2_gov_db_password:
-#    secret_alias: Datasources.WSO2_GOV_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_GOV_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  wso2_user_db_password:
-#    secret_alias: Datasources.WSO2_USER_DB.Configuration.Password
-#    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_USER_DB']/definition[@type='RDBMS']/configuration/password,false
-#    password: "%{hiera('wso2::datasources::mysql::password')}"
-#
-#  xmpp_password:
-#    secret_alias: MultifactorAuthentication.XMPPSettings.XMPPConfig.XMPPPassword
-#    secret_alias_value: repository/conf/identity/identity.xml//MultifactorAuthentication/XMPPSettings/XMPPConfig/XMPPPassword,false
-#    password: wso2carbon
 #
 #  authenticator_config_trust_store_password:
 #    secret_alias: AuthenticatorConfig.TrustStore.Password

@@ -21,7 +21,7 @@
 <% end %>
     <Realm>
         <Configuration>
-		<AddAdmin>true</AddAdmin>
+            <AddAdmin><%= @user_management['add_admin'] %></AddAdmin>
             <AdminRole><%= @user_management['admin_role'] %></AdminRole>
             <AdminUser>
                 <UserName><%= @user_management['admin_username'] %></UserName>

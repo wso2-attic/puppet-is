@@ -51,6 +51,7 @@ class wso2is::params {
     $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
+    $registry_instances       = hiera_hash('wso2::registry_instances', undef)
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
     $carbon_home_symlink      = hiera('wso2::carbon_home_symlink')
     $wso2_user                = hiera('wso2::user')
@@ -350,6 +351,7 @@ class wso2is::params {
     }
 
     $user_management          = {
+      add_admin       => 'true',
       admin_role      => 'admin',
       admin_username  => 'admin',
       admin_password  => 'admin'
