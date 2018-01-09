@@ -65,6 +65,7 @@ class wso2is (
 
   # Templated configuration parameters
   $master_datasources     = $wso2is::params::master_datasources,
+  $registry_instances     = $wso2is::params::registry_instances,
   $registry_mounts        = $wso2is::params::registry_mounts,
   $hostname               = $wso2is::params::hostname,
   $mgt_hostname           = $wso2is::params::mgt_hostname,
@@ -92,6 +93,10 @@ class wso2is (
 
   if $userstores != undef {
     validate_hash($userstores)
+  }
+
+  if $registry_instances != undef {
+    validate_hash($registry_mounts)
   }
 
   if $registry_mounts != undef {

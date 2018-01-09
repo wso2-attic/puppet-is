@@ -30,14 +30,14 @@
     </Authenticator>
 
     <!-- Authenticator Configurations for SAML2SSOAuthenticator -->
-    <Authenticator name="SAML2SSOAuthenticator" disabled="<%= (!@sso_authentication['enabled']) %>">
+    <Authenticator name="SAML2SSOAuthenticator" disabled="true">
         <Priority>10</Priority>
         <Config>
-            <Parameter name="LoginPage"><%= @sso_authentication['login_page'] %></Parameter>
-            <Parameter name="ServiceProviderID"><%= @sso_authentication['service_provider_id'] %></Parameter>
-            <Parameter name="IdentityProviderSSOServiceURL"><%= @sso_authentication['sso_service_url'] %></Parameter>
+            <Parameter name="LoginPage">/carbon/admin/login.jsp</Parameter>
+            <Parameter name="ServiceProviderID">carbonServer</Parameter>
+            <Parameter name="IdentityProviderSSOServiceURL">https://localhost:9443/samlsso</Parameter>
             <Parameter name="NameIDPolicyFormat">urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</Parameter>
-            <Parameter name="AssertionConsumerServiceURL"><%= @sso_authentication['consumer_service_url'] %></Parameter>
+            <Parameter name="AssertionConsumerServiceURL">https://localhost:9443/acs</Parameter>
 
             <!-- <Parameter name="IdPCertAlias">wso2carbon</Parameter> -->
             <!-- <Parameter name="ResponseSignatureValidationEnabled">false</Parameter> -->
@@ -46,31 +46,32 @@
             <!-- <Parameter name="RoleClaimAttribute"></Parameter> -->
             <!-- <Parameter name="AttributeValueSeparator">,</Parameter> -->
 
-             <!-- <Parameter name="JITUserProvisioningEnabled">true</Parameter> -->
+            <!-- <Parameter name="JITUserProvisioningEnabled">true</Parameter> -->
             <!-- <Parameter name="ProvisioningDefaultUserstore">PRIMARY</Parameter> -->
             <!-- <Parameter name="ProvisioningDefaultRole">admin</Parameter> -->
             <!-- <Parameter name="IsSuperAdminRoleRequired">true</Parameter> -->
-	</Config>
+        </Config>
 
-	<!-- If this authenticator should skip any URI from authentication, specify it under "SkipAuthentication"
-	<SkipAuthentication>
+        <!-- If this authenticator should skip any URI from authentication, specify it under "SkipAuthentication"
+        <SkipAuthentication>
             <UrlContains></UrlContains>
         </SkipAuthentication> -->
 
-	<!-- If this authenticator should skip any URI from session validation, specify it under "SkipAuthentication
+        <!-- If this authenticator should skip any URI from session validation, specify it under "SkipAuthentication
         <SkipSessionValidation>
             <UrlContains></UrlContains>
         </SkipSessionValidation> -->
     </Authenticator>
 
-        <!-- Authenticator Configurations for MutualSSLAuthenticator -->
-    <!--Authenticator name="MutualSSLAuthenticator" disabled="false">
-	  <Priority>5</Priority>
-	  <Config>
-	      <Parameter name="UsernameHeader">UserName</Parameter>
-	      <Parameter name="WhiteListEnabled">false</Parameter>
-	      <Parameter name="WhiteList"/>
-	  </Config>
-    </Authenticator-->
+    <!-- Authenticator Configurations for MutualSSLAuthenticator -->
+    <Authenticator name="MutualSSLAuthenticator">
+      <Priority>5</Priority>
+      <Config>
+        <Parameter name="UsernameHeader">UserName</Parameter>
+        <Parameter name="WhiteListEnabled">false</Parameter>
+        <Parameter name="WhiteList"/>
+      </Config>
+    </Authenticator>
 
 </Authenticators>
+
