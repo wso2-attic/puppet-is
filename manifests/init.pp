@@ -17,13 +17,12 @@
 # Manages WSO2 Identity Server deployment
 class wso2is (
   # wso2is specific configuration data
+  $user_store               = $wso2is::params::user_store,
   $bps_datasources          = $wso2is::params::bps_datasources,
   $bps_datasource           = $wso2is::params::bps_datasource,
   $metrics_datasources      = $wso2is::params::metrics_datasources,
   $metrics_datasource       = $wso2is::params::metrics_datasource,
   $identity_datasource      = $wso2is::params::identity_datasource,
-  $userstores               = $wso2is::params::userstores,
-  $primary_userstore        = $wso2is::params::primary_userstore,
   $sso_service_providers    = $wso2is::params::sso_service_providers,
   $enable_thrift_service    = $wso2is::params::enable_thrift_service,
 
@@ -61,7 +60,6 @@ class wso2is (
   $key_stores             = $wso2is::params::key_stores,
   $carbon_home            = $wso2is::params::carbon_home,
   $pack_file_abs_path     = $wso2is::params::pack_file_abs_path,
-  $remove_file_list       = $wso2am_runtime::params::remove_file_list,
 
   # Templated configuration parameters
   $master_datasources     = $wso2is::params::master_datasources,
@@ -91,8 +89,8 @@ class wso2is (
 
   validate_bool($enable_thrift_service)
 
-  if $userstores != undef {
-    validate_hash($userstores)
+  if $user_store != undef {
+    validate_hash($user_store)
   }
 
   if $registry_instances != undef {
@@ -105,10 +103,6 @@ class wso2is (
 
   if $sso_service_providers != undef {
     validate_hash($sso_service_providers)
-  }
-
-  if $primary_userstore != undef {
-    validate_string($primary_userstore)
   }
 
   validate_string($hostname)

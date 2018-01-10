@@ -24,11 +24,10 @@ class wso2is::params {
   # use_hieradata facter flags whether parameter lookup should be done via Hiera
   if $::use_hieradata == 'true' {
 
+    $user_store               = hiera('wso2::user_store', undef)
     $bps_datasources          = hiera('wso2::bps_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
-    $userstores               = hiera('wso2::userstores', undef)
     $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
-    $primary_userstore        = hiera('wso2::primary_userstore', undef)
     $identity_datasource      = hiera('wso2::identity_datasource')
     $bps_datasource           = hiera('wso2::bps_datasource')
     $metrics_datasource       = hiera('wso2::metrics_datasource')
@@ -354,7 +353,8 @@ class wso2is::params {
       add_admin       => 'true',
       admin_role      => 'admin',
       admin_username  => 'admin',
-      admin_password  => 'admin'
+      admin_password  => 'admin',
+      dataSource      => 'wso2_carbon_db'
     }
 
     $enable_secure_vault      = false

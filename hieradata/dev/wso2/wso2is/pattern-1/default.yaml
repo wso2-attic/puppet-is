@@ -81,12 +81,6 @@ wso2::clustering:
 #    tag_key: tag-key
 #    tag_value: tag-value
 
-wso2::user_management:
-  add_admin: true
-  admin_role: admin
-  admin_username: "%{hiera('wso2::super_admin::username')}"
-  admin_password: "%{hiera('wso2::super_admin::password')}"
-
 wso2::master_datasources:
   identity_ds:
     name: WSO2_IDENTITY_DS
@@ -103,27 +97,12 @@ wso2::master_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-  wso2_user_db:
-    name: WSO2_USER_DB
-    description: The datasource used for user management and as JDBC userstore
-    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: jdbc:mysql://192.168.100.1:3306/WSO2_USER_DB?autoReconnect=true&amp;useSSL=false
-    username: "%{hiera('wso2::datasources::mysql::username')}"
-    password: "%{hiera('wso2::datasources::mysql::password')}"
-    jndi_config: jdbc/WSO2_USER_DB
-    max_active: "%{hiera('wso2::datasources::common::max_active')}"
-    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-    default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
-
 wso2::bps_datasources:
   bps_ds:
     name: WSO2_BPS_DS
     description: The datasource used for bps
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: jdbc:mysql://192.168.100.1:3306/WSO2_BPS_DB?autoReconnect=true
+    url: jdbc:mysql://192.168.100.1:3306/WSO2_IDENTITY_DB?autoReconnect=true
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
     jndi_config: bpsds
@@ -154,35 +133,147 @@ wso2::metrics_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-# todo: This needs to be improved with direct mappings for user store properties in user-mgt.xml.
-# todo: Then the user store type can be identified for its class and templates can be populated accordingly.
-wso2::userstores:
-  primary_jdbc:
-    type: jdbc
+wso2::user_store:
+  user_store_type: jdbc
+  user_store_properties:
+    jdbc:
+      driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
+      url: jdbc:mysql://192.168.100.1:3306/WSO2_USER_DB?autoReconnect=true&amp;useSSL=false
+      username: "%{hiera('wso2::datasources::mysql::username')}"
+      password: "%{hiera('wso2::datasources::mysql::password')}"
+      read_only: false
+      read_groups: true
+      write_groups: true
+      username_java_regex: '^[\S]{3,30}$'
+      username_javascript_regex: '^[\S]{3,30}$'
+      password_java_regex: '^[\S]{5,30}$'
+      password_javascript_regex: '^[\S]{5,30}$'
+      rolename_java_regex: '^[\S]{3,30}$'
+      rolename_javascript_regex: '^[\S]{3,30}$'
+      case_insensitive_username: false
+      scim_enabled: true
+      is_bulk_import_supported: false
+      password_digest: SHA-256
+      store_salted_password: true
+      multi_attribute_separator: ','
+      max_username_list_length: 100
+      max_rolename_list_length: 100
+      user_roles_cache_enabled: true
+      user_name_unique_across_tenants: false
+      validation_query: SELECT 1
+      validation_interval: 30000
+#    read-only-ldap:
+#      connection_url: ldap://localhost:10389
+#      connection_name: uid=admin,ou=system
+#      connection_password: admin
+#      anonymous_bind: false
+#      user_search_base: ou=system
+#      username_attribute: uid
+#      username_search_filter: (&amp;(objectClass=person)(uid=?))
+#      username_list_filter: (objectClass=person)
+#      read_groups: true
+#      group_search_base: ou=system
+#      groupname_attribute: cn
+#      groupname_search_filter: (&amp;(objectClass=groupOfNames)(cn=?))
+#      groupname_list_filter: (objectClass=groupOfNames)
+#      membership_attribute: member
+#      back_links_enabled: false
+#      username_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
+#      password_javaregex: '^[\S]{5,30}$'
+#      rolename_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
+#      scim_enabled: false
+#      password_hash_method: PLAIN_TEXT
+#      multi_attribute_separator: ','
+#      max_username_list_length: 100
+#      max_rolename_list_length: 100
+#      user_roles_cache_enabled: true
+#      connection_pooling_enabled: true
+#      ldap_connection_timeout: 5000
+#      replace_escape_characters_at_user_login: true
+#    read-write-ldap:
+#      connection_url: ldap://localhost:10389
+#      connection_name: uid=admin,ou=system
+#      connection_password: admin
+#      anonymous_bind: false
+#      user_search_base: ou=Users,dc=wso2,dc=org
+#      username_attribute: uid
+#      username_search_filter: (&amp;(objectClass=person)(uid=?))
+#      username_list_filter: (objectClass=person)
+#      read_groups: true
+#      write_groups: true
+#      group_search_base: ou=system
+#      groupname_attribute: cn
+#      groupname_search_filter: (&amp;(objectClass=groupOfNames)(cn=?))
+#      groupname_list_filter: (objectClass=groupOfNames)
+#      membership_attribute: member
+#      back_links_enabled: false
+#      username_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
+#      username_javascript_regex: '^[\S]{3,30}$'
+#      password_javaregex: '^[\S]{5,30}$'
+#      password_javascript_regex: '^[\S]{5,30}$'
+#      rolename_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
+#      rolename_javascript_regex: '^[\S]{3,30}$'
+#      scim_enabled: true
+#      is_bulk_import_supported: false
+#      empty_roles_allowed: false
+#      password_hash_method: PLAIN_TEXT
+#      multi_attribute_separator: ','
+#      max_username_list_length: 100
+#      max_rolename_list_length: 100
+#      kdc_enabled: false
+#      user_roles_cache_enabled: true
+#      connection_pooling_enabled: true
+#      ldap_connection_timeout: 5000
+#    active_directory:
+#      connection_url: ldap://localhost:10389
+#      connection_name: uid=admin,ou=system
+#      connection_password: admin
+#      anonymous_bind: false
+#      user_search_base: ou=Users,dc=wso2,dc=org
+#      username_attribute: uid
+#      username_search_filter: (&amp;(objectClass=person)(uid=?))
+#      username_list_filter: (objectClass=person)
+#      read_groups: true
+#      write_groups: true
+#      group_search_base: ou=system
+#      groupname_attribute: cn
+#      groupname_search_filter: (&amp;(objectClass=groupOfNames)(cn=?))
+#      groupname_list_filter: (objectClass=groupOfNames)
+#      membership_attribute: member
+#      member_of_attribute: memberOf
+#      back_links_enabled: false
+#      referral: follow
+#      username_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
+#      username_javascript_regex: '^[\S]{3,30}$'
+#      password_javaregex: '^[\S]{5,30}$'
+#      password_javascript_regex: '^[\S]{5,30}$'
+#      rolename_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
+#      rolename_javascript_regex: '^[\S]{3,30}$'
+#      scim_enabled: false
+#      is_bulk_import_supported: false
+#      empty_roles_allowed: false
+#      password_hash_method: PLAIN_TEXT
+#      multi_attribute_separator: ','
+#      is_adlds_role: false
+#      user_account_control: 512
+#      max_username_list_length: 100
+#      max_rolename_list_length: 100
+#      membership_attribute_range: 1500
+#      kdc_enabled: false
+#      user_roles_cache_enabled: true
+#      connection_pooling_enabled: true
+#      ldap_connection_timeout: 5000
 
-  primary_read_only_ldap:
-    type: read_only_ldap
-    connection_url: ldap://localhost:10389
-    connection_name: uid=admin,ou=system
-    connection_password: admin
+wso2::user_management:
+  add_admin: true
+  admin_role: admin
+  admin_username: "%{hiera('wso2::super_admin::username')}"
+  admin_password: "%{hiera('wso2::super_admin::password')}"
+  datasource: identity_ds
 
-  primary_read_write_ldap:
-    type: read_write_ldap
-    connection_url: ldap://localhost:10389
-    connection_name: uid=admin,ou=system
-    connection_password: admin
-
-  primary_active_directory:
-      type: active_directory
-      connection_url: ldaps://10.100.1.100:636
-      connection_name: CN=admin,CN=Users,DC=WSO2,DC=Com
-      connection_password: admin
-
-wso2::usermgt_datasource: wso2_user_db
 wso2::identity_datasource: identity_ds
 wso2::bps_datasource: bps_ds
 wso2::metrics_datasource: metrics_ds
-wso2::primary_userstore: primary_jdbc
 
 wso2::registry_instances:
   shared_registry:
@@ -320,6 +411,11 @@ wso2::tomcat:
 #    secret_alias_value: repository/conf/carbon.xml//Server/Security/TrustStore/Password,false
 #    password: "%{hiera('wso2::key_stores::trust_store::password')}"
 #
+#  connector_key_store_password:
+#    secret_alias: Server.Service.Connector.keystorePass
+#    secret_alias_value: repository/conf/tomcat/catalina-server.xml//Server/Service/Connector[@keystorePass],true
+#    password: "%{hiera('wso2::key_stores::connector_key_store::password')}"
+#
 #  user_manager_admin_password:
 #    secret_alias: UserManager.AdminUser.Password
 #    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/Configuration/AdminUser/Password,false
@@ -329,11 +425,6 @@ wso2::tomcat:
 #    secret_alias: Datasources.WSO2_CARBON_DB.Configuration.Password
 #    secret_alias_value: repository/conf/datasources/master-datasources.xml//datasources-configuration/datasources/datasource[name='WSO2_CARBON_DB']/definition[@type='RDBMS']/configuration/password,false
 #    password: "%{hiera('wso2::datasources::common::password')}"
-#
-#  connector_key_store_password:
-#    secret_alias: Server.Service.Connector.keystorePass
-#    secret_alias_value: repository/conf/tomcat/catalina-server.xml//Server/Service/Connector[@keystorePass],true
-#    password: "%{hiera('wso2::key_stores::connector_key_store::password')}"
 #
 #  identity_ds_password:
 #    secret_alias: Datasources.WSO2_IDENTITY_DS.Configuration.Password
