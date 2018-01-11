@@ -19,11 +19,12 @@ servers:
     hostname: is.dev.wso2.org
     facters:
       product_name: wso2is
-      product_version: 5.1.0
+      product_version: 5.4.0
       product_profile: default
       environment: dev
       platform: default
       use_hieradata: true
+      pattern: pattern-1
     box: ubuntu/trusty64
     ip: 192.168.100.111
     ram: 2048
