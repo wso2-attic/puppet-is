@@ -1,162 +1,95 @@
-# WSO2 Identity Server Puppet Module
+# WSO2 Identity Server Puppet Modules
 
-This repository contains the Puppet Module for installing and configuring WSO2 Identity Server on various environments. It supports multiple versions of WSO2 Identity Server. Configuration data is managed using [Hiera](http://docs.puppetlabs.com/hiera/1/). Hiera provides a mechanism for separating configuration data from Puppet scripts and managing them in a separate set of YAML files in a hierarchical manner.
+This repository contains following puppet modules related to WSO2 Identity Server.
+
+1. wso2is   - WSO2 Identity Server 5.4.0
+2. wso2is_analytics - WSO2 Identity Analytics Server 5.4.0
+
+These modules support installing and configuring WSO2 Identity Server upon the two [standard production deployment 
+patterns](https://docs.wso2.com/display/IS540/Deployment+Patterns) defined.
+Deployment Pattern 1: HA clustered deployment of WSO2 Identity Server
+Deployment Pattern 2: HA clustered deployment of WSO2 Identity Server with WSO2 Identity Analytics
+
+Configuration data is managed using [Hiera](https://docs.puppet.com/hiera/1/). Hiera provides a mechanism for separating configuration data from Puppet 
+scripts and managing them in a set of YAML files in a hierarchical manner.
+
+This guide includes the basic and common information related to setting up puppet modules for deployment patterns 
+above. Upon the modules used in each deployment pattern you may need to refer to the relevant ```README``` file under
+ the hieradata directory of the respective module for the respective pattern.
+> Note that this guide, explains only about setting up wso2is or wso2is_analytics puppet modules with respect to the 
+deployment pattern selected. Setting up the infrastructure, load balancers and sharing runtime deployment artifacts 
+among the nodes participating in a deployment is not in the scope of this guideline.
+Refer [WSO2 Identity Server Deployment Guidelines](https://docs.wso2.com/display/IS540/Deploying+the+Identity+Server)
+ to understand how to do a complete deployment of WSO2 Identity Server based on a standard deployment pattern.
 
 ## Supported Operating Systems
-
-- Debian 6 or higher
-- Ubuntu 12.04 or higher
+* Debian 6 or higher
+* Ubuntu 14.04
 
 ## Supported Puppet Versions
+* Puppet 3.x
 
-- Puppet 2.7, 3 or newer
+## Setup Puppet Environment
+Setup the puppet environment with puppet modules needed, with respect to the deployment pattern selected as defined 
+below.
+> Follow the steps mentioned in the [wiki](https://github.com/wso2/puppet-base/wiki) to setup a development environment.
 
-## How to Contribute
-Follow the steps mentioned in the [wiki](https://github.com/wso2/puppet-base/wiki) to setup a development environment and update/create new puppet modules.
+* WSO2 IS 5.4.0 puppet modules are compatible and tested with puppet-base version 1.1.x and puppet-common version 1.0.x
+* If using puppet-common's setup.sh to setup the PUPPET_HOME, use 1.0.x version of puppet-common.
+* After setting up PUPPET_HOME using puppet-common's setup.sh, checkout the above mentioned compatible version of 
+puppet-base.
 
-## Packs to be Copied
+##### Deployment Pattern 1   
+* For this deployment pattern you need to setup wso2is and wso2base puppet modules.
 
-Copy the following files to their corresponding locations.
+##### Deployment Pattern 2  
+* For this deployment pattern you need to setup wso2is, wso2is_analytics, and wso2base puppet modules.                                          
+                                                        
+## Copy artifacts
+Upon the modules used based on the deployment pattern selected, copy necessary artifacts to the corresponding 
+locations, in puppet master.
 
-1. WSO2 Identity Server distribution (5.3.0) to `<PUPPET_HOME>/modules/wso2is/files`
-2. JDK 1.7_80 distribution to `<PUPPET_HOME>/modules/wso2base/files`
+##### Deployment Pattern 1  
+1. Copy JDK jdk-8u*-linux-x64.tar.gz distribution to <PUPPET_HOME>/modules/wso2base/files
+2. Copy WSO2 Identity Server 5.4.0 distribution (wso2is-5.4.0.zip) to <PUPPET_HOME>/modules/wso2is/files
+3. Copy the JDBC driver as per the RDBMS used to <PUPPET_HOME>/modules/wso2is/files/configs/lib.  
+                                   
+##### Deployment Pattern 2
+1. Copy JDK jdk-8u*-linux-x64.tar.gz distribution to <PUPPET_HOME>/modules/wso2base/files                
+2. Copy WSO2 Identity Server 5.4.0 distribution (wso2is-5.4.0.zip) to <PUPPET_HOME>/modules/wso2is/files 
+3. Copy WSO2 Identity Analytics Server 5.4.0 distribution (wso2is-analytics-5.4.0.zip) to <PUPPET_HOME>/modules/wso2is_analytics/files
+4. Copy the JDBC driver as per the RDBMS used to <PUPPET_HOME>/modules/wso2is/files/configs/lib.
+5. Copy the JDBC driver as per the RDBMS used to <PUPPET_HOME>/modules/wso2is_analytics/files/configs/lib.
 
-Note: For wso2is_km puppet module use WSO2 Identity Server 5.3.0 distribution which has API Key Manager feature installed on it. If you are using the pre-packaged [WSO2 Identity Server 5.3.0 Key Manager pack](http://product-dist.wso2.com/downloads/api-manager/1.10.0/identity-server/wso2is-5.3.0.zip) with Secure Vault enabled, extract the product zip file, remove `authenticationendpoint` folder in `CARBON_HOME/repository/deployment/server/webapps`, compress the pack and then copy it to `<PUPPET_HOME>/modules/wso2is_km/files`. For more details, refer step 4 under `Running  WSO2 Identity Server Key Manager with Secure Vault`.
+## Configure Hiera
 
-## Running WSO2 Identity Server in the `default` profile
-No changes to Hiera data are required to run the `default` profile.  Copy the above mentioned files to their corresponding locations and apply the Puppet Modules.
+##### Deployment Pattern 1                                                                                                                                                          
+* [Hiera YAML file](wso2is/hieradata/dev/wso2/wso2is/pattern-1/default.yaml) defined under pattern-1                                  
+(wso2is/hieradata/dev/wso2/wso2is/pattern-1) directory of wso2is module includes configurations with respect to                        
+this deployment pattern for WSO2 Identity Server. 
+Configure hiera for WSO2 Identity Server following the [README](wso2is/hieradata/dev/wso2/wso2is/pattern-1/) under 
+pattern-1 directory. 
 
-## Running WSO2 Identity Server with clustering in specific profiles
-No changes to Hiera data are required to run the distributed deployment of WSO2 Identity Server, other than pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Identity Server 5.3.0](https://docs.wso2.com/display/CLUSTER44x/Clustering+Identity+Server+5.3.0) and [WSO2 Identity Server 5.0.0](https://docs.wso2.com/display/CLUSTER420/Clustering+Identity+Server) clustering guides.
+##### Deployment Pattern 2                  
+* [Hiera YAML file](wso2is/hieradata/dev/wso2/wso2is/pattern-2/default.yaml) defined under pattern-2            
+(wso2is/hieradata/dev/wso2/wso2is/pattern-2) directory of wso2is module includes configurations with respect to 
+this deployment pattern for WSO2 Identity Server. 
+Configure hiera for WSO2 Identity Server following the [README](wso2is/hieradata/dev/wso2/wso2is/pattern-2/) under 
+pattern-2 directory. 
+* [Hiera YAML file](wso2is_analytics/hieradata/dev/wso2/wso2is_analytics/pattern-1/default.yaml) defined under pattern-1
+(wso2is_analytics/hieradata/dev/wso2/wso2is_analytics/pattern-2) directory of wso2is_analytics module includes 
+configurations with respect to this deployment pattern for WSO2 Identity Analytics Server. 
+Configure hiera for WSO2 Identity Analytics Server following the [README](wso2is_analytics/hieradata/dev/wso2/wso2is_analytics/pattern-1/) under 
+pattern-1 directory.
 
-1. If the Clustering Membership Scheme is `WKA`, add the Well Known Address list.
+This completes setting up the puppet master
 
-   Ex:
-    ```yaml
-    wso2::clustering :
-        enabled: true
-        local_member_host: "%{::ipaddress}"
-        local_member_port: 4000
-        membership_scheme: wka
-        sub_domain: mgt
-        wka:
-           members:
-             -
-               hostname: 192.168.100.113
-               port: 4000
-             -
-               hostname: 192.168.100.114
-               port: 4000
-    ```
 
-2. Add external databases to master datasources
+        
+    
+            
 
-   Ex:
-    ```yaml
-    wso2::master_datasources:
-      wso2_config_db:
-        name: WSO2_CONFIG_DB
-        description: The datasource used for config registry
-        driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-        url: jdbc:mysql://mysql-is-db:3306/IS_DB?autoReconnect=true
-        username: "%{hiera('wso2::datasources::common::username')}"
-        password: "%{hiera('wso2::datasources::common::password')}"
-        jndi_config: jdbc/WSO2_CONFIG_DB
-        max_active: "%{hiera('wso2::datasources::common::max_active')}"
-        max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
-        test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
-        default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
-        validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
-        validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
+                                                                                     
 
-    ```
-
-3. Configure registry mounting
-
-   Ex:
-    ```yaml
-    wso2_config_db:
-      path: /_system/config
-      target_path: /_system/config
-      read_only: false
-      registry_root: /
-      enable_cache: true
-
-    wso2_gov_db:
-      path: /_system/governance
-      target_path: /_system/governance
-      read_only: false
-      registry_root: /
-      enable_cache: true
-    ```
-
-4. Configure deployment synchronization
-
-    Ex:
-    ```yaml
-    wso2::dep_sync:
-        enabled: true
-        auto_checkout: true
-        auto_commit: true
-        repository_type: svn
-        svn:
-           url: http://svnrepo.example.com/repos/
-           user: username
-           password: password
-           append_tenant_id: true
-    ```
-
-## Running WSO2 Identity Server with Secure Vault
-WSO2 Carbon products may contain sensitive information such as passwords in configuration files. [WSO2 Secure Vault](https://docs.wso2.com/display/Carbon444/Securing+Passwords+in+Configuration+Files) provides a solution for securing such information.
-
->For WSO2 Identity Server 5.0.0, which is based on WSO2 Carbon Kernel 4.2.0, `org.wso2.ciphertool-1.0.0-wso2v2.jar` in Kernel patch [patch0010](http://dist.wso2.org/maven2/org/wso2/carbon/WSO2-CARBON-PATCH-4.2.0/0010/) has to be applied before enabling the Secure Vault. The `org.wso2.ciphertool-1.0.0-wso2v2.jar` in `WSO2-CARBON-PATCH-4.2.0-0009/lib` has to be copied to `wso2is/files/configs/lib` folder and added to the `file_list` in hiera file as below:
-
-```yaml
-wso2::file_list :
-  - lib/org.wso2.ciphertool-1.0.0-wso2v2.jar
-```
-
-Uncomment and modify the below changes in Hiera file to apply Secure Vault.
-
-1. Enable Secure Vault
-
-    ```yaml
-    wso2::enable_secure_vault: true
-    ```
-
-2. Run the ciphertool.sh / ciphertool.bat (in <WSO2_HOME>/bin) with -Dconfigure parameter and enter the primary keystore password of carbon server.
-
-```bash
-sh ciphertool.sh -Dconfigure
-[Please Enter Primary KeyStore Password of Carbon Server : ]
-
-```
-
-3. Copy repository/conf/security/cipher-tool.properties, repository/conf/security/cipher-text.properties, repository/conf/security/secret-conf.properties in <WSO2_HOME>/repository/conf/security to 
-'/etc/puppet/environments/production/modules/wso2is/files/configs/repository/conf/security'
-
-4. Create a file named 'password-tmp' containing the the primary keystore password of carbon server in 
-'/etc/puppet/environments/production/modules/wso2is/files/configs'
-
-5. Add the following configurations
-   
-```yaml
-# Puppet file list to be populated
- wso2::file_list:
-  - repository/conf/security/cipher-tool.properties
-  - repository/conf/security/cipher-text.properties
-  - repository/conf/security/secret-conf.properties
-
-# Puppet file list to be populated without triggering service refresh
-wso2::service_refresh_file_list:
-  - password-tmp
-```
-
-For more information please refer [Using WSO2 Carbon Secure Vault with WSO2 Puppet Modules](https://github.com/wso2/puppet-base/wiki/Using-WSO2-Carbon-Secure-Vault-With-WSO2-Puppet-Modules)
-
-## System Service Re-starts
-
-The system service will only restart for distribution changes or configuration changes.
-
-## Running WSO2 Identity Server on Kubernetes
-WSO2 Puppet Module ships Hiera data required to deploy WSO2 Identity Server on Kubernetes. For more information refer to the documentation on [deploying WSO2 products on Kubernetes using WSO2 Puppet Modules](https://docs.wso2.com/display/PM210/Deploying+WSO2+Products+on+Kubernetes+Using+WSO2+Puppet+Modules).
+                                                                                                                                       
+                                                                                                                                       
