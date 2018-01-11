@@ -55,6 +55,8 @@ wso2::file_list:
 # Files to be copied to the product folder when restarting the system service
 # wso2::service_refresh_file_list:
 
+# Clustering configurations of the product in repository/conf/axis2/axis2.xml
+# Clustering scheme can be wka, aws, kubenetes, mesos
 wso2::clustering:
   enabled: true
   local_member_host: "%{::ipaddress}"
@@ -81,6 +83,7 @@ wso2::clustering:
 #    tag_key: tag-key
 #    tag_value: tag-value
 
+# Datasource configurations in repository/conf/datasources/master-datasources.xml
 wso2::master_datasources:
   identity_ds:
     name: WSO2_IDENTITY_DS
@@ -97,6 +100,7 @@ wso2::master_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
+# BPS datasource configuration in repository/conf/datasources/bps-datasources.xml
 wso2::bps_datasources:
   bps_ds:
     name: WSO2_BPS_DS
@@ -115,6 +119,7 @@ wso2::bps_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
+# Metrics datasource configuration in repository/conf/datasources/metrics-datasources.xml
 wso2::metrics_datasources:
   # Metrics are to be stored local to the server. Thus an embedded H2 database is used here.
   # If necessary can be pointed to an external datasource.
@@ -133,6 +138,8 @@ wso2::metrics_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
+# Primary user store configuration in repository/conf/user-mgt.xml
+# User store can be a JDBC, read only/read write LDAP or Active Directory
 wso2::user_store:
   user_store_type: jdbc
   user_store_properties:
@@ -264,6 +271,7 @@ wso2::user_store:
 #      connection_pooling_enabled: true
 #      ldap_connection_timeout: 5000
 
+# User management admin user/role configurations and the datasource configuration in repository/conf/user-mgt.xml
 wso2::user_management:
   add_admin: true
   admin_role: admin
@@ -271,10 +279,16 @@ wso2::user_management:
   admin_password: "%{hiera('wso2::super_admin::password')}"
   datasource: identity_ds
 
+# Identity datasource configuration in repository/conf/identity/identity.xml
 wso2::identity_datasource: identity_ds
+
+# BPS datasource configuration in repository/conf/bps.xml
 wso2::bps_datasource: bps_ds
+
+# Metrics datasource configuration in repository/conf/metrics.xml
 wso2::metrics_datasource: metrics_ds
 
+# Remote registry instance configuration in repository/conf/registry.xml
 wso2::registry_instances:
   shared_registry:
     datasource: identity_ds
@@ -283,6 +297,7 @@ wso2::registry_instances:
     enable_cache: true
     overwrite: true
 
+# Registry mount configuration in repository/conf/registry.xml
 wso2::registry_mounts:
   config_registry:
     instance_id: shared_registry
@@ -296,7 +311,7 @@ wso2::registry_mounts:
     target_path: /_system/governance
     overwrite: true
 
-# Properties in identity.xml
+# Identity related property configurations in repository/conf/identity/identity.xml
 wso2::session_persist:
   enabled: true
   temporary: true
