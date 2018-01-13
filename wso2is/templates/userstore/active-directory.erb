@@ -19,44 +19,49 @@
   <Property name="TenantManager">org.wso2.carbon.user.core.tenant.CommonHybridLDAPTenantManager</Property>
   <Property name="ConnectionURL"><%= @user_store['user_store_properties']['active_directory']['connection_url'] %></Property>
   <Property name="ConnectionName"><%= @user_store['user_store_properties']['active_directory']['connection_name'] %></Property>
+  <% if @enable_secure_vault %>
+  <Property name="ConnectionPassword" svns:secretAlias="UserStoreManager.Property.ConnectionPassword">password</Property>
+  <%- else -%>
   <Property name="ConnectionPassword"><%= @user_store['user_store_properties']['active_directory']['connection_password'] %></Property>
-  <Property name="AnonymousBind"><%= @user_store['user_store_properties']['active_directory']['anonymous_bind'] %></Property>
-  <Property name="UserSearchBase"><%= @user_store['user_store_properties']['active_directory']['user_search_base'] %></Property>
+  <% end %>
+  <Property name="AnonymousBind">false</Property>
+  <Property name="UserSearchBase">CN=Users,DC=WSO2,DC=Com</Property>
   <Property name="UserEntryObjectClass">user</Property>
-  <Property name="UserNameAttribute"><%= @user_store['user_store_properties']['active_directory']['username_attribute'] %></Property>
-  <Property name="UserNameSearchFilter"><%= @user_store['user_store_properties']['active_directory']['username_search_filter'] %></Property>
-  <Property name="UserNameListFilter"><%= @user_store['user_store_properties']['active_directory']['username_list_filter'] %></Property>
-  <Property name="ReadGroups"><%= @user_store['user_store_properties']['active_directory']['read_groups'] %></Property>
-  <Property name="WriteGroups"><%= @user_store['user_store_properties']['active_directory']['write_groups'] %></Property>
-  <Property name="GroupSearchBase"><%= @user_store['user_store_properties']['active_directory']['group_search_base'] %></Property>
+  <Property name="UserNameAttribute">cn</Property>
+  <Property name="UserNameSearchFilter">(&amp;(objectClass=user)(cn=?))</Property>
+  <Property name="UserNameListFilter">(objectClass=user)</Property>
+  <Property name="ReadGroups">true</Property>
+  <Property name="WriteGroups">true</Property>
+  <Property name="GroupSearchBase">CN=Users,DC=WSO2,DC=Com</Property>
   <Property name="GroupEntryObjectClass">group</Property>
-  <Property name="GroupNameAttribute"><%= @user_store['user_store_properties']['active_directory']['groupname_attribute'] %></Property>
-  <Property name="GroupNameSearchFilter"><%= @user_store['user_store_properties']['active_directory']['groupname_search_filter'] %></Property>
-  <Property name="GroupNameListFilter"><%= @user_store['user_store_properties']['active_directory']['groupname_list_filter'] %></Property>
-  <Property name="MembershipAttribute"><%= @user_store['user_store_properties']['active_directory']['membership_attribute'] %></Property>
-  <Property name="MemberOfAttribute"><%= @user_store['user_store_properties']['active_directory']['member_of_attribute'] %></Property>
-  <Property name="BackLinksEnabled"><%= @user_store['user_store_properties']['active_directory']['back_links_enabled'] %></Property>
-  <Property name="Referral"><%= @user_store['user_store_properties']['active_directory']['referral'] %></Property>
-  <Property name="UsernameJavaRegEx"><%= @user_store['user_store_properties']['active_directory']['username_java_regex'] %></Property>
-  <Property name="UsernameJavaScriptRegEx"><%= @user_store['user_store_properties']['active_directory']['username_javascript_regex'] %></Property>
+  <Property name="GroupNameAttribute">cn</Property>
+  <Property name="GroupNameSearchFilter">(&amp;(objectClass=group)(cn=?))</Property>
+  <Property name="GroupNameListFilter">(objectcategory=group)</Property>
+  <Property name="MembershipAttribute">member</Property>
+  <Property name="MemberOfAttribute">memberOf</Property>
+  <Property name="BackLinksEnabled">true</Property>
+  <Property name="Referral">follow</Property>
+  <Property name="UsernameJavaRegEx">[a-zA-Z0-9._\-|//]{3,30}$</Property>
+  <Property name="UsernameJavaScriptRegEx">^[\S]{3,30}$</Property>
   <Property name="UsernameJavaRegExViolationErrorMsg">Username pattern policy violated</Property>
-  <Property name="PasswordJavaRegEx"><%= @user_store['user_store_properties']['active_directory']['password_javaregex'] %></Property>
-  <Property name="PasswordJavaScriptRegEx"><%= @user_store['user_store_properties']['active_directory']['password_javascript_regex'] %></Property>
+  <Property name="PasswordJavaRegEx">^[\S]{5,30}$</Property>
+  <Property name="PasswordJavaScriptRegEx">^[\S]{5,30}$</Property>
   <Property name="PasswordJavaRegExViolationErrorMsg">Password length should be within 5 to 30 characters</Property>
-  <Property name="RolenameJavaRegEx"><%= @user_store['user_store_properties']['active_directory']['rolename_java_regex'] %></Property>
-  <Property name="RolenameJavaScriptRegEx"><%= @user_store['user_store_properties']['active_directory']['rolename_javascript_regex'] %></Property>
-  <Property name="SCIMEnabled"><%= @user_store['user_store_properties']['active_directory']['scim_enabled'] %></Property>
-  <Property name="IsBulkImportSupported"><%= @user_store['user_store_properties']['active_directory']['is_bulk_import_supported'] %></Property>
-  <Property name="EmptyRolesAllowed"><%= @user_store['user_store_properties']['active_directory']['empty_roles_allowed'] %></Property>
-  <Property name="PasswordHashMethod"><%= @user_store['user_store_properties']['active_directory']['password_hash_method'] %></Property>
-  <Property name="MultiAttributeSeparator"><%= @user_store['user_store_properties']['active_directory']['multi_attribute_separator'] %></Property>
-  <Property name="isADLDSRole"><%= @user_store['user_store_properties']['active_directory']['is_adlds_role'] %></Property>
-  <Property name="userAccountControl"><%= @user_store['user_store_properties']['active_directory']['user_account_control'] %></Property>
-  <Property name="MaxUserNameListLength"><%= @user_store['user_store_properties']['active_directory']['max_username_list_length'] %></Property>
-  <Property name="MaxRoleNameListLength"><%= @user_store['user_store_properties']['active_directory']['max_rolename_list_length'] %></Property>
-  <Property name="MembershipAttributeRange"><%= @user_store['user_store_properties']['active_directory']['membership_attribute_range'] %>1500</Property>
-  <Property name="kdcEnabled"><%= @user_store['user_store_properties']['active_directory']['kdc_enabled'] %></Property>
-  <Property name="UserRolesCacheEnabled"><%= @user_store['user_store_properties']['active_directory']['user_roles_cache_enabled'] %></Property>
-  <Property name="ConnectionPoolingEnabled"><%= @user_store['user_store_properties']['active_directory']['connection_pooling_enabled'] %></Property>
-  <Property name="LDAPConnectionTimeout"><%= @user_store['user_store_properties']['active_directory']['ldap_connection_timeout'] %></Property>
+  <Property name="RolenameJavaRegEx">[a-zA-Z0-9._\-|//]{3,30}$</Property>
+  <Property name="RolenameJavaScriptRegEx">^[\S]{3,30}$</Property>
+  <Property name="SCIMEnabled">false</Property>
+  <Property name="IsBulkImportSupported">false</Property>
+  <Property name="EmptyRolesAllowed">true</Property>
+  <Property name="PasswordHashMethod">PLAIN_TEXT</Property>
+  <Property name="MultiAttributeSeparator">,</Property>
+  <Property name="isADLDSRole">false</Property>
+  <Property name="userAccountControl">512</Property>
+  <Property name="MaxUserNameListLength">100</Property>
+  <Property name="MaxRoleNameListLength">100</Property>
+  <Property name="MembershipAttributeRange">1500</Property>
+  <Property name="kdcEnabled">false</Property>
+  <Property name="defaultRealmName">WSO2.ORG</Property>
+  <Property name="UserRolesCacheEnabled">true</Property>
+  <Property name="ConnectionPoolingEnabled">false</Property>
+  <Property name="LDAPConnectionTimeout">5000</Property>
 </UserStoreManager>

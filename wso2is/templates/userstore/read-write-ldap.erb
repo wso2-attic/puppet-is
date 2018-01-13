@@ -18,40 +18,47 @@
 
 <UserStoreManager class="org.wso2.carbon.user.core.ldap.ReadWriteLDAPUserStoreManager">
   <Property name="TenantManager">org.wso2.carbon.user.core.tenant.CommonHybridLDAPTenantManager</Property>
-  <Property name="ConnectionURL"><%= @user_store['user_store_properties']['read-write-ldap']['connection_url'] %></Property>
-  <Property name="ConnectionName"><%= @user_store['user_store_properties']['read-write-ldap']['connection_name'] %></Property>
-  <Property name="ConnectionPassword"><%= @user_store['user_store_properties']['read-write-ldap']['connection_password'] %></Property>
-  <Property name="AnonymousBind"><%= @user_store['user_store_properties']['read-write-ldap']['anonymous_bind'] %></Property>
-  <Property name="UserSearchBase"><%= @user_store['user_store_properties']['read-write-ldap']['user_search_base'] %></Property>
-  <Property name="UserNameAttribute"><%= @user_store['user_store_properties']['read-write-ldap']['username_attribute'] %></Property>
-  <Property name="UserNameSearchFilter"><%= @user_store['user_store_properties']['read-write-ldap']['username_search_filter'] %></Property>
-  <Property name="UserNameListFilter"><%= @user_store['user_store_properties']['read-write-ldap']['username_list_filter'] %></Property>
-  <Property name="ReadGroups"><%= @user_store['user_store_properties']['read-write-ldap']['read_groups'] %></Property>
-  <Property name="WriteGroups"><%= @user_store['user_store_properties']['read-write-ldap']['write_groups'] %></Property>
-  <Property name="GroupSearchBase"><%= @user_store['user_store_properties']['read-write-ldap']['group_search_base'] %></Property>
+  <Property name="ConnectionURL"><%= @user_store['user_store_properties']['read_write_ldap']['connection_url'] %></Property>
+  <Property name="ConnectionName"><%= @user_store['user_store_properties']['read_write_ldap']['connection_name'] %></Property>
+  <% if @enable_secure_vault %>
+  <Property name="ConnectionPassword" svns:secretAlias="UserStoreManager.Property.ConnectionPassword">password</Property>
+  <%- else -%>
+  <Property name="ConnectionPassword"><%= @user_store['user_store_properties']['read_write_ldap']['connection_password'] %></Property>
+  <% end %>
+  <Property name="AnonymousBind">false</Property>
+  <Property name="UserSearchBase">ou=Users,dc=wso2,dc=org</Property>
+  <Property name="UserEntryObjectClass">identityPerson</Property>
+  <Property name="UserNameAttribute">uid</Property>
+  <Property name="UserNameSearchFilter">(&amp;(objectClass=person)(uid=?))</Property>
+  <Property name="UserNameListFilter">(objectClass=person)</Property>
+  <Property name="DisplayNameAttribute"/>
+  <Property name="ReadGroups">true</Property>
+  <Property name="WriteGroups">true</Property>
+  <Property name="GroupSearchBase">ou=Groups,dc=wso2,dc=org</Property>
   <Property name="GroupEntryObjectClass">groupOfNames</Property>
-  <Property name="GroupNameAttribute"><%= @user_store['user_store_properties']['read-write-ldap']['groupname_attribute'] %></Property>
-  <Property name="GroupNameSearchFilter"><%= @user_store['user_store_properties']['read-write-ldap']['groupname_search_filter'] %></Property>
-  <Property name="GroupNameListFilter"><%= @user_store['user_store_properties']['read-write-ldap']['groupname_list_filter'] %></Property>
-  <Property name="MembershipAttribute"><%= @user_store['user_store_properties']['read-write-ldap']['membership_attribute'] %></Property>
-  <Property name="BackLinksEnabled"><%= @user_store['user_store_properties']['read-write-ldap']['back_links_enabled'] %></Property>
-  <Property name="UsernameJavaRegEx"><%= @user_store['user_store_properties']['read-write-ldap']['username_java_regex'] %></Property>
-  <Property name="UsernameJavaScriptRegEx"><%= @user_store['user_store_properties']['read-write-ldap']['username_javascript_regex'] %></Property>
+  <Property name="GroupNameAttribute">cn</Property>
+  <Property name="GroupNameSearchFilter">(&amp;(objectClass=groupOfNames)(cn=?))</Property>
+  <Property name="GroupNameListFilter">(objectClass=groupOfNames)</Property>
+  <Property name="MembershipAttribute">member</Property>
+  <Property name="BackLinksEnabled">false</Property>
+  <Property name="UsernameJavaRegEx">[a-zA-Z0-9._\-|//]{3,30}$</Property>
+  <Property name="UsernameJavaScriptRegEx">^[\S]{3,30}$</Property>
   <Property name="UsernameJavaRegExViolationErrorMsg">Username pattern policy violated</Property>
-  <Property name="PasswordJavaRegEx"><%= @user_store['user_store_properties']['read-write-ldap']['password_javaregex'] %></Property>
-  <Property name="PasswordJavaScriptRegEx"><%= @user_store['user_store_properties']['read-write-ldap']['password_javascript_regex'] %></Property>
+  <Property name="PasswordJavaRegEx">^[\S]{5,30}$</Property>
+  <Property name="PasswordJavaScriptRegEx">^[\S]{5,30}$</Property>
   <Property name="PasswordJavaRegExViolationErrorMsg">Password length should be within 5 to 30 characters</Property>
-  <Property name="RolenameJavaRegEx"><%= @user_store['user_store_properties']['read-write-ldap']['rolename_java_regex'] %></Property>
-  <Property name="RolenameJavaScriptRegEx"><%= @user_store['user_store_properties']['read-write-ldap']['rolename_javascript_regex'] %></Property>
-  <Property name="SCIMEnabled"><%= @user_store['user_store_properties']['read-write-ldap']['scim_enabled'] %></Property>
-  <Property name="IsBulkImportSupported"><%= @user_store['user_store_properties']['read-write-ldap']['is_bulk_import_supported'] %></Property>
-  <Property name="EmptyRolesAllowed"><%= @user_store['user_store_properties']['read-write-ldap']['empty_roles_allowed'] %></Property>
-  <Property name="PasswordHashMethod"><%= @user_store['user_store_properties']['read-write-ldap']['password_hash_method'] %></Property>
-  <Property name="MultiAttributeSeparator"><%= @user_store['user_store_properties']['read-write-ldap']['multi_attribute_separator'] %></Property>
-  <Property name="MaxUserNameListLength"><%= @user_store['user_store_properties']['read-write-ldap']['max_username_list_length'] %></Property>
-  <Property name="MaxRoleNameListLength"><%= @user_store['user_store_properties']['read-write-ldap']['max_rolename_list_length'] %></Property>
-  <Property name="kdcEnabled"><%= @user_store['user_store_properties']['read-write-ldap']['kdc_enabled'] %></Property>
-  <Property name="UserRolesCacheEnabled"><%= @user_store['user_store_properties']['read-write-ldap']['user_roles_cache_enabled'] %></Property>
-  <Property name="ConnectionPoolingEnabled"><%= @user_store['user_store_properties']['read-write-ldap']['connection_pooling_enabled'] %></Property>
-  <Property name="LDAPConnectionTimeout"><%= @user_store['user_store_properties']['read-write-ldap']['ldap_connection_timeout'] %></Property>
+  <Property name="RolenameJavaRegEx">[a-zA-Z0-9._\-|//]{3,30}$</Property>
+  <Property name="RolenameJavaScriptRegEx">^[\S]{3,30}$</Property>
+  <Property name="SCIMEnabled">true</Property>
+  <Property name="IsBulkImportSupported">false</Property>
+  <Property name="EmptyRolesAllowed">true</Property>
+  <Property name="PasswordHashMethod">PLAIN_TEXT</Property>
+  <Property name="MultiAttributeSeparator">,</Property>
+  <Property name="MaxUserNameListLength">100</Property>
+  <Property name="MaxRoleNameListLength">100</Property>
+  <Property name="kdcEnabled">false</Property>
+  <Property name="defaultRealmName">WSO2.ORG</Property>
+  <Property name="UserRolesCacheEnabled">true</Property>
+  <Property name="ConnectionPoolingEnabled">false</Property>
+  <Property name="LDAPConnectionTimeout">5000</Property>
 </UserStoreManager>

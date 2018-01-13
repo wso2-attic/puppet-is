@@ -55,7 +55,7 @@ wso2::file_list:
 # Files to be copied to the product folder when restarting the system service
 # wso2::service_refresh_file_list:
 
-# Clustering configurations of the product in repository/conf/axis2/axis2.xml
+# Clustering configuration related properties of the product in repository/conf/axis2/axis2.xml
 # Clustering scheme can be wka, aws, kubenetes, mesos
 wso2::clustering:
   enabled: true
@@ -83,7 +83,7 @@ wso2::clustering:
 #    tag_key: tag-key
 #    tag_value: tag-value
 
-# Datasource configurations in repository/conf/datasources/master-datasources.xml
+# Datasource configuration related properties in repository/conf/datasources/master-datasources.xml
 wso2::master_datasources:
   identity_ds:
     name: WSO2_IDENTITY_DS
@@ -100,7 +100,7 @@ wso2::master_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-# BPS datasource configuration in repository/conf/datasources/bps-datasources.xml
+# BPS datasource configuration related properties in repository/conf/datasources/bps-datasources.xml
 wso2::bps_datasources:
   bps_ds:
     name: WSO2_BPS_DS
@@ -119,7 +119,7 @@ wso2::bps_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-# Metrics datasource configuration in repository/conf/datasources/metrics-datasources.xml
+# Metrics datasource configuration related properties in repository/conf/datasources/metrics-datasources.xml
 wso2::metrics_datasources:
   # Metrics are to be stored local to the server. Thus an embedded H2 database is used here.
   # If necessary can be pointed to an external datasource.
@@ -138,7 +138,7 @@ wso2::metrics_datasources:
     validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
     validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
 
-# Primary user store configuration in repository/conf/user-mgt.xml
+# Primary user store configuration related properties in repository/conf/user-mgt.xml
 # User store can be a JDBC, read only/read write LDAP or Active Directory
 wso2::user_store:
   user_store_type: jdbc
@@ -148,130 +148,20 @@ wso2::user_store:
       url: jdbc:mysql://192.168.100.1:3306/WSO2_USER_DB?autoReconnect=true&amp;useSSL=false
       username: "%{hiera('wso2::datasources::mysql::username')}"
       password: "%{hiera('wso2::datasources::mysql::password')}"
-      read_only: false
-      read_groups: true
-      write_groups: true
-      username_java_regex: '^[\S]{3,30}$'
-      username_javascript_regex: '^[\S]{3,30}$'
-      password_java_regex: '^[\S]{5,30}$'
-      password_javascript_regex: '^[\S]{5,30}$'
-      rolename_java_regex: '^[\S]{3,30}$'
-      rolename_javascript_regex: '^[\S]{3,30}$'
-      case_insensitive_username: false
-      scim_enabled: true
-      is_bulk_import_supported: false
-      password_digest: SHA-256
-      store_salted_password: true
-      multi_attribute_separator: ','
-      max_username_list_length: 100
-      max_rolename_list_length: 100
-      user_roles_cache_enabled: true
-      user_name_unique_across_tenants: false
-      validation_query: SELECT 1
-      validation_interval: 30000
-#    read-only-ldap:
+#    read_only_ldap:
 #      connection_url: ldap://localhost:10389
 #      connection_name: uid=admin,ou=system
 #      connection_password: admin
-#      anonymous_bind: false
-#      user_search_base: ou=system
-#      username_attribute: uid
-#      username_search_filter: (&amp;(objectClass=person)(uid=?))
-#      username_list_filter: (objectClass=person)
-#      read_groups: true
-#      group_search_base: ou=system
-#      groupname_attribute: cn
-#      groupname_search_filter: (&amp;(objectClass=groupOfNames)(cn=?))
-#      groupname_list_filter: (objectClass=groupOfNames)
-#      membership_attribute: member
-#      back_links_enabled: false
-#      username_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
-#      password_javaregex: '^[\S]{5,30}$'
-#      rolename_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
-#      scim_enabled: false
-#      password_hash_method: PLAIN_TEXT
-#      multi_attribute_separator: ','
-#      max_username_list_length: 100
-#      max_rolename_list_length: 100
-#      user_roles_cache_enabled: true
-#      connection_pooling_enabled: true
-#      ldap_connection_timeout: 5000
-#      replace_escape_characters_at_user_login: true
-#    read-write-ldap:
+#    read_write_ldap:
 #      connection_url: ldap://localhost:10389
 #      connection_name: uid=admin,ou=system
 #      connection_password: admin
-#      anonymous_bind: false
-#      user_search_base: ou=Users,dc=wso2,dc=org
-#      username_attribute: uid
-#      username_search_filter: (&amp;(objectClass=person)(uid=?))
-#      username_list_filter: (objectClass=person)
-#      read_groups: true
-#      write_groups: true
-#      group_search_base: ou=system
-#      groupname_attribute: cn
-#      groupname_search_filter: (&amp;(objectClass=groupOfNames)(cn=?))
-#      groupname_list_filter: (objectClass=groupOfNames)
-#      membership_attribute: member
-#      back_links_enabled: false
-#      username_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
-#      username_javascript_regex: '^[\S]{3,30}$'
-#      password_javaregex: '^[\S]{5,30}$'
-#      password_javascript_regex: '^[\S]{5,30}$'
-#      rolename_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
-#      rolename_javascript_regex: '^[\S]{3,30}$'
-#      scim_enabled: true
-#      is_bulk_import_supported: false
-#      empty_roles_allowed: false
-#      password_hash_method: PLAIN_TEXT
-#      multi_attribute_separator: ','
-#      max_username_list_length: 100
-#      max_rolename_list_length: 100
-#      kdc_enabled: false
-#      user_roles_cache_enabled: true
-#      connection_pooling_enabled: true
-#      ldap_connection_timeout: 5000
 #    active_directory:
 #      connection_url: ldap://localhost:10389
 #      connection_name: uid=admin,ou=system
 #      connection_password: admin
-#      anonymous_bind: false
-#      user_search_base: ou=Users,dc=wso2,dc=org
-#      username_attribute: uid
-#      username_search_filter: (&amp;(objectClass=person)(uid=?))
-#      username_list_filter: (objectClass=person)
-#      read_groups: true
-#      write_groups: true
-#      group_search_base: ou=system
-#      groupname_attribute: cn
-#      groupname_search_filter: (&amp;(objectClass=groupOfNames)(cn=?))
-#      groupname_list_filter: (objectClass=groupOfNames)
-#      membership_attribute: member
-#      member_of_attribute: memberOf
-#      back_links_enabled: false
-#      referral: follow
-#      username_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
-#      username_javascript_regex: '^[\S]{3,30}$'
-#      password_javaregex: '^[\S]{5,30}$'
-#      password_javascript_regex: '^[\S]{5,30}$'
-#      rolename_java_regex: '[a-zA-Z0-9._\-|//]{3,30}$'
-#      rolename_javascript_regex: '^[\S]{3,30}$'
-#      scim_enabled: false
-#      is_bulk_import_supported: false
-#      empty_roles_allowed: false
-#      password_hash_method: PLAIN_TEXT
-#      multi_attribute_separator: ','
-#      is_adlds_role: false
-#      user_account_control: 512
-#      max_username_list_length: 100
-#      max_rolename_list_length: 100
-#      membership_attribute_range: 1500
-#      kdc_enabled: false
-#      user_roles_cache_enabled: true
-#      connection_pooling_enabled: true
-#      ldap_connection_timeout: 5000
 
-# User management admin user/role configurations and the datasource configuration in repository/conf/user-mgt.xml
+# User management admin user/role configuration and the datasource configuration in repository/conf/user-mgt.xml
 wso2::user_management:
   add_admin: true
   admin_role: admin
@@ -288,7 +178,7 @@ wso2::bps_datasource: bps_ds
 # Metrics datasource configuration in repository/conf/metrics.xml
 wso2::metrics_datasource: metrics_ds
 
-# Remote registry instance configuration in repository/conf/registry.xml
+# Remote registry instance configuration related properties in repository/conf/registry.xml
 wso2::registry_instances:
   shared_registry:
     datasource: identity_ds
@@ -435,6 +325,26 @@ wso2::tomcat:
 #    secret_alias: UserManager.AdminUser.Password
 #    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/Configuration/AdminUser/Password,false
 #    password: "%{hiera('wso2::super_admin::password')}"
+#
+#  jdbc_user_store_connection_password:
+#    secret_alias: UserStoreManager.Property.password
+#    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/UserStoreManager/Property[@name='password'],false
+#    password: "%{hiera('wso2::user_store::user_store_properties::jdbc::password')}"
+#
+#  read_only_ldap_user_store_connection_password:
+#    secret_alias: UserStoreManager.Property.ConnectionPassword
+#    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/UserStoreManager/Property[@name='ConnectionPassword'],false
+#    password: "%{hiera('wso2::user_store::user_store_properties::read_only_ldap::connection_password')}"
+#
+#  read_write_ldap_user_store_connection_password:
+#    secret_alias: UserStoreManager.Property.ConnectionPassword
+#    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/UserStoreManager/Property[@name='ConnectionPassword'],false
+#    password: "%{hiera('wso2::user_store::user_store_properties::read_write_ldap::connection_password')}"
+#
+#  active_directory_user_store_connection_password:
+#    secret_alias: UserStoreManager.Property.ConnectionPassword
+#    secret_alias_value: repository/conf/user-mgt.xml//UserManager/Realm/UserStoreManager/Property[@name='ConnectionPassword'],false
+#    password: "%{hiera('wso2::user_store::user_store_properties::active_directory::connection_password')}"
 #
 #  wso2_carbon_db_password:
 #    secret_alias: Datasources.WSO2_CARBON_DB.Configuration.Password

@@ -21,29 +21,33 @@
   <Property name="driverName"><%= @user_store['user_store_properties']['jdbc']['driver_class_name'] %></Property>
   <Property name="url"><%= @user_store['user_store_properties']['jdbc']['url'] %></Property>
   <Property name="userName"><%= @user_store['user_store_properties']['jdbc']['username'] %></Property>
-  <Property encrypted="false" name="password"><%= @user_store['user_store_properties']['jdbc']['password'] %></Property>
-  <Property name="ReadOnly"><%= @user_store['user_store_properties']['jdbc']['read_only'] %></Property>
-  <Property name="ReadGroups"><%= @user_store['user_store_properties']['jdbc']['read_groups'] %></Property>
-  <Property name="WriteGroups"><%= @user_store['user_store_properties']['jdbc']['write_groups'] %></Property>
-  <Property name="UsernameJavaRegEx"><%= @user_store['user_store_properties']['jdbc']['username_java_regex'] %></Property>
-  <Property name="UsernameJavaScriptRegEx"><%= @user_store['user_store_properties']['jdbc']['username_javascript_regex'] %></Property>
-  <Property name="UsernameJavaRegExViolationErrorMsg">Username pattern policy violated</Property>
-  <Property name="PasswordJavaRegEx"><%= @user_store['user_store_properties']['jdbc']['password_java_regex'] %></Property>
-  <Property name="PasswordJavaScriptRegEx"><%= @user_store['user_store_properties']['jdbc']['password_javascript_regex'] %></Property>
-  <Property name="PasswordJavaRegExViolationErrorMsg">Password length should be within 5 to 30 characters</Property>
-  <Property name="RolenameJavaRegEx"><%= @user_store['user_store_properties']['jdbc']['rolename_java_regex'] %></Property>
-  <Property name="RolenameJavaScriptRegEx"><%= @user_store['user_store_properties']['jdbc']['rolename_javascript_regex'] %></Property>
-  <Property name="CaseInsensitiveUsername"><%= @user_store['user_store_properties']['jdbc']['case_insensitive_username'] %></Property>
-  <Property name="SCIMEnabled"><%= @user_store['user_store_properties']['jdbc']['scim_enabled'] %></Property>
-  <Property name="IsBulkImportSupported"><%= @user_store['user_store_properties']['jdbc']['is_bulk_import_supported'] %></Property>
-  <Property name="PasswordDigest"><%= @user_store['user_store_properties']['jdbc']['password_digest'] %></Property>
-  <Property name="StoreSaltedPassword"><%= @user_store['user_store_properties']['jdbc']['store_salted_password'] %></Property>
-  <Property name="MultiAttributeSeparator"><%= @user_store['user_store_properties']['jdbc']['multi_attribute_separator'] %></Property>
-  <Property name="MaxUserNameListLength"><%= @user_store['user_store_properties']['jdbc']['max_username_list_length'] %></Property>
-  <Property name="MaxRoleNameListLength"><%= @user_store['user_store_properties']['jdbc']['max_rolename_list_length'] %></Property>
-  <Property name="UserRolesCacheEnabled"><%= @user_store['user_store_properties']['jdbc']['user_roles_cache_enabled'] %></Property>
-  <Property name="UserNameUniqueAcrossTenants"><%= @user_store['user_store_properties']['jdbc']['user_name_unique_across_tenants'] %></Property>
-  <Property name="validationQuery"><%= @user_store['user_store_properties']['jdbc']['validation_query'] %></Property>
-  <Property name="validationInterval"><%= @user_store['user_store_properties']['jdbc']['validation_interval'] %></Property>
+  <% if @enable_secure_vault %>
+  <Property name="password" svns:secretAlias="UserStoreManager.Property.password">password</Property>
+  <%- else -%>
+  <Property name="password"><%= @user_store['user_store_properties']['jdbc']['password'] %></Property>
+  <% end %>
+  <Property name="ReadOnly">false</Property>
+  <Property name="ReadGroups">true</Property>
+  <Property name="WriteGroups">true</Property>
+  <Property name="UsernameJavaRegEx">^[\S]{5,30}$</Property>
+  <Property name="UsernameJavaScriptRegEx">^[\S]{5,30}$</Property>
+  <Property name="UsernameJavaRegExViolationErrorMsg">Username pattern policy violated.</Property>
+  <Property name="PasswordJavaRegEx">^[\S]{5,30}$</Property>
+  <Property name="PasswordJavaScriptRegEx">^[\S]{5,30}$</Property>
+  <Property name="PasswordJavaRegExViolationErrorMsg">Password pattern policy violated.</Property>
+  <Property name="RolenameJavaRegEx">^[\S]{5,30}$</Property>
+  <Property name="RolenameJavaScriptRegEx">^[\S]{5,30}$</Property>
+  <Property name="CaseInsensitiveUsername">true</Property>
+  <Property name="SCIMEnabled">true</Property>
+  <Property name="IsBulkImportSupported">false</Property>
+  <Property name="PasswordDigest">SHA-256</Property>
+  <Property name="MultiAttributeSeparator">,</Property>
+  <Property name="StoreSaltedPassword">true</Property>
+  <Property name="MaxUserNameListLength">100</Property>
+  <Property name="MaxRoleNameListLength">100</Property>
+  <Property name="UserRolesCacheEnabled">true</Property>
+  <Property name="UserNameUniqueAcrossTenants">false</Property>
+  <Property name="validationQuery">SELECT 1</Property>
+  <Property name="validationInterval">30000</Property>
   <Property name="CountRetrieverClass">org.wso2.carbon.identity.user.store.count.jdbc.JDBCUserStoreCountRetriever</Property>
 </UserStoreManager>
