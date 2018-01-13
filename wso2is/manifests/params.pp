@@ -78,27 +78,10 @@ class wso2is::params {
     $dep_sync                 = hiera('wso2::dep_sync')
     $ports                    = hiera('wso2::ports')
     $jvm                      = hiera('wso2::jvm')
-    # identitly.xml configurations
 
-    $sso_authentication       = hiera('wso2::sso_authentication', undef)
     $user_management          = hiera('wso2::user_management', undef)
     $enable_secure_vault      = hiera('wso2::enable_secure_vault', undef)
-    $session_persist          = hiera('wso2::session_persist', undef)
-    $session_cleanUp          = hiera('wso2::session_cleanUp', undef)
-    $operation_cleanUp        = hiera('wso2::operation_cleanUp', undef)
-    $openID                   = hiera('wso2::openID', undef)
-    $time_config              = hiera('wso2::time_config', undef)
-    $oAuth                    = hiera('wso2::oAuth', undef)
-    $sso                      = hiera('wso2::sso', undef)
-    $passiveSTS               = hiera('wso2::passiveSTS', undef)
-    $evenet_listeners         = hiera('wso2::evenet_listeners', undef)
-    $cache                    = hiera('wso2::cache', undef)
     $key_stores               = hiera('wso2::key_stores')
-
-    # catalina-server.xml configurations
-
-    $tomcat                  = hiera('wso2::tomcat')
-
 
   } else {
 
@@ -121,6 +104,7 @@ class wso2is::params {
         validation_interval     => '30000'
       }
     }
+
     $metrics_datasources      = {
       wso2_metrics_db => {
         name                => 'WSO2_METRICS_DB',
@@ -139,6 +123,7 @@ class wso2is::params {
         validation_interval => '30000'
       }
     }
+
     $enable_thrift_service    = false
 
     $java_prefs_system_root   = '/home/wso2user/.java'
@@ -230,107 +215,7 @@ class wso2is::params {
         ]
       }
     }
-    $session_persist       = {
-      enabled           => true,
-      temporary         => true,
-      pool_size         => 0
-    }
 
-    $session_cleanUp       = {
-      enabled           => true,
-      timeout           => 20160,
-      period            => 1140,
-      delete_chunk_size => 50000
-    }
-
-    $operation_cleanUp       = {
-      enabled           => true,
-     }
-
-    $openID       = {
-      skip_user_consent => false,
-      remember_me_timeout  => 7200,
-      disable_dumbmode   => false,
-      remember_me_expir => 7200
-
-    }
-
-    $time_config       = {
-      session_idle_timeout => 15,
-      remember_me_timeout  => 20160
-    }
-
-    $oAuth      = {
-      app_info_cache_timeout => -1,
-      auth_grant_cache_timeout  => -1,
-      session_data_cache_timeout   => -1,
-      claim_cache_timeout   => -1,
-      auth_code_default_validity_period => 300,
-      access_token_default_validity_period => 3600,
-      user_access_token_default_validity_period   => 3600,
-      refresh_token_validity_period  =>84600,
-      time_stamp_skew   => 0,
-      renew_refresh_token_for_refresh_grant => true,
-      strict_client_credential_validation   => false,
-      enable_assertions_UserName => false,
-      enable_access_token_partitioning => false,
-      auth_context_token_generation_enabled => false,
-      auth_context_token_generation_TTL => 15,
-      id_token_expiration => 3600,
-      openIDConnect_skip_user_consent => false,
-      sign_jwt_spey => false,
-      token_persistence_enable => true,
-      token_persistence_pool_size => 0,
-      token_persistence_retry_count => 5
-    }
-
-    $sso      = {
-      persistance_cache_timeout => 157680000,
-      session_index_timeout  => 157680000,
-      single_logout_retry_count  => 5,
-      single_logout_retry_interval   => 60000,
-      sAMLresponse_validity_period=> 5,
-      use_authenticated_user_domain_crypto => false,
-      slo_host_name_verifi_enabled => true,
-      tenant_partitioning_enabled => false
-    }
-
-    $passiveSTS      = {
-      slo_host_name_verifi_enabled => true
-    }
-
-    $evenet_listeners     = {
-      user_store_action_listener => true,
-      identity_mgt_event_listener => false,
-      identity_governance_event_listener => true,
-      scimuser_operation_listener => true,
-      identity_store_event_listener => true,
-      daslogin_data_publisher => false,
-      dassession_data_publisher => false,
-      authn_data_publisher_proxy => true,
-      identity_scim2_user_operation_listener => false
-    }
-
-    $cache      = {
-      appauth_framework_session_context             => true,
-      authentication_context_cache                  => true,
-      authentication_request_cache                  => true,
-      app_info_cache                                => true,
-      authorization_grant_cache                     => true,
-      oauth_cache                                   => true,
-      oauth_scope_cache                             => true,
-      oauth_session_data_cache                      => true,
-      samalsso_participant_cache                    => true,
-      samalsso_session_index_cache                  => true,
-      samalsso_session_data_cache                   => true,
-      service_provider_cache                        => true,
-      provisioning_connector_cache                  => true,
-      provisioning_entity_cache                     => true,
-      service_provider_provisioning_connector_cache => true,
-      idP_cache_byauth_property                     => true,
-      idp_cache_byhri                               => true,
-      idp_cache_by_name                             => true
-    }
     $dep_sync                 = {
       enabled => false
     }
@@ -343,10 +228,6 @@ class wso2is::params {
       xms           => '256m',
       xmx           => '1024m',
       max_perm_size => '256m'
-    }
-
-    $sso_authentication       = {
-      enabled => false
     }
 
     $user_management          = {

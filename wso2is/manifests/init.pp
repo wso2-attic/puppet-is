@@ -75,7 +75,6 @@ class wso2is (
   $ports                  = $wso2is::params::ports,
   $jvm                    = $wso2is::params::jvm,
   $fqdn                   = $wso2is::params::fqdn,
-  $sso_authentication     = $wso2is::params::sso_authentication,
   $user_management        = $wso2is::params::user_management,
 ) inherits wso2is::params {
 
@@ -115,7 +114,6 @@ class wso2is (
   validate_hash($ports)
   validate_hash($jvm)
   validate_string($fqdn)
-  validate_hash($sso_authentication)
   validate_hash($user_management)
   class { '::wso2base':
     packages               => $packages,
