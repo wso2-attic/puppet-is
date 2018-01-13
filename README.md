@@ -7,8 +7,8 @@ This repository contains following puppet modules related to WSO2 Identity Serve
 
 These modules support installing and configuring WSO2 Identity Server upon the two [standard production deployment 
 patterns](https://docs.wso2.com/display/IS540/Deployment+Patterns) defined.
-Deployment Pattern 1: HA clustered deployment of WSO2 Identity Server
-Deployment Pattern 2: HA clustered deployment of WSO2 Identity Server with WSO2 Identity Analytics
+* Deployment Pattern 1: HA clustered deployment of WSO2 Identity Server
+* Deployment Pattern 2: HA clustered deployment of WSO2 Identity Server with WSO2 Identity Analytics
 
 Configuration data is managed using [Hiera](https://docs.puppet.com/hiera/1/). Hiera provides a mechanism for separating configuration data from Puppet 
 scripts and managing them in a set of YAML files in a hierarchical manner.
@@ -40,10 +40,10 @@ below.
 puppet-base.
 
 ##### Deployment Pattern 1   
-* For this deployment pattern you need to setup wso2is and wso2base puppet modules.
+* For this deployment pattern you need to setup wso2is and wso2base puppet modules following the guide in [wiki](https://github.com/wso2/puppet-base/wiki).
 
 ##### Deployment Pattern 2  
-* For this deployment pattern you need to setup wso2is, wso2is_analytics, and wso2base puppet modules.                                          
+* For this deployment pattern you need to setup wso2is, wso2is_analytics, and wso2base puppet modules following the guide in [wiki](https://github.com/wso2/puppet-base/wiki).              
                                                         
 ## Copy artifacts
 Upon the modules used based on the deployment pattern selected, copy necessary artifacts to the corresponding 
