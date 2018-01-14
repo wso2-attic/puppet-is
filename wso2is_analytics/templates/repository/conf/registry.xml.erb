@@ -29,29 +29,34 @@
     <enableCache>true</enableCache>
     <registryRoot>/</registryRoot>
 
-    <dbConfig name="wso2registry">
+   <dbConfig name="wso2registry">
         <dataSource><%= @master_datasources[@local_reg_datasource]['jndi_config'] %></dataSource>
     </dbConfig>
 
-    <% if @registry_mounts and !@registry_mounts.empty? -%>
-    <%- @registry_mounts.each do |datasource_name, registry_mount| -%>
-    <dbConfig name="<%= @master_datasources[datasource_name]['name'] %>">
-        <dataSource><%= @master_datasources[datasource_name]['jndi_config'] %></dataSource>
+    <% if @registry_instances and !@registry_instances.empty? -%>
+    <%- @registry_instances.each do |registry_instance_name, registry_instance| -%>
+    <dbConfig name="<%= registry_instance_name %>">
+        <dataSource><%= @master_datasources[registry_instance['datasource']]['jndi_config'] %></dataSource>
     </dbConfig>
     <remoteInstance url="https://localhost:9443/registry">
-        <id><%= @master_datasources[datasource_name]['name'] %></id>
-        <dbConfig><%= @master_datasources[datasource_name]['name'] %></dbConfig>
-        <readOnly><%= registry_mount['read_only'] %></readOnly>
-        <registryRoot><%= registry_mount['registry_root'] %></registryRoot>
-        <enableCache><%= registry_mount['enable_cache'] %></enableCache>
-        <cacheId><%= @master_datasources[datasource_name]['username'] %>@<%= @master_datasources[datasource_name]['url'] %></cacheId>
+        <id><%= registry_instance_name %></id>
+        <dbConfig><%= registry_instance_name %></dbConfig>
+        <readOnly><%= registry_instance['read_only'] %></readOnly>
+        <registryRoot><%= registry_instance['registry_root'] %></registryRoot>
+        <enableCache><%= registry_instance['enable_cache'] %></enableCache>
+        <cacheId><%= @master_datasources[registry_instance['datasource']]['username'] %>@<%= @master_datasources[registry_instance['datasource']]['url'] %></cacheId>
     </remoteInstance>
+    <%- end -%>
+    <% end -%>
+
+    <% if @registry_mounts and !@registry_mounts.empty? -%>
+    <%- @registry_mounts.each do |registry_mount_name, registry_mount| -%>
     <mount path="<%= registry_mount['path'] %>" overwrite="virtual">
-        <instanceId><%= @master_datasources[datasource_name]['name'] %></instanceId>
+        <instanceId><%= registry_mount['instance_id'] %></instanceId>
         <targetPath><%= registry_mount['target_path'] %></targetPath>
     </mount>
-<%- end -%>
-<%- end -%>
+    <%- end -%>
+    <% end -%>
 
    <!--<handler class="org.wso2.carbon.registry.extensions.handlers.SynapseRepositoryHandler">
         <filter class="org.wso2.carbon.registry.core.jdbc.handlers.filters.MediaTypeMatcher">

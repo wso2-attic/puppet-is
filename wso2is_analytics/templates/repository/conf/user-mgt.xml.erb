@@ -17,14 +17,14 @@
 <UserManager>
     <Realm>
         <Configuration>
-		<AddAdmin>true</AddAdmin>
+        <AddAdmin>true</AddAdmin>
             <AdminRole><%= @user_management['admin_role'] %></AdminRole>
             <AdminUser>
                 <UserName><%= @user_management['admin_username'] %></UserName>
                 <Password><%= @user_management['admin_password'] %></Password>
             </AdminUser>
             <EveryOneRoleName>everyone</EveryOneRoleName> <!-- By default users in this role sees the registry root -->
-            <Property name="dataSource"><%= @master_datasources[@usermgt_datasource]['jndi_config'] %></Property>
+            <Property name="dataSource"><%= @master_datasources[@user_management['datasource']]['jndi_config'] %></Property>
             <Property name="isCascadeDeleteEnabled">true</Property>
         </Configuration>
 

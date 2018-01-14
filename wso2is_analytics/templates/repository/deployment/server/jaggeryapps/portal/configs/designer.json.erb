@@ -6,7 +6,7 @@
         "isCreateGadgetEnable": false,
         "ignoreProviders": ["rt"]
     },
-    <%- if @sso_authentication['enabled']-%>
+    <%- if @sso_authentication and !@sso_authentication.empty? and @sso_authentication['enabled']-%>
     "authentication": {
         "activeMethod": "sso",
         "methods": {
@@ -99,8 +99,12 @@
         "password": "admin"
     },
     "host": {
-        "hostname": "<%= @portal['hostname'] %>",
-        "port": "<%= @portal['port'] %>",
-        "protocol": "<%= @portal['protocol'] %>"
+    <% if @hostname %>
+        "hostname": "<%= @hostname %>",
+    <%- else -%>
+        "hostname": "localhost",
+    <% end %>
+        "port": "",
+        "protocol": ""
     }
 }

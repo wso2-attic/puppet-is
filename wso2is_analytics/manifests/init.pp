@@ -19,10 +19,11 @@ class wso2is_analytics (
   # wso2is_analytics specific configuration data
   $analytics_datasources  = $wso2is_analytics::params::analytics_datasources,
   $metrics_datasources    = $wso2is_analytics::params::metrics_datasources,
+  $analytics_event_store_datasource = $wso2is_analytics::params::analytics_event_store_datasource,
+  $analytics_processed_data_store_datasource = $wso2is_analytics::params::analytics_processed_data_store_datasource,
+  $metrics_datasource     = $wso2is_analytics::params::metrics_datasource,
   $spark                  = $wso2is_analytics::params::spark,
-  $identity_datasource    = $wso2is_analytics::params::identity_datasource,
   $ha_deployment          = $wso2is_analytics::params::ha_deployment,
-  $portal                 = $wso2is_analytics::params::portal,
 
   $remove_file_list       = $wso2is_analytics::params::remove_file_list,
   $packages               = $wso2is_analytics::params::packages,
@@ -62,11 +63,11 @@ class wso2is_analytics (
 
   # Templated configuration parameters
   $master_datasources     = $wso2is_analytics::params::master_datasources,
+  $registry_instances     = $wso2is_analytics::params::registry_instances,
   $registry_mounts        = $wso2is_analytics::params::registry_mounts,
   $hostname               = $wso2is_analytics::params::hostname,
   $mgt_hostname           = $wso2is_analytics::params::mgt_hostname,
   $worker_node            = $wso2is_analytics::params::worker_node,
-  $usermgt_datasource     = $wso2is_analytics::params::usermgt_datasource,
   $local_reg_datasource   = $wso2is_analytics::params::local_reg_datasource,
   $clustering             = $wso2is_analytics::params::clustering,
   $dep_sync               = $wso2is_analytics::params::dep_sync,
@@ -80,26 +81,38 @@ class wso2is_analytics (
 
   validate_hash($analytics_datasources)
   validate_hash($metrics_datasources)
+
+  validate_string($analytics_event_store_datasource)
+  validate_string($analytics_processed_data_store_datasource)
+  validate_string($metrics_datasource)
+
   validate_hash($spark)
-  validate_string($identity_datasource)
   validate_hash($ha_deployment)
-  validate_hash($portal)
 
   validate_hash($master_datasources)
+
+  if $registry_instances != undef {
+    validate_hash($registry_mounts)
+  }
+
   if $registry_mounts != undef {
     validate_hash($registry_mounts)
   }
+
   validate_string($hostname)
   validate_string($mgt_hostname)
   validate_bool($worker_node)
-  validate_string($usermgt_datasource)
   validate_string($local_reg_datasource)
   validate_hash($clustering)
   validate_hash($dep_sync)
   validate_hash($ports)
   validate_hash($jvm)
   validate_string($fqdn)
-  validate_hash($sso_authentication)
+
+  if $sso_authentication != undef {
+    validate_hash($sso_authentication)
+  }
+
   validate_hash($user_management)
 
   class { '::wso2base':
