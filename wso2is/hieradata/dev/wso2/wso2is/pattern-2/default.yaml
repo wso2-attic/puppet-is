@@ -1,4 +1,4 @@
-# Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ wso2::template_list:
   - repository/conf/carbon.xml
   - repository/conf/tomcat/catalina-server.xml
   - repository/conf/axis2/axis2.xml
+  - repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-AuthenticationData.xml
+  - repository/deployment/server/eventpublishers/IsAnalytics-Publisher-wso2event-SessionData.xml
   - bin/wso2server.sh
 
 #  - repository/conf/security/cipher-text.properties
@@ -197,6 +199,15 @@ wso2::registry_mounts:
     path: /_system/governance
     target_path: /_system/governance
     overwrite: true
+
+# Identity event listeners in repository/conf/identity/identity.xml
+wso2::identity::event_listeners::login_data_publisher::enable: true
+wso2::identity::event_listeners::session_data_publisher::enable: true
+
+wso2::analytics_username: "%{hiera('wso2::super_admin::username')}"
+wso2::analytics_password: "%{hiera('wso2::super_admin::password')}"
+wso2::analytics_receiver_url: tcp://localhost:7611
+wso2::analytics_authenticator_url: tcp://localhost:7711
 
 # Secure vault configuration related properties
 # wso2::enable_secure_vault: true

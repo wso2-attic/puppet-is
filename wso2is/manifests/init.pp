@@ -76,6 +76,12 @@ class wso2is (
   $jvm                    = $wso2is::params::jvm,
   $fqdn                   = $wso2is::params::fqdn,
   $user_management        = $wso2is::params::user_management,
+  $login_data_publisher_enabled   = $wso2is::params::login_data_publisher_enabled,
+  $session_data_publisher_enabled = $wso2is::params::session_data_publisher_enabled,
+  $analytics_username       = $wso2is::params::analytics_username,
+  $analytics_password       = $wso2is::params::analytics_password,
+  $analytics_receiver_url   = $wso2is::params::analytics_receiver_url,
+  $analytics_authenticator_url = $wso2is::params::analytics_authenticator_url,
 ) inherits wso2is::params {
 
   validate_hash($master_datasources)
@@ -115,6 +121,31 @@ class wso2is (
   validate_hash($jvm)
   validate_string($fqdn)
   validate_hash($user_management)
+
+  if $login_data_publisher_enabled != undef {
+    validate_bool($login_data_publisher_enabled)
+  }
+
+  if $session_data_publisher_enabled != undef {
+    validate_bool($session_data_publisher_enabled)
+  }
+
+  if $analytics_username != undef {
+    validate_string($analytics_username)
+  }
+
+  if $analytics_password != undef {
+    validate_string($analytics_password)
+  }
+
+  if $analytics_receiver_url != undef {
+    validate_string($analytics_receiver_url)
+  }
+
+  if $analytics_authenticator_url != undef {
+    validate_string($analytics_authenticator_url)
+  }
+
   class { '::wso2base':
     packages               => $packages,
     template_list          => $template_list,

@@ -82,6 +82,12 @@ class wso2is::params {
     $user_management          = hiera('wso2::user_management', undef)
     $enable_secure_vault      = hiera('wso2::enable_secure_vault', undef)
     $key_stores               = hiera('wso2::key_stores')
+    $login_data_publisher_enabled   = hiera('wso2::identity::event_listeners::login_data_publisher::enable', undef)
+    $session_data_publisher_enabled = hiera('wso2::identity::event_listeners::session_data_publisher::enable', undef)
+    $analytics_username       = hiera('wso2::analytics_username', undef)
+    $analytics_password       = hiera('wso2::analytics_password', undef)
+    $analytics_receiver_url   = hiera('wso2::analytics_receiver_url', undef)
+    $analytics_authenticator_url = hiera('wso2::analytics_authenticator_url', undef)
 
   } else {
 
@@ -239,6 +245,11 @@ class wso2is::params {
     }
 
     $enable_secure_vault      = false
+
+    $analytics_username       = 'admin'
+    $analytics_password       = 'admin'
+    $analytics_receiver_url   = 'tcp://localhost:7611'
+    $analytics_authenticator_url = 'tcp://localhost:7711'
 
     $key_stores               = {
       key_store              => {
