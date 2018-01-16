@@ -76,13 +76,19 @@ wso2::clustering:
 #     tag_key: tag-key
 #     tag_value: tag-value
 
+# Common RDBMS properties used across datasource configurations.
+# Configure the engine, host name and port to be configured when configuring database connection URLs.
+wso2::rdbms::engine: mysql
+wso2::rdbms::hostname: mysql-db-server-host
+wso2::rdbms::port: 3306
+
 # Datasource configuration related properties in repository/conf/datasources/master-datasources.xml
 wso2::master_datasources:
   analytics_ds:
     name: WSO2_ANALYTICS_DS
     description: The datasource used for registry and user management
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: jdbc:mysql://192.168.100.1:3306/WSO2_ANALYTICS_DB?autoReconnect=true&amp;useSSL=false
+    url: "jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_ANALYTICS_DB?autoReconnect=true&amp;useSSL=false"
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
     jndi_config: jdbc/WSO2AnalyticsDS
@@ -99,7 +105,7 @@ wso2::analytics_datasources:
     name: WSO2_ANALYTICS_STORE_DS
     description: The datasource used for analytics record store
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: jdbc:mysql://192.168.100.1:3306/WSO2_ANALYTICS_DB?autoReconnect=true&amp;useSSL=false
+    url: "jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_ANALYTICS_DB?autoReconnect=true&amp;useSSL=false"
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
     max_active: "%{hiera('wso2::datasources::common::max_active')}"

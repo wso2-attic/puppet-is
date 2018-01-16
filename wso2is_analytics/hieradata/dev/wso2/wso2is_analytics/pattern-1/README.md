@@ -36,9 +36,19 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     ```
 3. Configure datasources
 
-    Update the data sources to point to an external RDBMS server.
-    For each datasource you will have to configure the connection URL against ```url```, connection username against 
-    ```username``` and password against ```password``` property keys. Datasources defined in this hiera file are below.
+    Update the data sources to point to an external RDBMS server. 
+    
+    You can configure the database server engine, host name and port under below hiera configurations.
+    These properties are then used in configuring connection URLs in hiera.
+    ```
+    wso2::rdbms::engine: mysql
+    wso2::rdbms::hostname: mysql.sever.com
+    wso2::rdbms::port: 3306
+    ```
+
+    For each datasource you will have to configure the connection URL against ```url``` adding the database name and 
+    other connection URL query parameters, connection username against  ```username``` and password against 
+    ```password``` property keys. Datasources defined in this hiera file are below.
     * Datasource in repository/conf/master-datasources.xml file:
     
     A single datasource can be configured for registry and user management

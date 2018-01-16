@@ -52,9 +52,19 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     ```
 4. Configure datasources
 
-    Update the data sources to point to an external RDBMS server. There are three datasources defined.
-    For each datasource you will have to configure the connection URL against ```url```, connection username against 
-    ```username``` and password against ```password``` property keys. Datasources defined in this hiera file are below.
+    Update the data sources to point to an external RDBMS server. 
+    
+    You can configure the database server engine, host name and port under below hiera configurations.
+    These properties are then used in configuring connection URLs in hiera.
+    ```
+    wso2::rdbms::engine: mysql
+    wso2::rdbms::hostname: mysql.sever.com
+    wso2::rdbms::port: 3306
+    ```
+    
+    For each datasource you will have to configure the connection URL against ```url``` adding the database name and 
+    other connection URL query parameters, connection username against ```username``` and password against 
+    ```password``` property keys. Datasources defined in this hiera file are below.
     * Datasource in repository/conf/master-datasources.xml file:
     
     A single datasource can be configured to be used with used for registry, user management and identity
@@ -65,7 +75,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
         name: WSO2_IDENTITY_DS
         description: The datasource used for registry, user management and identity
         driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-        url: jdbc:mysql://192.168.100.1:3306/WSO2_IDENTITY_DB?autoReconnect=true&amp;useSSL=false
+        url: jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_IDENTITY_DB?autoReconnect=true&amp;useSSL=false
         username: "%{hiera('wso2::datasources::mysql::username')}"
         password: "%{hiera('wso2::datasources::mysql::password')}"
         jndi_config: jdbc/WSO2IdentityDS
@@ -86,7 +96,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
         name: WSO2_BPS_DS
         description: The datasource used for bps
         driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-        url: jdbc:mysql://192.168.100.1:3306/WSO2_IDENTITY_DB?autoReconnect=true
+        url: jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_IDENTITY_DB?autoReconnect=true
         username: "%{hiera('wso2::datasources::mysql::username')}"
         password: "%{hiera('wso2::datasources::mysql::password')}"
         jndi_config: bpsds
@@ -109,7 +119,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
      user_store_properties:
        jdbc:
          driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-         url: jdbc:mysql://192.168.100.1:3306/WSO2_USER_DB?autoReconnect=true&amp;useSSL=false
+         url: jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_USER_DB?autoReconnect=true&amp;useSSL=false
          username: "%{hiera('wso2::datasources::mysql::username')}"
          password: "%{hiera('wso2::datasources::mysql::password')}"
    ```
