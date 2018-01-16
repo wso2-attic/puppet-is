@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-#  Copyright (c) 2017 WSO2, Inc. http://www.wso2.org
+#  Copyright (c) 2016 WSO2, Inc. http://www.wso2.org
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class wso2is_analytics::params {
+class wso2is::params {
 
   # Set facter variables
   $vm_type                    = $::vm_type
@@ -24,27 +24,30 @@ class wso2is_analytics::params {
   # use_hieradata facter flags whether parameter lookup should be done via Hiera
   if $::use_hieradata == 'true' {
 
-    $analytics_datasources    = hiera('wso2::analytics_datasources')
+    $user_store               = hiera('wso2::user_store', undef)
+    $bps_datasources          = hiera('wso2::bps_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
-    $analytics_event_store_datasource = hiera('wso2::analytics_event_store_datasource')
-    $analytics_processed_data_store_datasource = hiera('wso2::analytics_event_store_datasource')
+    $sso_service_providers    = hiera('wso2::sso_service_providers', undef)
+    $identity_datasource      = hiera('wso2::identity_datasource')
+    $bps_datasource           = hiera('wso2::bps_datasource')
     $metrics_datasource       = hiera('wso2::metrics_datasource')
-    $spark                    = hiera('wso2::spark')
-    $ha_deployment            = hiera('wso2::ha_deployment')
+    $enable_thrift_service    = hiera('wso2::enable_thrift_service')
 
     $java_prefs_system_root   = hiera('java_prefs_system_root')
     $java_prefs_user_root     = hiera('java_prefs_user_root')
     $java_home                = hiera('java_home')
 
     # system configuration data
-    $packages                 = hiera_array('packages')
+    $packages                 = hiera_array('packages', undef)
     $template_list            = hiera_array('wso2::template_list')
     $file_list                = hiera_array('wso2::file_list', undef)
+    $service_refresh_file_list = hiera_array('wso2::service_refresh_file_list', undef)
     $patch_list               = hiera('wso2::patch_list', undef)
     $system_file_list         = hiera_hash('wso2::system_file_list', undef)
     $directory_list           = hiera_array('wso2::directory_list', undef)
     $cert_list                = hiera_hash('wso2::cert_list', undef)
     $hosts_mapping            = hiera_hash('wso2::hosts_mapping')
+    $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
     $registry_instances       = hiera_hash('wso2::registry_instances', undef)
@@ -69,81 +72,47 @@ class wso2is_analytics::params {
     $patches_dir              = hiera('wso2::patches_dir')
     $service_name             = hiera('wso2::service_name')
     $service_template         = hiera('wso2::service_template')
+    $usermgt_datasource       = hiera('wso2::usermgt_datasource')
     $local_reg_datasource     = hiera('wso2::local_reg_datasource')
     $clustering               = hiera('wso2::clustering')
     $dep_sync                 = hiera('wso2::dep_sync')
     $ports                    = hiera('wso2::ports')
     $jvm                      = hiera('wso2::jvm')
-    $sso_authentication       = hiera('wso2::sso_authentication', undef)
-    $user_management          = hiera('wso2::user_management')
-    $enable_secure_vault      = hiera('wso2::enable_secure_vault')
 
-    $remove_file_list         = hiera_array('wso2::remove_file_list', undef)
-
-    if $enable_secure_vault {
-      $secure_vault_configs   = hiera('wso2::secure_vault_configs')
-    }
-
+    $user_management          = hiera('wso2::user_management', undef)
+    $enable_secure_vault      = hiera('wso2::enable_secure_vault', undef)
     $key_stores               = hiera('wso2::key_stores')
+    $login_data_publisher_enabled   = hiera('wso2::identity::event_listeners::login_data_publisher::enable', undef)
+    $session_data_publisher_enabled = hiera('wso2::identity::event_listeners::session_data_publisher::enable', undef)
+    $analytics_username       = hiera('wso2::analytics_username', undef)
+    $analytics_password       = hiera('wso2::analytics_password', undef)
+    $analytics_receiver_url   = hiera('wso2::analytics_receiver_url', undef)
+    $analytics_authenticator_url = hiera('wso2::analytics_authenticator_url', undef)
+
   } else {
 
-
-    $analytics_datasources     = {
-      wso2_analytics_fs_db      => {
-        name                => 'WSO2_ANALYTICS_FS_DB',
-        description         => 'The datasource used for analytics file system',
-        driver_class_name   => 'org.h2.Driver',
-        url                 => 'jdbc:h2:repository/database/ANALYTICS_FS_DB;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000',
-        username            => 'wso2carbon',
-        password            => 'wso2carbon',
-        max_active          => '50',
-        max_wait            => '60000',
-        test_on_borrow      => true,
-        default_auto_commit => false,
-        validation_query    => 'SELECT 1',
-        validation_interval => '30000',
-        initial_size        => 0,
-        test_while_idle     => true,
-        min_evictable_idle_time_millis  => 4000
-      },
-      wso2_analytics_event_store_db     => {
-        name                => 'WSO2_ANALYTICS_EVENT_STORE_DB',
-        description         => 'The datasource used for analytics record store',
-        driver_class_name   => 'org.h2.Driver',
-        url                 => 'jdbc:h2:repository/database/ANALYTICS_EVENT_STORE;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000',
-        username            => 'wso2carbon',
-        password            => 'wso2carbon',
-        max_active          => '50',
-        max_wait            => '60000',
-        test_on_borrow      => true,
-        default_auto_commit => false,
-        validation_query    => 'SELECT 1',
-        validation_interval => '30000',
-        initial_size        => 0,
-        test_while_idle     => true,
-        min_evictable_idle_time_millis  => 4000
-      },
-      wso2_analytics_processed_data_store_db => {
-        name                => 'WSO2_ANALYTICS_PROCESSED_DATA_STORE_DB',
-        description         => 'The datasource used for analytics record store',
-        driver_class_name   => 'org.h2.Driver',
-        url                 => 'jdbc:h2:repository/database/ANALYTICS_PROCESSED_DATA_STORE;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000',
-        username            => 'wso2carbon',
-        password            => 'wso2carbon',
-        max_active          => '50',
-        max_wait            => '60000',
-        test_on_borrow      => true,
-        default_auto_commit => false,
-        validation_query    => 'SELECT 1',
-        validation_interval => '30000',
-        initial_size        => 0,
-        test_while_idle     => true,
-        min_evictable_idle_time_millis  => 4000
+    $bps_datasources       = {
+      bps_ds => {
+        name                    => 'BPS_DS',
+        description             => 'The datasource used for bps',
+        driver_class_name       => 'org.h2.Driver',
+        url                     => 'jdbc:h2:file:repository/database/jpadb;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE',
+        username                => 'wso2carbon',
+        password                => 'wso2carbon',
+        jndi_config             => 'bpsds',
+        max_active              => '50',
+        max_idle                => '20',
+        max_wait                => '60000',
+        test_on_borrow          => true,
+        use_datasource_factory  => false,
+        default_auto_commit     => false,
+        validation_query        => 'SELECT 1',
+        validation_interval     => '30000'
       }
     }
 
-    $metrics_datasources       = {
-      wso2_metrics_db   => {
+    $metrics_datasources      = {
+      wso2_metrics_db => {
         name                => 'WSO2_METRICS_DB',
         description         => 'The default datasource used for WSO2 Carbon Metrics',
         driver_class_name   => 'org.h2.Driver',
@@ -161,70 +130,32 @@ class wso2is_analytics::params {
       }
     }
 
-    $analytics_event_store_datasource = 'wso2_analytics_event_store_db'
-
-    $analytics_processed_data_store_datasource = 'wso2_analytics_processed_data_store_db'
-
-    $metrics_datasource       = 'wso2_metrics_db'
-
-    $spark      = {
-      master        => 'local',
-      master_count  => '1',
-      hostname      => $ipaddress
-    }
-
-    $single_node_deployment = {
-      enabled  => true
-    }
-
-    $ha_deployment   = {
-      enabled           => false,
-      presenter_enabled => false,
-      worker_enabled    => true,
-      eventSync         => {
-        hostName  => $ipaddress,
-        port      => 11224
-      },
-      management        => {
-        hostName  => $ipaddress,
-        port      => 10005
-      },
-      presentation      => {
-        hostName  => $ipaddress,
-        port      => 11000
-      }
-    }
-
-    $file_list          = [
-    ]
-
-    $directory_list             = [
-      'dbscripts/identity'
-    ]
+    $enable_thrift_service    = false
 
     $java_prefs_system_root   = '/home/wso2user/.java'
     $java_prefs_user_root     = '/home/wso2user/.java/.systemPrefs'
     $java_home                = '/opt/java'
 
     # system configuration data
-    $packages             = [
+    $packages                 = [
       'zip',
       'unzip'
     ]
 
     $template_list        = [
-      'repository/conf/datasources/analytics-datasources.xml',
+      'repository/conf/datasources/bps-datasources.xml',
       'repository/conf/datasources/metrics-datasources.xml',
-      'repository/deployment/server/jaggeryapps/portal/configs/designer.json',
-      'repository/conf/analytics/analytics-config.xml',
-      'repository/conf/analytics/spark/spark-defaults.conf',
-      'repository/conf/event-processor.xml',
+      'repository/conf/identity/identity.xml',
+      'repository/conf/identity/sso-idp-config.xml',
+      'repository/conf/identity/application-authentication.xml',
+      'repository/conf/identity/EndpointConfig.properties',
       'repository/conf/carbon.xml',
       'repository/conf/user-mgt.xml',
       'repository/conf/registry.xml',
       'repository/conf/datasources/master-datasources.xml',
       'repository/conf/tomcat/catalina-server.xml',
       'repository/conf/axis2/axis2.xml',
+      'repository/conf/security/authenticators.xml',
       'bin/wso2server.sh'
     ]
 
@@ -268,7 +199,11 @@ class wso2is_analytics::params {
     $patches_dir              = 'repository/components/patches'
     $service_name             = $product_name
     $service_template         = 'wso2base/wso2service.erb'
+    $usermgt_datasource       = 'wso2_carbon_db'
     $local_reg_datasource     = 'wso2_carbon_db'
+    $identity_datasource      = 'wso2_carbon_db'
+    $bps_datasource           = 'bps_ds'
+    $metrics_datasource       = 'wso2_metrics_db'
 
     $clustering               = {
       enabled           => false,
@@ -301,11 +236,8 @@ class wso2is_analytics::params {
       max_perm_size => '256m'
     }
 
-    $sso_authentication       = {
-      enabled => false
-    }
-
     $user_management          = {
+      add_admin       => 'true',
       admin_role      => 'admin',
       admin_username  => 'admin',
       admin_password  => 'admin',
@@ -313,6 +245,11 @@ class wso2is_analytics::params {
     }
 
     $enable_secure_vault      = false
+
+    $analytics_username       = 'admin'
+    $analytics_password       = 'admin'
+    $analytics_receiver_url   = 'tcp://localhost:7611'
+    $analytics_authenticator_url = 'tcp://localhost:7711'
 
     $key_stores               = {
       key_store              => {
@@ -347,7 +284,7 @@ class wso2is_analytics::params {
     }
   }
 
-  $product_name               = 'wso2is-analytics'
+  $product_name               = 'wso2is'
   $product_version            = '5.4.0'
   $platform_version           = '4.4.0'
   $carbon_home                = "${install_dir}/${product_name}-${product_version}"
