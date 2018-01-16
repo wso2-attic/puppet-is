@@ -578,12 +578,24 @@
                    orderId="97" enable="true">
       <Property name="Data.Store">org.wso2.carbon.identity.governance.store.JDBCIdentityDataStore</Property>
     </EventListener>
+    <% if @login_data_publisher_enabled %>
+    <EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
+                   name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASLoginDataPublisherImpl"
+                   orderId="10" enable="<%= @login_data_publisher_enabled %>"/>
+    <%- else -%>
     <EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
                    name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASLoginDataPublisherImpl"
                    orderId="10" enable="false"/>
+    <% end -%>
+    <% if @session_data_publisher_enabled %>
+    <EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
+                   name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASSessionDataPublisherImpl"
+                   orderId="11" enable="<%= @session_data_publisher_enabled %>"/>
+    <%- else -%>
     <EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
                    name="org.wso2.carbon.identity.data.publisher.application.authentication.impl.DASSessionDataPublisherImpl"
                    orderId="11" enable="false"/>
+    <% end -%>
     <EventListener type="org.wso2.carbon.identity.core.handler.AbstractIdentityMessageHandler"
                    name="org.wso2.carbon.identity.data.publisher.application.authentication.AuthnDataPublisherProxy"
                    orderId="11" enable="true"/>

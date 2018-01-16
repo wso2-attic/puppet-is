@@ -26,10 +26,11 @@ class wso2is_analytics::params {
 
     $analytics_datasources    = hiera('wso2::analytics_datasources')
     $metrics_datasources      = hiera('wso2::metrics_datasources')
+    $analytics_event_store_datasource = hiera('wso2::analytics_event_store_datasource')
+    $analytics_processed_data_store_datasource = hiera('wso2::analytics_event_store_datasource')
+    $metrics_datasource       = hiera('wso2::metrics_datasource')
     $spark                    = hiera('wso2::spark')
-    $identity_datasource      = hiera('wso2::identity_datasource', undef)
     $ha_deployment            = hiera('wso2::ha_deployment')
-    $portal                   = hiera('wso2::portal')
 
     $java_prefs_system_root   = hiera('java_prefs_system_root')
     $java_prefs_user_root     = hiera('java_prefs_user_root')
@@ -46,6 +47,7 @@ class wso2is_analytics::params {
     $hosts_mapping            = hiera_hash('wso2::hosts_mapping')
 
     $master_datasources       = hiera_hash('wso2::master_datasources')
+    $registry_instances       = hiera_hash('wso2::registry_instances', undef)
     $registry_mounts          = hiera_hash('wso2::registry_mounts', undef)
     $carbon_home_symlink      = hiera('wso2::carbon_home_symlink')
     $wso2_user                = hiera('wso2::user')
@@ -67,13 +69,12 @@ class wso2is_analytics::params {
     $patches_dir              = hiera('wso2::patches_dir')
     $service_name             = hiera('wso2::service_name')
     $service_template         = hiera('wso2::service_template')
-    $usermgt_datasource       = hiera('wso2::usermgt_datasource')
     $local_reg_datasource     = hiera('wso2::local_reg_datasource')
     $clustering               = hiera('wso2::clustering')
     $dep_sync                 = hiera('wso2::dep_sync')
     $ports                    = hiera('wso2::ports')
     $jvm                      = hiera('wso2::jvm')
-    $sso_authentication       = hiera('wso2::sso_authentication')
+    $sso_authentication       = hiera('wso2::sso_authentication', undef)
     $user_management          = hiera('wso2::user_management')
     $enable_secure_vault      = hiera('wso2::enable_secure_vault')
 
@@ -160,13 +161,17 @@ class wso2is_analytics::params {
       }
     }
 
+    $analytics_event_store_datasource = 'wso2_analytics_event_store_db'
+
+    $analytics_processed_data_store_datasource = 'wso2_analytics_processed_data_store_db'
+
+    $metrics_datasource       = 'wso2_metrics_db'
+
     $spark      = {
       master        => 'local',
       master_count  => '1',
       hostname      => $ipaddress
     }
-
-    $identity_datasource   = 'wso2_carbon_db'
 
     $single_node_deployment = {
       enabled  => true
@@ -193,10 +198,6 @@ class wso2is_analytics::params {
     $file_list          = [
     ]
 
-    $portal   = {
-      hostname   => 'is.analytics.dev.wso2.org'
-    }
-
     $directory_list             = [
       'dbscripts/identity'
     ]
@@ -212,10 +213,10 @@ class wso2is_analytics::params {
     ]
 
     $template_list        = [
-      'repository/conf/identity/identity.xml',
       'repository/conf/datasources/analytics-datasources.xml',
       'repository/conf/datasources/metrics-datasources.xml',
       'repository/deployment/server/jaggeryapps/portal/configs/designer.json',
+      'repository/conf/analytics/analytics-config.xml',
       'repository/conf/analytics/spark/spark-defaults.conf',
       'repository/conf/event-processor.xml',
       'repository/conf/carbon.xml',
@@ -224,7 +225,6 @@ class wso2is_analytics::params {
       'repository/conf/datasources/master-datasources.xml',
       'repository/conf/tomcat/catalina-server.xml',
       'repository/conf/axis2/axis2.xml',
-      'repository/conf/security/authenticators.xml',
       'bin/wso2server.sh'
     ]
 
@@ -268,7 +268,6 @@ class wso2is_analytics::params {
     $patches_dir              = 'repository/components/patches'
     $service_name             = $product_name
     $service_template         = 'wso2base/wso2service.erb'
-    $usermgt_datasource       = 'wso2_carbon_db'
     $local_reg_datasource     = 'wso2_carbon_db'
 
     $clustering               = {
@@ -309,7 +308,8 @@ class wso2is_analytics::params {
     $user_management          = {
       admin_role      => 'admin',
       admin_username  => 'admin',
-      admin_password  => 'admin'
+      admin_password  => 'admin',
+      dataSource      => 'wso2_carbon_db'
     }
 
     $enable_secure_vault      = false

@@ -1,10 +1,12 @@
-# WSO2 Identity Server Pattern-1
+# WSO2 Identity Server Pattern-2
 
-WSO2 Identity Server Deployment Pattern 1 runs two Identity Server instances fronted with a load balancer. Identity 
+[WSO2 Identity Server Deployment Pattern 2](https://docs.wso2.com/display/IS540/Deployment+Patterns#DeploymentPatterns-Pattern2-HAclustereddeploymentofWSO2IdentityServerwithWSO2IdentityAnalytics) 
+runs two Identity Server instances fronted with a load balancer with WSO2 
+Identity Analytics Server. Identity 
 Server nodes are clustered and a shared file system or a synchronization mechanism like rsync can be used to synchronize 
 runtime artifacts.
 
-![alt tag](../../../../../../patterns/images/deployment-architecture-pattern-1.png)
+![alt tag](../../../../../../patterns/images/deployment-architecture-pattern-2.png)
   
 The hiera YAML in this directory can be used to setup each WSO2 Identity Server node participating in the 
 cluster.
@@ -63,9 +65,8 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     ```
     
     For each datasource you will have to configure the connection URL against ```url``` adding the database name and 
-    other connection URL query parameters, connection username against 
-    ```username``` and password against ```password``` property keys. 
-    Datasources defined in this hiera file are below.
+    other connection URL query parameters, connection username against ```username``` and password against 
+    ```password``` property keys. Datasources defined in this hiera file are below.
     * Datasource in repository/conf/master-datasources.xml file:
     
     A single datasource can be configured to be used with used for registry, user management and identity
@@ -124,9 +125,25 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
          username: "%{hiera('wso2::datasources::mysql::username')}"
          password: "%{hiera('wso2::datasources::mysql::password')}"
    ```
- 6. In the puppet agent set below factor variables as explained in [wiki](https://github
- .com/wso2/puppet-base/wiki/Use-WSO2-Puppet-Modules-in-puppet-master-agent-Environment#task-3---set-facter-variables
- -and-perform-a-puppet-agent-run), and run puppet agent
+6. Configure WSO2 Identity Analytics Server Receiver URLs and Authenticator URLs
+
+   As WSO2 Identity Analytics Server component is not mission critical, a single node 
+   deployment of a WSO2 Identity Analytics Server or the [minimum HA deployment of WSO2 Identity Analytics Server](https://docs.wso2.com/display/IS540/Setting+Up+Deployment+Pattern+2#SettingUpDeploymentPattern2-MinimumHighAvailabilityDeploymentforWSO2ISAnalytics) 
+   can be done in this deployment.
+   Once WSO2 Identity Analytics Server node/nodes are setup configure the reciever and authenticator URLs of the 
+   Identity Analytics Server node/nodes to publish events. 
+   ```
+   # For single Identity Analytics Node
+   wso2::analytics_receiver_url: tcp://<analytics_node_ip>:7611
+   wso2::analytics_authenticator_url: tcp://<analytics_node_ip>:7711
+   
+   # For two node Minimum HA Identity Analytics deployment
+   wso2::analytics_receiver_url: '{tcp://<analytics_node1_ip>:7611|tcp://<analytics_node2_ip>:7611}'
+   wso2::analytics_authenticator_url: '{tcp://<analytics_node1_ip>:7711|tcp://<analytics_node2_ip>:7711}'
+   ```
+    
+7. In the puppet agent set below factor variables as explained in [wiki](https://github.com/wso2/puppet-base/wiki/Use-WSO2-Puppet-Modules-in-puppet-master-agent-Environment#task-3---set-facter-variables-and-perform-a-puppet-agent-run), 
+and run puppet agent
     ```
     product_name=wso2is
     product_version=5.4.0
@@ -134,5 +151,5 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     environment=production
     use_hieradata=true
     platform=default
-    pattern=pattern-1
+    pattern=pattern-2
     ```
