@@ -42,9 +42,11 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
       wka:
         members:
           -
-            hostname: 192.168.48.194
+            # local member host
+            hostname: "%{::ipaddress}"
             port: 4000
           -
+            # well known member host
             hostname: 192.168.48.195
             port: 4000
     ```
