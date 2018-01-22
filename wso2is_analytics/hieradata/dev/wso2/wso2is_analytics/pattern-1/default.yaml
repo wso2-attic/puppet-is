@@ -101,11 +101,29 @@ wso2::master_datasources:
 
 # Datasource configuration related properties in repository/conf/datasources/analytics-datasources.xml
 wso2::analytics_datasources:
-  analytics_store_ds:
-    name: WSO2_ANALYTICS_STORE_DS
+  analytics_event_store_ds:
+    name: WSO2_ANALYTICS_EVENT_STORE_DS
     description: The datasource used for analytics record store
     driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
-    url: "jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_ANALYTICS_DB?autoReconnect=true&amp;useSSL=false"
+    url: "jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_ANALYTICS_EVENT_STORE_DB?autoReconnect=true&amp;useSSL=false"
+    username: "%{hiera('wso2::datasources::mysql::username')}"
+    password: "%{hiera('wso2::datasources::mysql::password')}"
+    max_active: "%{hiera('wso2::datasources::common::max_active')}"
+    max_wait: "%{hiera('wso2::datasources::common::max_wait')}"
+    test_on_borrow: "%{hiera('wso2::datasources::common::test_on_borrow')}"
+    default_auto_commit: "%{hiera('wso2::datasources::common::default_auto_commit')}"
+    validation_query: "%{hiera('wso2::datasources::mysql::validation_query')}"
+    validation_interval: "%{hiera('wso2::datasources::common::validation_interval')}"
+    default_auto_commit: false
+    initial_size: 0
+    test_while_idle: true
+    min_evictable_idle_time_millis: 4000
+
+  analytics_processed_data_store_ds:
+    name: WSO2_ANALYTICS_PROCESSED_DATA_STORE_DS
+    description: The datasource used for analytics record store
+    driver_class_name: "%{hiera('wso2::datasources::mysql::driver_class_name')}"
+    url: "jdbc:%{hiera('wso2::rdbms::engine')}://%{hiera('wso2::rdbms::hostname')}:%{hiera('wso2::rdbms::port')}/WSO2_ANALYTICS_PROCESSED_DATA_STORE_DB?autoReconnect=true&amp;useSSL=false"
     username: "%{hiera('wso2::datasources::mysql::username')}"
     password: "%{hiera('wso2::datasources::mysql::password')}"
     max_active: "%{hiera('wso2::datasources::common::max_active')}"
@@ -146,10 +164,10 @@ wso2::user_management:
   datasource: analytics_ds
 
 # Analytics event store datasource configuration in repository/conf/analytics/analytics-config.xml
-wso2::analytics_event_store_datasource: analytics_store_ds
+wso2::analytics_event_store_datasource: analytics_event_store_ds
 
 # Analytics processed data store datasource configuration in repository/conf/analytics/analytics-config.xml
-wso2::analytics_processed_data_store_datasource: analytics_store_ds
+wso2::analytics_processed_data_store_datasource: analytics_processed_data_store_ds
 
 # Metrics datasource configuration in repository/conf/metrics.xml
 wso2::metrics_datasource: metrics_ds
