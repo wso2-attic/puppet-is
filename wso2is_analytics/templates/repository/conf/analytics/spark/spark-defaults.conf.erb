@@ -34,19 +34,20 @@
 #   3. cluster mode - DAS creates its own Spark cluster usign Carbon Clustering
 #       ex: "carbon.spark.master local" AND "carbon.spark.master.count  <number of redundant masters>"
 
-carbon.spark.master <%= @spark['master'] %>
-carbon.spark.master.count  <%= @spark['master_count'] %>
+<%- if @clustering['enabled'] and @ha_deployment['enabled'] -%>
+carbon.spark.master carbon
+carbon.spark.master.count 2
+<%- else -%>
+carbon.spark.master local
+carbon.spark.master.count 1
+<%- end -%>
 
 #This configuration is used to limit the number of results returned from spark query execution
 #To return all the results, set this to -1
 carbon.spark.results.limit 1000
 
 # this configuratoin can be used to point to a symbolic link to WSO2 DAS HOME
-<%- if @clustering['enabled'] -%>
-carbon.das.symbolic.link <%= @carbon_home_symlink %>
-<%- else -%>
 # carbon.das.symbolic.link /home/ubuntu/das/das_symlink/
-<%- end -%>
 
 # this configuration can be used with the spark fair scheduler, when fair schedule pools are used. the
 #     defualt pool name for carbon is 'carbon-pool'

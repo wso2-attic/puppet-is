@@ -27,7 +27,7 @@
         <checkMemberUpdateInterval>10000</checkMemberUpdateInterval>
         <eventSync>
             <hostName><%= @ha_deployment['eventSync']['hostName'] %></hostName>
-            <port><%= @ha_deployment['eventSync']['port'] %></port>
+            <port>11224</port>
             <reconnectionInterval>20000</reconnectionInterval>
             <serverThreads>20000</serverThreads>
             <!--Size of TCP event publishing client's send buffer in bytes-->
@@ -47,13 +47,13 @@
         </eventSync>
         <management>
             <hostName><%= @ha_deployment['management']['hostName'] %></hostName>
-            <port><%= @ha_deployment['management']['port'] %></port>
+            <port>10005</port>
             <tryStateChangeInterval>15000</tryStateChangeInterval>
             <stateSyncRetryInterval>10000</stateSyncRetryInterval>
         </management>
         <presentation>
             <hostName><%= @ha_deployment['presentation']['hostName'] %></hostName>
-            <port><%= @ha_deployment['presentation']['port'] %></port>
+            <port>11000</port>
             <!--Size of TCP event publishing client's send buffer in bytes-->
             <publisherTcpSendBufferSize>5242880</publisherTcpSendBufferSize>
             <!--Character encoding of TCP event publishing client-->

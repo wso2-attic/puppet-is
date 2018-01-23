@@ -53,7 +53,7 @@ wso2::file_list:
 # Clustering configuration related properties of the product in repository/conf/axis2/axis2.xml
 # Clustering scheme can be wka, aws, kubenetes, mesos
 wso2::clustering:
-  enabled: false
+  enabled: true
   domain: is.analytics.wso2.domain
   local_member_host: "%{::ipaddress}"
   local_member_port: 4000
@@ -195,22 +195,19 @@ wso2::registry_mounts:
     target_path: /_system/governance
     overwrite: true
 
-wso2::spark:
-  master: local
-  master_count: 1
-  hostname: "%{::ipaddress}"
-
+# HA deployment configurations in repository/conf/event-processor.xml
 wso2::ha_deployment:
-  enabled: false
+  enabled: true
   eventSync:
     hostName: "%{::ipaddress}"
-    port: 11224
   management:
     hostName: "%{::ipaddress}"
-    port: 10005
   presentation:
     hostName: "%{::ipaddress}"
-    port: 11002
+
+# Spark configurations in repository/conf/analytics/spark/spark-defaults.conf
+wso2::spark:
+  hostname: "%{::ipaddress}"
 
 ## Secure vault configuration
 # wso2::enable_secure_vault: true
