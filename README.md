@@ -64,16 +64,16 @@ locations, in puppet master.
 ## Configure Hiera
 
 ##### Deployment Pattern 1                                                                                                                                                          
-* [Hiera YAML file](wso2is/hieradata/dev/wso2/wso2is/pattern-1/default.yaml) defined under pattern-1                                  
-(wso2is/hieradata/dev/wso2/wso2is/pattern-1) directory of wso2is module includes configurations with respect to                        
+* [Hiera YAML file](wso2is/hieradata/dev/wso2/wso2is/pattern-1/default.yaml) defined under pattern-1
+(wso2is/hieradata/dev/wso2/wso2is/pattern-1) directory of wso2is module includes configurations with respect to
 this deployment pattern for WSO2 Identity Server. 
 Configure hiera for WSO2 Identity Server following the [README](wso2is/hieradata/dev/wso2/wso2is/pattern-1/) under 
 pattern-1 directory. 
 
 ##### Deployment Pattern 2                  
-* [Hiera YAML file](wso2is/hieradata/dev/wso2/wso2is/pattern-2/default.yaml) defined under pattern-2            
-(wso2is/hieradata/dev/wso2/wso2is/pattern-2) directory of wso2is module includes configurations with respect to 
-this deployment pattern for WSO2 Identity Server. 
+* [Hiera YAML file](wso2is/hieradata/dev/wso2/wso2is/pattern-2/default.yaml) defined under pattern-2
+(wso2is/hieradata/dev/wso2/wso2is/pattern-2) directory of wso2is module includes configurations with respect to this
+ deployment pattern for WSO2 Identity Server. 
 Configure hiera for WSO2 Identity Server following the [README](wso2is/hieradata/dev/wso2/wso2is/pattern-2/) under 
 pattern-2 directory. 
 * [Hiera YAML file](wso2is_analytics/hieradata/dev/wso2/wso2is_analytics/pattern-1/default.yaml) defined under pattern-1

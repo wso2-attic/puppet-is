@@ -1,6 +1,7 @@
 # WSO2 Identity Server Pattern-1
 
-WSO2 Identity Server Deployment Pattern 1 runs two Identity Server instances fronted with a load balancer. Identity 
+[WSO2 Identity Server Deployment Pattern 1](https://docs.wso2.com/display/IS540/Deployment+Patterns#DeploymentPatterns-Pattern1-HAclustereddeploymentofWSO2IdentityServer) 
+runs two Identity Server instances fronted with a load balancer. Identity 
 Server nodes are clustered and a shared file system or a synchronization mechanism like rsync can be used to synchronize 
 runtime artifacts.
 
@@ -16,6 +17,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     Update ```wso2::hostname``` and ```wso2::mgt_hostname``` in the [default.yaml](default.yaml) file with the DNS name 
     of the load balancer. If the environment does not have a load balancer, then make sure to add the hostname mapping to 
     /etc/hosts file. 
+    
     e.g:
     ```
     wso2::hostname: is.wso2.com
@@ -26,6 +28,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     Configure the JDBC driver file name under ```wso2::file_list``` or in common.yaml. For MYSQL there is an 
     entry in common.yaml as ```wso2::datasources::mysql::connector_jar``` which is then referred by the [default.yaml]
     (default.yaml) file here.
+    
     e.g:
      ```
      wso2::file_list:
@@ -36,6 +39,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     Configure a clustering scheme under ```wso2::clustering```. By default, WKA related configurations are added. 
     Update the member list under WKA scheme in [default.yaml](default.yaml) file with the ip addresses of the members
      participating in the cluster.
+     
     e.g:
     ```
     membership_scheme: wka
@@ -69,6 +73,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     * Datasource in repository/conf/master-datasources.xml file:
     
     A single datasource can be configured to be used with used for registry, user management and identity
+    
     e.g:
     ```
     wso2::master_datasources:
@@ -90,6 +95,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
     * BPS datasource in repository/conf/datasources/bps-datasources.xml file:
     
     Datasource used to manage the embedded BPS engine related data.
+    
     e.g:
     ```
     wso2::bps_datasources:
@@ -113,6 +119,7 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
 5. Configure user store.
 
    Configure a JDBC user store, LDAP or an Active Directory, with connection URL, connection username and password.
+   
    e.g:
    ```
    wso2::user_store:
@@ -124,9 +131,8 @@ Follow the given steps below, to configure hiera YAML with respect to the deploy
          username: "%{hiera('wso2::datasources::mysql::username')}"
          password: "%{hiera('wso2::datasources::mysql::password')}"
    ```
- 6. In the puppet agent set below factor variables as explained in [wiki](https://github
- .com/wso2/puppet-base/wiki/Use-WSO2-Puppet-Modules-in-puppet-master-agent-Environment#task-3---set-facter-variables
- -and-perform-a-puppet-agent-run), and run puppet agent
+ 6. In the puppet agent set below factor variables as explained in 
+ [wiki](https://github.com/wso2/puppet-base/wiki/Use-WSO2-Puppet-Modules-in-puppet-master-agent-Environment#task-3---set-facter-variables-and-perform-a-puppet-agent-run), and run puppet agent
     ```
     product_name=wso2is
     product_version=5.4.0
