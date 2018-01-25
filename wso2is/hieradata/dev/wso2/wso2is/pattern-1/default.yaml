@@ -16,8 +16,8 @@ classes:
   - wso2is
 
 wso2::service_name: wso2is
-wso2::hostname: is.dev.wso2.org
-wso2::mgt_hostname: is.dev.wso2.org
+wso2::hostname: "%{::hostname}"
+wso2::mgt_hostname: "%{::hostname}"
 
 wso2::enable_thrift_service: false
 
@@ -39,9 +39,9 @@ wso2::template_list:
 #  - repository/conf/security/cipher-tool.properties
 #  - bin/ciphertool.sh
 
-wso2::ports:
-  proxyPort:
-    https: 443
+# wso2::ports:
+#   proxyPort:
+#     https: 443
 # http: 80
 
 # File list to be copied to the product folder, if there are changes found in the files, the system
@@ -84,7 +84,7 @@ wso2::clustering:
 # Configure the engine, host name and port to be configured when configuring database connection URLs.
 wso2::rdbms::engine: mysql
 wso2::rdbms::hostname: mysql-db-server-host
-wso2::rdbms::port: 3306
+wso2::rdbms::port: "3306"
 
 # Datasource configuration related properties in repository/conf/datasources/master-datasources.xml
 wso2::master_datasources:
