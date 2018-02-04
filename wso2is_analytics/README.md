@@ -15,9 +15,9 @@ environments. It supports multiple versions of WSO2 Data Analytics Server. Confi
 ## Setup Puppet Environment
 
 * Setup the puppet environment with the puppet modules wso2is_analytics and wso2base.
-* WSO2 IS Analytics 5.4.0  puppet modules are compatible and tested with
-[puppet-base](https://github.com/wso2/puppet-base/) version 1.0.0 and [puppet-common](https://github.com/wso2/puppet-common) version 1.0.0
-* So if using puppet-common's setup.sh to setup the PUPPET_HOME, use this version (1.0.0) of puppet-common.
+* WSO2 IS Analytics 5.4.0 puppet module is compatible and tested with
+[puppet-base](https://github.com/wso2/puppet-base/) version 1.2.0 and [puppet-common](https://github.com/wso2/puppet-common) version 1.1.0
+* So if using puppet-common's setup.sh to setup the PUPPET_HOME, use this version (1.1.0) of puppet-common.
 * After setting up PUPPET_HOME using puppet-common's setup.sh, checkout the above mentioned compatible version of puppet-base.
 
 ## Setup a Development Environment
@@ -39,7 +39,7 @@ No changes to Hiera data are required to run the `default` profile.  Copy the ab
 
 ## Running WSO2 IS Analytics Server with clustering in specific profiles
 No changes to Hiera data are required to run the distributed deployment of WSO2 IS Analytics Server, other than
-pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Data Analytics Server clustering guide](https://docs.wso2.com/display/CLUSTER44x/Clustering+Data+Analytics+Server)
+pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Identity Server Deployment Patterns](https://docs.wso2.com/display/IS540/Deployment+Patterns)
 
 1. If the Clustering Membership Scheme is `WKA`, add the Well Known Address list.
 

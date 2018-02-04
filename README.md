@@ -9,7 +9,15 @@ This repository contains the Puppet Module for installing and configuring WSO2 I
 
 ## Supported Puppet Versions
 
-- Puppet 2.7, 3 or newer
+- Puppet 3.x
+
+## Setup Puppet Environment
+
+* Setup the puppet environment with the puppet modules wso2is and wso2base.
+* WSO2 IS 5.4.0 puppet module is compatible and tested with
+[puppet-base](https://github.com/wso2/puppet-base/) version 1.2.0 and [puppet-common](https://github.com/wso2/puppet-common) version 1.1.0
+* So if using puppet-common's setup.sh to setup the PUPPET_HOME, use this version (1.1.0) of puppet-common.
+* After setting up PUPPET_HOME using puppet-common's setup.sh, checkout the above mentioned compatible version of puppet-base.
 
 ## How to Contribute
 Follow the steps mentioned in the [wiki](https://github.com/wso2/puppet-base/wiki) to setup a development environment and update/create new puppet modules.
@@ -18,16 +26,14 @@ Follow the steps mentioned in the [wiki](https://github.com/wso2/puppet-base/wik
 
 Copy the following files to their corresponding locations.
 
-1. WSO2 Identity Server distribution (5.3.0) to `<PUPPET_HOME>/modules/wso2is/files`
-2. JDK 1.7_80 distribution to `<PUPPET_HOME>/modules/wso2base/files`
-
-Note: For wso2is_km puppet module use WSO2 Identity Server 5.3.0 distribution which has API Key Manager feature installed on it. If you are using the pre-packaged [WSO2 Identity Server 5.3.0 Key Manager pack](http://product-dist.wso2.com/downloads/api-manager/1.10.0/identity-server/wso2is-5.3.0.zip) with Secure Vault enabled, extract the product zip file, remove `authenticationendpoint` folder in `CARBON_HOME/repository/deployment/server/webapps`, compress the pack and then copy it to `<PUPPET_HOME>/modules/wso2is_km/files`. For more details, refer step 4 under `Running  WSO2 Identity Server Key Manager with Secure Vault`.
+1. WSO2 Identity Server distribution (5.4.0) to `<PUPPET_HOME>/modules/wso2is/files`
+2. JDK 8 distribution to `<PUPPET_HOME>/modules/wso2base/files`
 
 ## Running WSO2 Identity Server in the `default` profile
 No changes to Hiera data are required to run the `default` profile.  Copy the above mentioned files to their corresponding locations and apply the Puppet Modules.
 
 ## Running WSO2 Identity Server with clustering in specific profiles
-No changes to Hiera data are required to run the distributed deployment of WSO2 Identity Server, other than pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Identity Server 5.3.0](https://docs.wso2.com/display/CLUSTER44x/Clustering+Identity+Server+5.3.0) and [WSO2 Identity Server 5.0.0](https://docs.wso2.com/display/CLUSTER420/Clustering+Identity+Server) clustering guides.
+No changes to Hiera data are required to run the distributed deployment of WSO2 Identity Server, other than pointing to the correct resources such as the deployment synchronization and remote DB instances. For more details refer the [WSO2 Identity Server Deployment Patterns](https://docs.wso2.com/display/IS540/Deployment+Patterns)
 
 1. If the Clustering Membership Scheme is `WKA`, add the Well Known Address list.
 
