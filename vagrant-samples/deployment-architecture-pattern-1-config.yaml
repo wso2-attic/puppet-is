@@ -1,4 +1,4 @@
-# Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,32 +16,34 @@
 servers:
   -
     enabled: true
-    hostname: is-analytics1.dev.wso2.org
+    hostname: wso2is1.local
     facters:
-      product_name: wso2is_analytics
-      product_version: 3.1.0
-      product_profile: default
-      environment: dev
-      platform: default
-      use_hieradata: true
-    pattern: pattern-2
-    box: ubuntu/trusty64
-    ip: 192.168.100.61
-    ram: 2048
-    cpu: 1
-
-  -
-    enabled: true
-    hostname: is-analytics2.dev.wso2.org
-    facters:
-      product_name: wso2is_analytics
+      product_name: wso2is
       product_version: 5.4.0
       product_profile: default
       environment: dev
       platform: default
       use_hieradata: true
-    pattern: pattern-2
+      pattern: pattern-1
+      hostname: wso2is1.local
     box: ubuntu/trusty64
-    ip: 192.168.100.62
+    ip: 192.168.100.111
+    ram: 2048
+    cpu: 1
+
+  -
+    enabled: true
+    hostname: wso2is2.local
+    facters:
+      product_name: wso2is
+      product_version: 5.4.0
+      product_profile: default
+      environment: dev
+      platform: default
+      use_hieradata: true
+      pattern: pattern-1
+      hostname: wso2is2.local
+    box: ubuntu/trusty64
+    ip: 192.168.100.112
     ram: 2048
     cpu: 1

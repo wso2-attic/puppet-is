@@ -76,7 +76,7 @@ class wso2is::params {
     $local_reg_datasource     = hiera('wso2::local_reg_datasource')
     $clustering               = hiera('wso2::clustering')
     $dep_sync                 = hiera('wso2::dep_sync')
-    $ports                    = hiera('wso2::ports')
+    $ports                    = hiera('wso2::ports', undef)
     $jvm                      = hiera('wso2::jvm')
 
     $user_management          = hiera('wso2::user_management', undef)

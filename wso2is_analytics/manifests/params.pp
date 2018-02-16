@@ -72,7 +72,7 @@ class wso2is_analytics::params {
     $local_reg_datasource     = hiera('wso2::local_reg_datasource')
     $clustering               = hiera('wso2::clustering')
     $dep_sync                 = hiera('wso2::dep_sync')
-    $ports                    = hiera('wso2::ports')
+    $ports                    = hiera('wso2::ports', undef)
     $jvm                      = hiera('wso2::jvm')
     $sso_authentication       = hiera('wso2::sso_authentication', undef)
     $user_management          = hiera('wso2::user_management')
