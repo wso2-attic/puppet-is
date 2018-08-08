@@ -5,6 +5,8 @@
 
 2. Run the following commands in the Puppet agent
 
-```export FACTER_product_name=wso2is```
+```
+export FACTER_product_name=wso2is
 
-```puppet agent -vt```
+puppet agent -vt
+```
