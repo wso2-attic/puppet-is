@@ -11,9 +11,9 @@ class wso2is (
 	$wso2_identity_db  = $wso2is::params::wso2_identity_db,
 	$wso2_consent_db   = $wso2is::params::wso2_consent_db,
 
-  	$ports             = $wso2is::params::ports,
-	$hostname	   = $wso2is::params::hostname,
-	$mgt_hostname	   = $wso2is::params::mgt_hostname
+  $ports             = $wso2is::params::ports,
+	$hostname				   = $wso2is::params::hostname,
+	$mgt_hostname		   = $wso2is::params::mgt_hostname
 
 )
 
