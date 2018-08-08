@@ -9,22 +9,21 @@
 #
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either excustomss or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
 # Run stages
 stage { 'final' : }
-stage { 'pre' : }
-Stage['main'] -> Stage['pre']
-Stage['pre'] -> Stage['final']
+stage { 'custom' : }
+# Order of stages
+Stage['main'] -> Stage['custom'] -> Stage['final']
 
-node "ip-172-31-86-223" {
+node "default" {
     class { "::${::product_name}": }
-
     class { "::${::product_name}::custom":
-        stage => 'pre'
+        stage => 'custom'
       }
     class { "::${::product_name}::startserver":
         stage => 'final'

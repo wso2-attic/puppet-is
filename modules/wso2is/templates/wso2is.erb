@@ -1,3 +1,4 @@
+#!/bin/bash
 #----------------------------------------------------------------------------
 #  Copyright (c) 2018 WSO2, Inc. http://www.wso2.org
 #
@@ -13,8 +14,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #----------------------------------------------------------------------------
-
-#!/bin/bash
 #
 # /etc/init.d/as
 # chkconfig:         2345 90 10
@@ -38,10 +37,10 @@ fi
 #set the configuration settings for the service
 USER="ubuntu"
 PRODUCT_CODE="wso2is"
-CARBON_HOME="/usr/lib/wso2/wso2is/5.6.0"
-LOCK_FILE="/usr/lib/wso2/wso2is/5.6.0/wso2carbon.lck"
-PID_FILE="/usr/lib/wso2/wso2is/5.6.0/wso2carbon.pid"
-CMD="/usr/lib/wso2/wso2is/5.6.0/bin/wso2server.sh"
+CARBON_HOME="<%=@install_path%>"
+LOCK_FILE="<%=@install_path%>/wso2carbon.lck"
+PID_FILE="<%=@install_path%>/wso2carbon.pid"
+CMD="<%=@install_path%>/bin/wso2server.sh"
 
 #Get the status details of the service
 status() {

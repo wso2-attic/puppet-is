@@ -11,9 +11,9 @@ class wso2is (
 	$wso2_identity_db  = $wso2is::params::wso2_identity_db,
 	$wso2_consent_db   = $wso2is::params::wso2_consent_db,
 
-  $ports             = $wso2is::params::ports
-#	$hostname	         = $wso2is::params::hostname
-#	$mgt_hostname	     = $wso2is::params::mgt_hostname
+  $ports             = $wso2is::params::ports,
+	$hostname	         = $wso2is::params::hostname,
+	$mgt_hostname	     = $wso2is::params::mgt_hostname
 
 )
 
@@ -29,12 +29,14 @@ elsif $::osfamily == 'debian' {
         $install_provider = 'dpkg'
     }
 
+# Ensure /opt/wso2is directory is available
 file { '/opt/wso2is':
          ensure => directory,
          owner  => $wso2_user,
          group  => $wso2_group,
     }
 
+# Copy the relevant installer to the /opt/wso2is directory
 file { "/opt/wso2is/$wso2is_package":
          mode   => "0644",
          owner  => $wso2_user,
@@ -42,12 +44,14 @@ file { "/opt/wso2is/$wso2is_package":
          source => "puppet:///modules/wso2is/$wso2is_package",
     }
 
+# Install WSO2 Identity Server
 package { "wso2is":
-	       provider => "$install_provider",
-	       ensure   => installed,
-	       source   => "/opt/wso2is/$wso2is_package"
+	     provider => "$install_provider",
+	     ensure   => installed,
+	     source   => "/opt/wso2is/$wso2is_package"
     }
 
+# Define the template list
 $template_list        = [
 #	'repository/conf/identity/identity.xml',
 #	'repository/conf/carbon.xml',
@@ -57,6 +61,7 @@ $template_list        = [
 #	'repository/conf/axis2/axis2.xml',
 ]
 
+# Copy configuration changes to the installed directory
 $template_list.each |String $template| {
 file {"${install_path}/${template}":
 		ensure  => file,
@@ -67,13 +72,16 @@ file {"${install_path}/${template}":
 		}
 }
 
+# Copy the service file with start|stop|restart|status options
 file { "/etc/init.d/${service_name}":
 				ensure  => present,
 				owner   => root,
 				group   => root,
 				mode    => '0755',
-				content => template("wso2is/wso2service.erb"),
+				content => template("wso2is/${service_name}.erb"),
 }
+
+# Copy the Unit file required to deploy the server as a service
 file { "/etc/systemd/system/wso2is.service":
         ensure  => present,
         owner   => root,
