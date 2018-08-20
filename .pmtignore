@@ -1,6 +1,0 @@
-pkg/
-hieradata/
-.vagrant
-*.iml
-pom.xml
-package.xml
