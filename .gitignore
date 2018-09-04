@@ -20,6 +20,10 @@
 *.tar
 *.jar
 
+# Files location
+modules/is/files/*
+!modules/is/files/.gitkeep
+
 target/
 
 # puppet packages

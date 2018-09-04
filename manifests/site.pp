@@ -20,12 +20,12 @@ stage { 'custom': }
 # Order of stages
 Stage['main'] -> Stage['custom'] -> Stage['final']
 
-node "default" {
-  class { "::${::product_name}": }
-  class { "::${::product_name}::custom":
+node default {
+  class { "::${::profile}": }
+  class { "::${::profile}::custom":
     stage => 'custom'
   }
-  class { "::${::product_name}::startserver":
+  class { "::${::profile}::startserver":
     stage => 'final'
   }
 }

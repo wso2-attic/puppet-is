@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-#For custom configurations
-class wso2is::custom {
+# For custom configurations
+class is::custom {
 
 }
