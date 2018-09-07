@@ -31,7 +31,6 @@ class is (
   $wso2_identity_db     = $is::params::wso2_identity_db,
   $wso2_consent_db      = $is::params::wso2_consent_db,
 
-  $ports                = $is::params::ports,
   $hostname             = $is::params::hostname,
   $mgt_hostname         = $is::params::mgt_hostname
 )
