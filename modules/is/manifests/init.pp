@@ -14,39 +14,18 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class is (
-  $user                 = $is::params::user,
-  $user_id              = $is::params::user_id,
-  $user_group           = $is::params::user_group,
-  $user_group_id        = $is::params::user_group_id,
-  $service_name         = $is::params::service_name,
-  $start_script_template = $is::params::start_script_template,
-  $template_list        = $is::params::template_list,
-  $jre_version          = $is::params::jre_version,
-
-  # Master Datasources
-  $wso2_carbon_db       = $is::params::wso2_carbon_db,
-  $wso2_reg_db          = $is::params::wso2_reg_db,
-  $wso2_user_db         = $is::params::wso2_user_db,
-  $wso2_identity_db     = $is::params::wso2_identity_db,
-  $wso2_consent_db      = $is::params::wso2_consent_db,
-
-  $hostname             = $is::params::hostname,
-  $mgt_hostname         = $is::params::mgt_hostname
-)
-
-  inherits is::params {
+class is inherits is::params {
 
   # Checking for the OS family
   if $::osfamily == 'redhat' {
-    $is_package = 'wso2is-linux-installer-x64-5.6.0.rpm'
+    $is_package = 'wso2is-linux-installer-x64-5.7.0.rpm'
     $install_provider = 'rpm'
-    $install_path = '/usr/lib64/wso2/wso2is/5.6.0'
+    $install_path = '/usr/lib64/wso2/wso2is/5.7.0'
   }
   elsif $::osfamily == 'debian' {
-    $is_package = 'wso2is-linux-installer-x64-5.6.0.deb'
+    $is_package = 'wso2is-linux-installer-x64-5.7.0.deb'
     $install_provider = 'dpkg'
-    $install_path = '/usr/lib/wso2/wso2is/5.6.0'
+    $install_path = '/usr/lib/wso2/wso2is/5.7.0'
   }
 
   # Create wso2 group

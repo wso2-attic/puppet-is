@@ -24,42 +24,39 @@ class is::params {
   $service_name = 'wso2is'
   $hostname = 'localhost'
   $mgt_hostname = 'localhost'
-  $jre_version = 'jre1.8.0_172'
+  $jdk_version = 'jdk1.8.0_192'
 
   # Define the templates
   $start_script_template = 'bin/wso2server.sh'
 
   $template_list = [
-  'repository/conf/datasources/master-datasources.xml',
+    'repository/conf/carbon.xml',
+    'repository/conf/user-mgt.xml',
+    # 'repository/conf/datasources/master-datasources.xml',
+    # 'repository/conf/axis2/axis2.xml',
     #	'repository/conf/identity/identity.xml',
-    #	'repository/conf/carbon.xml',
-    #	'repository/conf/user-mgt.xml',
-    #	'repository/conf/axis2/axis2.xml',
   ]
 
-  # Master-datasources.xml
-  $wso2_reg_db = {
-    url               => 'jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000',
-    username          => 'wso2carbon',
-    password          => 'wso2carbon',
-    driver_class_name => 'org.h2.Driver',
-  }
-
-  $wso2_user_db = {
-    url               => 'jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000',
-    username          => 'wso2carbon',
-    password          => 'wso2carbon',
-    driver_class_name => 'org.h2.Driver',
-  }
-
-  $wso2_identity_db = {
-    url               => 'jdbc:h2:repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000',
-    username          => 'wso2carbon',
-    password          => 'wso2carbon',
-    driver_class_name => 'org.h2.Driver',
-  }
-
-  # Carbon.xml
+  # carbon.xml configs
   $ports_offset = 0
 
+  $security_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
+  $security_keystore_type = 'JKS'
+  $security_keystore_password = 'wso2carbon'
+  $security_keystore_key_alias = 'wso2carbon'
+  $security_keystore_key_password = 'wso2carbon'
+
+  $security_internal_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
+  $security_internal_keystore_type = 'JKS'
+  $security_internal_keystore_password = 'wso2carbon'
+  $security_internal_keystore_key_alias = 'wso2carbon'
+  $security_internal_keystore_key_password = 'wso2carbon'
+
+  $security_trust_store_location = '${carbon.home}/repository/resources/security/client-truststore.jks'
+  $security_trust_store_type = 'JKS'
+  $security_trust_store_password = 'wso2carbon'
+
+  # user-mgt.xml
+  $admin_username = 'admin'
+  $admin_password = 'admin'
 }

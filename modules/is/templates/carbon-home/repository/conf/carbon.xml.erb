@@ -36,7 +36,7 @@
     <!--
        Product Version
     -->
-    <Version>5.6.0</Version>
+    <Version>5.7.0</Version>
 
     <!--
        Host name or IP address of the machine hosting this server
@@ -44,12 +44,12 @@
        This is will become part of the End Point Reference of the
        services deployed on this server instance.
     -->
-    <HostName><%= @hostname %></HostName>
+    <HostName>localhost</HostName>
+
     <!--
     Host name to be used for the Carbon management console
     -->
-    <MgtHostName><%= @mgt_hostname %></MgtHostName>
-    <!--MgtHostName>mgt.wso2.org</MgtHostName-->
+    <MgtHostName>localhost</MgtHostName>
 
     <!--
         The URL of the back end server. This is where the admin services are hosted and
@@ -349,6 +349,33 @@
     </ServiceUserRoles>
 
     <!--
+       Configurations related to Carbon Crypto Service which is a crypto framework used inside Carbon products.
+    -->
+    <CryptoService>
+
+        <Enabled>true</Enabled>
+
+        <!-- The crypto provider which is used for internal data encryption and decryption -->
+        <InternalCryptoProviderClassName>org.wso2.carbon.crypto.provider.KeyStoreBasedInternalCryptoProvider</InternalCryptoProviderClassName>
+
+        <!--
+            The crypto provider which is used for the crypto needs which come when communicating with external parties.
+            e.g. Signing, Decrypting.
+        -->
+        <ExternalCryptoProviderClassName>org.wso2.carbon.core.encryption.KeyStoreBasedExternalCryptoProvider</ExternalCryptoProviderClassName>
+
+        <!--
+            The list of key resolvers which will be used based on the context when handling crypto with external parties.
+
+            e.g. Resolving the public key of an external entity.
+        -->
+        <KeyResolvers>
+            <KeyResolver className="org.wso2.carbon.crypto.defaultProvider.resolver.ContextIndependentKeyResolver" priority="-1"/>
+        </KeyResolvers>
+
+    </CryptoService>
+
+    <!--
       Enable following config to allow Emails as usernames.
     -->
     <!--EnableEmailUserName>true</EnableEmailUserName-->
@@ -361,26 +388,35 @@
             KeyStore which will be used for encrypting/decrypting passwords
             and other sensitive information.
         -->
-   <KeyStore>
+        <KeyStore>
             <!-- Keystore file location-->
-            <Location>${carbon.home}/<%= @key_stores['key_store']['location'] %></Location>
+            <Location><%= @security_keystore_location %></Location>
             <!-- Keystore type (JKS/PKCS12 etc.)-->
-            <Type><%= @key_stores['key_store']['type'] %></Type>
+            <Type><%= @security_keystore_type %></Type>
             <!-- Keystore password-->
-            <% if @enable_secure_vault %>
-            <Password svns:secretAlias="Carbon.Security.KeyStore.Password">password</Password>
-            <%- else -%>
-            <Password><%= @key_stores['key_store']['password'] %></Password>
-            <% end %>
+            <Password><%= @security_keystore_password %></Password>
             <!-- Private Key alias-->
-            <KeyAlias><%= @key_stores['key_store']['key_alias'] %></KeyAlias>
+            <KeyAlias><%= @security_keystore_key_alias %></KeyAlias>
             <!-- Private Key password-->
-            <% if @enable_secure_vault %>
-            <KeyPassword svns:secretAlias="Carbon.Security.KeyStore.KeyPassword">password</KeyPassword>
-            <%- else -%>
-            <KeyPassword><%= @key_stores['key_store']['key_password'] %></KeyPassword>
-            <% end %>
+            <KeyPassword><%= @security_keystore_key_password %></KeyPassword>
         </KeyStore>
+
+        <!--
+            The KeyStore which is used for encrypting/decrypting internal data.
+            This block is read by Carbon Crypto Service.
+        -->
+        <InternalKeyStore>
+            <!-- Keystore file location-->
+            <Location><%= @security_internal_keystore_location %></Location>
+            <!-- Keystore type (JKS/PKCS12 etc.)-->
+            <Type><%= @security_internal_keystore_type %></Type>
+            <!-- Keystore password-->
+            <Password><%= @security_internal_keystore_password %></Password>
+            <!-- Private Key alias-->
+            <KeyAlias><%= @security_internal_keystore_key_alias %></KeyAlias>
+            <!-- Private Key password-->
+            <KeyPassword><%= @security_internal_keystore_key_password %></KeyPassword>
+        </InternalKeyStore>
 
         <!--
             System wide trust-store which is used to maintain the certificates of all
@@ -388,15 +424,11 @@
         -->
         <TrustStore>
             <!-- trust-store file location -->
-            <Location>${carbon.home}/<%= @key_stores['trust_store']['location'] %></Location>
+            <Location><%= @security_trust_store_location %></Location>
             <!-- trust-store type (JKS/PKCS12 etc.) -->
-            <Type><%= @key_stores['trust_store']['type'] %></Type>
+            <Type><%= @security_trust_store_type %></Type>
             <!-- trust-store password -->
-            <% if @enable_secure_vault %>
-            <Password svns:secretAlias="Carbon.Security.TrustStore.Password">password</Password>
-            <%- else -%>
-            <Password><%= @key_stores['trust_store']['password'] %></Password>
-            <% end %>
+            <Password><%= @security_trust_store_password %></Password>
         </TrustStore>
 
         <!--
@@ -584,27 +616,8 @@
 	In master nodes you need to set both AutoCommit and AutoCheckout to true
 	and in  worker nodes set only AutoCheckout to true.
     -->
-
-
-  <DeploymentSynchronizer>
-        <Enabled><%= @dep_sync['enabled'] %></Enabled>
-        <AutoCommit><%= @dep_sync['auto_commit'] %></AutoCommit>
-        <AutoCheckout><%= @dep_sync['auto_checkout'] %></AutoCheckout>
-        <RepositoryType><%= @dep_sync['repository_type'] %></RepositoryType>
-    <%- if @dep_sync['repository_type'] == "svn" -%>
-        <SvnUrl><%= @dep_sync['svn']['url'] -%></SvnUrl>
-        <SvnUser><%= @dep_sync['svn']['user'] -%></SvnUser>
-        <SvnPassword><%= @dep_sync['svn']['password'] -%></SvnPassword>
-        <SvnUrlAppendTenantId><%= @dep_sync['svn']['append_tenant_id'] -%></SvnUrlAppendTenantId>
-    <%- end -%>
-    </DeploymentSynchronizer>
-
-    <!-- Deployment Synchronizer Configuration. Uncomment the following section when running with "registry based" dep sync.
-        In master nodes you need to set both AutoCommit and AutoCheckout to true
-        and in  worker nodes set only AutoCheckout to true.
-    -->
-    <!--<DeploymentSynchronizer>
-        <Enabled>true</Enabled>
+    <DeploymentSynchronizer>
+        <Enabled>false</Enabled>
         <AutoCommit>false</AutoCommit>
         <AutoCheckout>true</AutoCheckout>
         <RepositoryType>svn</RepositoryType>
@@ -614,7 +627,7 @@
         <SvnUrlAppendTenantId>true</SvnUrlAppendTenantId>
     </DeploymentSynchronizer>
 
-    <!Mediation persistence configurations. Only valid if mediation features are available i.e. ESB -->
+    <!-- Mediation persistence configurations. Only valid if mediation features are available i.e. ESB -->
     <!--<MediationConfig>
         <LoadFromRegistry>false</LoadFromRegistry>
         <SaveToFile>false</SaveToFile>
@@ -687,13 +700,13 @@
    -->
    <APIManagement>
 
-	<!--Uses the embedded API Manager by default. If you want to use an external
-	API Manager instance to manage APIs, configure below  externalAPIManager-->
+	<!--Uses the embedded Identity Server by default. If you want to use an external
+	Identity Server instance to manage APIs, configure below  externalAPIManager-->
 
 	<Enabled>true</Enabled>
 
 	<!--Uncomment and configure API Gateway and
-	Publisher URLs to use external API Manager instance-->
+	Publisher URLs to use external Identity Server instance-->
 
 	<!--ExternalAPIManager>
 
