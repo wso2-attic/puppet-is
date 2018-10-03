@@ -18,14 +18,16 @@ class is inherits is::params {
 
   # Checking for the OS family
   if $::osfamily == 'redhat' {
-    $is_package = 'wso2is-linux-installer-x64-5.7.0.rpm'
-    $install_provider = 'rpm'
-    $install_path = '/usr/lib64/wso2/wso2is/5.7.0'
+    $product_package = "${product}-linux-installer-x64-${product_version}.rpm"
+    $installer_provider = 'yum'
+    $install_path = "/usr/lib64/wso2/${product}/${product_version}"
+    $package_name = "${product}-${product_version}"
   }
   elsif $::osfamily == 'debian' {
-    $is_package = 'wso2is-linux-installer-x64-5.7.0.deb'
-    $install_provider = 'dpkg'
-    $install_path = '/usr/lib/wso2/wso2is/5.7.0'
+    $product_package = "${product}-linux-installer-x64-${product_version}.deb"
+    $installer_provider = 'apt'
+    $install_path = "/usr/lib/wso2/${product}/${product_version}"
+    $package_name = "/opt/${product}/${product_package}"
   }
 
   # Create wso2 group
@@ -45,25 +47,25 @@ class is inherits is::params {
   }
 
   # Ensure /opt/is directory is available
-  file { "/opt/${service_name}":
+  file { "/opt/${product}":
     ensure => directory,
     owner  => $user,
     group  => $user_group,
   }
 
   # Copy the relevant installer to the /opt/is directory
-  file { "/opt/${service_name}/${is_package}":
+  file { "/opt/${product}/${product_package}":
     owner  => $user,
     group  => $user_group,
     mode   => '0644',
-    source => "puppet:///modules/${module_name}/${is_package}",
+    source => "puppet:///modules/${module_name}/${product_package}",
   }
 
   # Install WSO2 Identity Server
-  package { $service_name:
-    provider => $install_provider,
+  package { $package_name:
     ensure   => installed,
-    source   => "/opt/${service_name}/${is_package}"
+    provider => $installer_provider,
+    source  => "/opt/${product}/${product_package}"
   }
 
   # Change the ownership of the installation directory to wso2 user & group

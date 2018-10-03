@@ -21,6 +21,8 @@ class is::params {
   $user_group = 'wso2'
   $user_home = '/home/$user'
   $user_group_id = 802
+  $product = 'wso2is'
+  $product_version = '5.7.0'
   $service_name = 'wso2is'
   $hostname = 'localhost'
   $mgt_hostname = 'localhost'
