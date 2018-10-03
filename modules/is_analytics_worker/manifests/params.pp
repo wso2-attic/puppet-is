@@ -23,6 +23,7 @@ class is_analytics_worker::params {
   $user_home = '/home/$user'
   $user_group_id = 802
   $product = 'wso2is-analytics'
+  $product_version = '5.7.0'
   $profile = 'worker'
   $service_name = "${product}-${profile}"
   $hostname = 'localhost'

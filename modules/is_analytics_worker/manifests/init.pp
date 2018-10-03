@@ -19,14 +19,16 @@
 class is_analytics_worker inherits is_analytics_worker::params {
 
   if $::osfamily == 'redhat' {
-    $is_analytics_package = 'wso2is-analytics-linux-installer-x64-5.7.0.rpm'
-    $installer_provider = 'rpm'
-    $install_path = '/usr/lib64/wso2/wso2is-analytics/5.7.0'
+    $product_package = "${product}-linux-installer-x64-${product_version}.rpm"
+    $installer_provider = 'yum'
+    $install_path = "/usr/lib64/wso2/${product}/${product_version}"
+    $package_name = "${product}-${product_version}"
   }
   elsif $::osfamily == 'debian' {
-    $is_analytics_package = 'wso2is-analytics-linux-installer-x64-5.7.0.deb'
-    $installer_provider = 'dpkg'
-    $install_path = '/usr/lib/wso2/wso2is-analytics/5.7.0'
+    $product_package = "${product}-linux-installer-x64-${product_version}.deb"
+    $installer_provider = 'apt'
+    $install_path = "/usr/lib/wso2/${product}/${product_version}"
+    $package_name = "/opt/${product}/${product_package}"
   }
 
   # Create wso2 group
@@ -52,18 +54,18 @@ class is_analytics_worker inherits is_analytics_worker::params {
   }
 
   # Copy the installer to the directory
-  file { "/opt/${product}/${is_analytics_package}":
+  file { "/opt/${product}/${product_package}":
     owner  => $user,
     group  => $user_group,
     mode   => '0644',
-    source => "puppet:///modules/${module_name}/${is_analytics_package}",
+    source => "puppet:///modules/${module_name}/${product_package}",
   }
 
-  # Install WSO2 Identity Server
-  package { $product:
+  # Install WSO2 Identity Server Analytics
+  package { $package_name:
     ensure   => installed,
     provider => $installer_provider,
-    source   => "/opt/${product}/${is_analytics_package}"
+    source  => "/opt/${product}/${product_package}"
   }
 
   # Change the ownership of the installation directory to wso2 user & group
