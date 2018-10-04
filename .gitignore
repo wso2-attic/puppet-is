@@ -19,6 +19,8 @@
 *.gz
 *.tar
 *.jar
+*.deb
+*.rpm
 
 # Files location
 modules/is/files/*

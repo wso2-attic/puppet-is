@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Copyright (c) 2018 WSO2, Inc. http://www.wso2.org
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +12,12 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
-class is inherits is::params {
+# Class: is_analytics_dashboard
+# Init class of Identity Server Analytics - Dashboard profile
+class is_analytics_dashboard inherits is_analytics_dashboard::params {
 
-  # Checking for the OS family
   if $::osfamily == 'redhat' {
     $product_package = "${product}-linux-installer-x64-${product_version}.rpm"
     $installer_provider = 'yum'
@@ -45,15 +46,14 @@ class is inherits is::params {
     home   => "/home/${user}",
     system => true,
   }
-
-  # Ensure /opt/is directory is available
+  # Ensure the installation directory is available
   file { "/opt/${product}":
-    ensure => directory,
+    ensure => 'directory',
     owner  => $user,
     group  => $user_group,
   }
 
-  # Copy the relevant installer to the /opt/is directory
+  # Copy the installer to the directory
   file { "/opt/${product}/${product_package}":
     owner  => $user,
     group  => $user_group,
@@ -61,7 +61,7 @@ class is inherits is::params {
     source => "puppet:///modules/${module_name}/${product_package}",
   }
 
-  # Install WSO2 Identity Server
+  # Install WSO2 Identity Server Analytics
   package { $package_name:
     ensure   => installed,
     provider => $installer_provider,
@@ -78,7 +78,7 @@ class is inherits is::params {
   }
 
   # Copy configuration changes to the installed directory
-  $template_list.each |String $template| {
+  $template_list.each | String $template | {
     file { "${install_path}/${template}":
       ensure  => file,
       owner   => $user,
@@ -97,7 +97,7 @@ class is inherits is::params {
     content => template("${module_name}/carbon-home/${start_script_template}.erb")
   }
 
-  # Copy the Unit file required to deploy the server as a service
+  # Copy the unit file required to deploy the server as a service
   file { "/etc/systemd/system/${service_name}.service":
     ensure  => present,
     owner   => root,
@@ -109,12 +109,12 @@ class is inherits is::params {
   /*
     Following script can be used to copy file to a given location.
     This will copy some_file to install_path -> repository.
-    Note: Ensure that file is available in modules -> is -> files
+    Note: Ensure that file is available in modules -> is_analytics_dashboard -> files
   */
   # file { "${install_path}/repository/some_file":
   #   owner  => $user,
   #   group  => $user_group,
   #   mode   => '0644',
-  #   source => "puppet:///modules/is/some_file",
+  #   source => "puppet:///modules/${module_name}/some_file",
   # }
 }
