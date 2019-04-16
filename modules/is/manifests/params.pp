@@ -17,48 +17,16 @@
 class is::params {
 
   $user = 'wso2carbon'
-  $user_id = 802
   $user_group = 'wso2'
-  $user_home = '/home/$user'
-  $user_group_id = 802
   $product = 'wso2is'
   $product_version = '5.7.0'
   $service_name = 'wso2is'
-  $hostname = 'localhost'
-  $mgt_hostname = 'localhost'
-  $jdk_version = 'jdk1.8.0_192'
 
-  # Define the templates
-  $start_script_template = 'bin/wso2server.sh'
+  #Directories
+  $products_dir = "/usr/local/wso2"
 
-  $template_list = [
-    'repository/conf/carbon.xml',
-    'repository/conf/user-mgt.xml',
-    # 'repository/conf/datasources/master-datasources.xml',
-    # 'repository/conf/axis2/axis2.xml',
-    #	'repository/conf/identity/identity.xml',
-  ]
-
-  # carbon.xml configs
-  $ports_offset = 0
-
-  $security_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
-  $security_keystore_type = 'JKS'
-  $security_keystore_password = 'wso2carbon'
-  $security_keystore_key_alias = 'wso2carbon'
-  $security_keystore_key_password = 'wso2carbon'
-
-  $security_internal_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
-  $security_internal_keystore_type = 'JKS'
-  $security_internal_keystore_password = 'wso2carbon'
-  $security_internal_keystore_key_alias = 'wso2carbon'
-  $security_internal_keystore_key_password = 'wso2carbon'
-
-  $security_trust_store_location = '${carbon.home}/repository/resources/security/client-truststore.jks'
-  $security_trust_store_type = 'JKS'
-  $security_trust_store_password = 'wso2carbon'
-
-  # user-mgt.xml
-  $admin_username = 'admin'
-  $admin_password = 'admin'
+  # Product and installation information
+  $product_binary = "${product}-${product_version}.zip"
+  $distribution_path = "${products_dir}/${product}/${product_version}"
+  $install_path = "${distribution_path}/${product}-${product_version}"
 }
