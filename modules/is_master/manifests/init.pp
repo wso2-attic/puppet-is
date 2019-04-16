@@ -72,10 +72,10 @@ class is_master inherits is_master::params {
   }
 
   # Copy update script to distributions path
-  file { "$distribution_path/update.sh":
+  file { "$distribution_path/${build_script_template}":
     ensure  => present,
     mode    => '0754',
-    content => template("${module_name}/update.sh.erb"),
+    content => template("${module_name}/${build_script_template}.erb"),
   }
 
   # Install the "zip" package
