@@ -1,0 +1,158 @@
+#!/bin/bash
+# ----------------------------------------------------------------------------
+#
+# Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+#
+# WSO2 Inc. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# ----------------------------------------------------------------------------
+
+# Apply configurations
+export FACTER_profile=is_master
+puppet agent -vt
+
+# exit immediately if a command exits with a non-zero status
+set -e
+
+updated_templates=()
+
+copy_to_agent() {
+  cd <%= @distribution_path %>
+  rm <%= @product %>-<%= @product_version %>.zip
+  echo "Repackaging updated pack..."
+  zip -qr <%= @product %>-<%= @product_version %>.zip <%= @product %>-<%= @product_version %>/
+  echo "Copying updated pack to Agent files directory..."
+  cp <%= @product %>-<%= @product_version %>.zip <%= @puppet_env %>/modules/is/files/
+}
+
+
+# Check if user has a WSO2 subscription
+while :
+do
+  read -p "Do you have a WSO2 subscription? (Y/N)? " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    if [[ ! -f <%= @install_path %>/bin/update_linux ]]
+    then
+      echo "Update executable not found. Please download package for subscription users from website."
+      exit 1
+    else
+      break
+    fi
+  elif [[ $REPLY =~ ^[Nn]$ ]]
+  then
+    copy_to_agent
+    exit 0
+  else
+    echo "Invalid input provided."
+  fi
+done
+
+# Create updates directory if it doesn't exist
+cd <%= @distribution_path %>
+if [[ ! -d updates ]]
+then
+  mkdir updates
+fi
+
+# Getting update status
+# 0 - first/last update successful
+# 1 - Error occurred in last update
+# 2 - In-place has been updated
+# 3 - conflicts encountered in last update
+status=0
+if [[ -f updates/status ]]
+then
+  status=$(cat updates/status)
+fi
+
+# Move into binaries of installation directory
+cd <%= @install_path %>/bin
+
+# Run in-place update
+if [[ ${status} -eq 0 ]] || [[ ${status} -eq 1 ]] || [[ ${status} -eq 2 ]]
+then
+  ./update_linux --verbose 2>&1 | tee output.txt
+  update_status=${PIPESTATUS[0]}
+elif [[ ${status} -eq 3 ]]
+then
+  ./update_linux --verbose --continue 2>&1 | tee output.txt
+  update_status=${PIPESTATUS[0]}
+
+  # Handle user running update script without resolving conflicts
+  if [[ ${update_status} -eq 1 ]]
+  then
+    echo "Error occurred while attempting to resolve conflicts."
+    exit 1
+  fi
+else
+  echo "status file is invalid. Please delete or clear file content."
+  exit 1
+fi
+
+# Update status
+echo ${update_status} > <%= @distribution_path %>/updates/status
+if [[ ${update_status} -eq 0 ]]
+then
+  echo
+  echo "Update completed successfully."
+  copy_to_agent
+elif [[ ${update_status} -eq 3 ]]
+then
+  echo "Conflicts encountered. Please resolve conflicts and run the update script again."
+else
+  echo "Update error occurred. Stopped with exit code ${update_status}"
+  exit ${update_status}
+fi
+
+cd <%= @install_path %>/bin
+# Get list of merged files
+if [[ ${update_status} -eq 0 ]] # If update is successful
+then
+  sed -n '/files./,/Successfully/p' output.txt > merged_files.txt
+elif [[ ${update_status} -eq 3 ]] # If conflicts were encountered during update
+then
+  sed -n '/files./,/Merging/p' output.txt > merged_files.txt
+fi
+
+if [[ -s merged_files.txt ]]
+then
+  sed -i '1d' merged_files.txt # Remove first line from file
+  sed -i '$ d' merged_files.txt # Remove last line from file
+
+  while read -r line; do
+    filepath=${line##*<%= @product %>-<%= @product_version %>/}
+    template_file=<%= @puppet_env %>/modules/is_master/templates/carbon-home/${filepath}.erb
+    if [[ -f ${template_file} ]]
+    then
+      updated_templates+=(${template_file})
+    fi
+  done < merged_files.txt
+
+  # Display template files to be changed
+  if [[ -n ${updated_templates} ]]
+  then
+    cd <%= @distribution_path %>/updates
+    DATE=`date +%Y-%m-%d`
+    update_file_name="update_${DATE}.log"
+    echo "Update has made changes to the following files. Please update the templates accordingly before running the next update." | tee -a ${update_file_name}
+    printf '%s\n' "${updated_templates[@]}" | tee -a ${update_file_name}
+  fi
+fi
+
+# Clean files
+cd <%= @install_path %>/bin
+rm output.txt merged_files.txt

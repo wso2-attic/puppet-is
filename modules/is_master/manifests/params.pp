@@ -24,6 +24,7 @@ class is_master::params {
 
   # Define the templates
   $start_script_template = 'bin/wso2server.sh'
+  $build_script_template = 'build.sh'
 
   $template_list = [
     'repository/conf/carbon.xml',
