@@ -37,7 +37,6 @@ copy_to_agent() {
   cp <%= @product %>-<%= @product_version %>.zip <%= @puppet_env %>/modules/is/files/
 }
 
-
 # Check if user has a WSO2 subscription
 while :
 do
@@ -58,14 +57,14 @@ do
     exit 0
   else
     echo "Invalid input provided."
+    sleep .5
   fi
 done
 
 # Create updates directory if it doesn't exist
-cd <%= @distribution_path %>
-if [[ ! -d updates ]]
+if [[ ! -d <%= @distribution_path %>/updates ]]
 then
-  mkdir updates
+  mkdir <%= @distribution_path %>/updates
 fi
 
 # Getting update status
@@ -74,9 +73,9 @@ fi
 # 2 - In-place has been updated
 # 3 - conflicts encountered in last update
 status=0
-if [[ -f updates/status ]]
+if [[ -f <%= @distribution_path %>/updates/status ]]
 then
-  status=$(cat updates/status)
+  status=$(cat <%= @distribution_path %>/updates/status)
 fi
 
 # Move into binaries of installation directory
@@ -85,11 +84,11 @@ cd <%= @install_path %>/bin
 # Run in-place update
 if [[ ${status} -eq 0 ]] || [[ ${status} -eq 1 ]] || [[ ${status} -eq 2 ]]
 then
-  ./update_linux --verbose 2>&1 | tee output.txt
+  ./update_linux --verbose 2>&1 | tee <%= @install_path %>/bin/output.txt
   update_status=${PIPESTATUS[0]}
 elif [[ ${status} -eq 3 ]]
 then
-  ./update_linux --verbose --continue 2>&1 | tee output.txt
+  ./update_linux --verbose --continue 2>&1 | tee <%= @install_path %>/bin/output.txt
   update_status=${PIPESTATUS[0]}
 
   # Handle user running update script without resolving conflicts
@@ -118,20 +117,19 @@ else
   exit ${update_status}
 fi
 
-cd <%= @install_path %>/bin
 # Get list of merged files
 if [[ ${update_status} -eq 0 ]] # If update is successful
 then
-  sed -n '/files./,/Successfully/p' output.txt > merged_files.txt
+  sed -n '/files./,/Successfully/p' <%= @install_path %>/bin/output.txt > <%= @install_path %>/bin/merged_files.txt
 elif [[ ${update_status} -eq 3 ]] # If conflicts were encountered during update
 then
-  sed -n '/files./,/Merging/p' output.txt > merged_files.txt
+  sed -n '/files./,/Merging/p' <%= @install_path %>/bin/output.txt > <%= @install_path %>/bin/merged_files.txt
 fi
 
-if [[ -s merged_files.txt ]]
+if [[ -s <%= @install_path %>/bin/merged_files.txt ]]
 then
-  sed -i '1d' merged_files.txt # Remove first line from file
-  sed -i '$ d' merged_files.txt # Remove last line from file
+  sed -i '1d' <%= @install_path %>/bin/merged_files.txt # Remove first line from file
+  sed -i '$ d' <%= @install_path %>/bin/merged_files.txt # Remove last line from file
 
   while read -r line; do
     filepath=${line##*<%= @product %>-<%= @product_version %>/}
@@ -140,19 +138,18 @@ then
     then
       updated_templates+=(${template_file})
     fi
-  done < merged_files.txt
+  done < <%= @install_path %>/bin/merged_files.txt
 
   # Display template files to be changed
   if [[ -n ${updated_templates} ]]
   then
-    cd <%= @distribution_path %>/updates
     DATE=`date +%Y-%m-%d`
     update_file_name="update_${DATE}.log"
-    echo "Update has made changes to the following files. Please update the templates accordingly before running the next update." | tee -a ${update_file_name}
-    printf '%s\n' "${updated_templates[@]}" | tee -a ${update_file_name}
+    echo
+    echo "Update has made changes to the following files. Please update the templates accordingly before running the next update." | tee -a <%= @distribution_path %>/updates/${update_file_name}
+    printf '%s\n' "${updated_templates[@]}" | tee -a <%= @distribution_path %>/updates/${update_file_name}
   fi
 fi
 
 # Clean files
-cd <%= @install_path %>/bin
-rm output.txt merged_files.txt
+rm <%= @install_path %>/bin/output.txt <%= @install_path %>/bin/merged_files.txt
