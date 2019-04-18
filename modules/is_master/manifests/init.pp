@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-#  Copyright (c) 2018 WSO2, Inc. http://www.wso2.org
+#  Copyright (c) 2019 WSO2, Inc. http://www.wso2.org
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -18,19 +18,10 @@ class is_master inherits is_master::params {
 
   # Create distribution path
   file { [  "${products_dir}",
-            "${products_dir}/${product}" ]:
+            "${products_dir}/${product}",
+            "${distribution_path}"]:
     ensure => 'directory',
   }
-
-  # Change the ownership of the installation directory to wso2 user & group
-  file { $distribution_path:
-    ensure  => directory,
-    recurse => true
-  }
-
-  /*
-  * WSO2 Identity Server Distribution
-  */
 
   # Copy binary to distribution path
   file { "binary":

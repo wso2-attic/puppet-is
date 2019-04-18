@@ -34,11 +34,11 @@ class is inherits is::params {
 
   # Create distribution path
   file { [  "${products_dir}",
-            "${products_dir}/${product}" ]:
-    ensure  => 'directory',
+    "${products_dir}/${product}" ]:
+    ensure => 'directory',
   }
 
-  # Change the ownership of the installation directory to wso2 user & group
+  # Change the ownership of the installation directory to specified user & group
   file { $distribution_path:
     ensure  => directory,
     owner   => $user,
@@ -59,7 +59,7 @@ class is inherits is::params {
   # Stop the existing setup
   exec { "stop-server":
     command     => "kill -term $(cat ${install_path}/wso2carbon.pid)",
-    path        =>  "/bin/",
+    path        => "/bin/",
     onlyif      => "/usr/bin/test -f ${install_path}/wso2carbon.pid",
     subscribe   => File["binary"],
     refreshonly => true,
@@ -68,19 +68,18 @@ class is inherits is::params {
   # Wait for the server to stop
   exec { "wait":
     command     => "sleep 10",
-    path        =>  "/bin/",
+    path        => "/bin/",
     onlyif      => "/usr/bin/test -d ${install_path}",
     subscribe   => File["binary"],
     refreshonly => true,
   }
 
   # Delete existing setup
-  exec { "delete-pack":
-    command     =>  "rm -rf ${install_path}",
-    path        =>  "/bin/",
-    onlyif      => "/usr/bin/test -d ${install_path}",
-    subscribe   => File["binary"],
-    refreshonly => true,
+  file { "detele-pack":
+    path    => $install_path,
+    ensure  => absent,
+    recurse => true,
+    force   => true
   }
 
   # Install the "unzip" package
