@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-#  Copyright (c) 2018 WSO2, Inc. http://www.wso2.org
+#  Copyright (c) 2019 WSO2, Inc. http://www.wso2.org
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -24,14 +24,15 @@ class is_master::params {
 
   # Define the templates
   $start_script_template = 'bin/wso2server.sh'
+  # Script used to update product using in-place client and copy into agent
   $build_script_template = 'build.sh'
 
   $template_list = [
     'repository/conf/carbon.xml',
     'repository/conf/user-mgt.xml',
-    # 'repository/conf/datasources/master-datasources.xml',
-    # 'repository/conf/axis2/axis2.xml',
-    #	'repository/conf/identity/identity.xml',
+    'repository/conf/datasources/master-datasources.xml',
+    'repository/conf/axis2/axis2.xml',
+    'repository/conf/identity/identity.xml',
   ]
 
   # carbon.xml configs
