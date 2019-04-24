@@ -22,11 +22,6 @@ class is_master::params {
   $product_version = '5.7.0'
   $service_name = 'wso2is'
 
-  # Define the templates
-  $start_script_template = 'bin/wso2server.sh'
-  # Script used to update product using in-place client and copy into agent
-  $build_script_template = 'build.sh'
-
   $template_list = [
     'repository/conf/carbon.xml',
     'repository/conf/user-mgt.xml',
@@ -66,7 +61,4 @@ class is_master::params {
   $product_binary = "${product}-${product_version}.zip"
   $distribution_path = "${products_dir}/${product}/${product_version}"
   $install_path = "${distribution_path}/${product}-${product_version}"
-
-  # Java path
-  $java_home = "$install_path/corretto"
 }

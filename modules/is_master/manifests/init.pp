@@ -55,20 +55,6 @@ class is_master inherits is_master::params {
     }
   }
 
-  # Copy wso2server.sh to installed directory
-  file { "${install_path}/${start_script_template}":
-    ensure  => file,
-    mode    => '0754',
-    content => template("${module_name}/carbon-home/${start_script_template}.erb")
-  }
-
-  # Copy update script to distributions path
-  file { "$distribution_path/${build_script_template}":
-    ensure  => present,
-    mode    => '0754',
-    content => template("${module_name}/${build_script_template}.erb"),
-  }
-
   # Install the "zip" package
   package { 'zip':
     ensure => installed,
