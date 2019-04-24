@@ -22,7 +22,19 @@ class is::params {
   $product_version = '5.7.0'
   $service_name = 'wso2is'
 
-  #Directories
+  # JDK Distributions
+  if $::osfamily == 'redhat' {
+    $lib_dir = "/usr/lib64/wso2"
+  }
+  elsif $::osfamily == 'debian' {
+    $lib_dir = "/usr/lib/wso2"
+  }
+  $jdk_name = 'amazon-corretto-8.202.08.2-linux-x64'
+  $java_home = "${lib_dir}/${jdk_name}"
+
+  $start_script_template = 'bin/wso2server.sh'
+
+  # Directories
   $products_dir = "/usr/local/wso2"
 
   # Product and installation information
