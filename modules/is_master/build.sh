@@ -19,6 +19,15 @@
 #
 # ----------------------------------------------------------------------------
 
+# Build artifacts and versions
+: ${product:="wso2is"}
+: ${product_version:="5.7.0"}
+: ${products_dir:="/usr/local/wso2"}
+: ${distribution_path:=${products_dir}"/"${product}"/"${product_version}}
+: ${install_path:=${distribution_path}"/"${product}"-"${product_version}}
+: ${product_binary:=${product}"-"${product_version}".zip"}
+: ${puppet_env:="/etc/puppet/code/environments/production"}
+
 # Apply configurations
 export FACTER_profile=is_master
 puppet agent -vt
@@ -29,22 +38,22 @@ set -e
 updated_templates=()
 
 copy_to_agent() {
-  cd <%= @distribution_path %>
-  rm <%= @product %>-<%= @product_version %>.zip
-  echo "Repackaging updated pack..."
-  zip -qr <%= @product %>-<%= @product_version %>.zip <%= @product %>-<%= @product_version %>/
+  cd ${distribution_path}
+  rm ${product_binary}
+  echo "Repackaging ${1} pack..."
+  zip -qr ${product_binary} ${product}-${product_version}
   echo "Copying updated pack to Agent files directory..."
-  cp <%= @product %>-<%= @product_version %>.zip <%= @puppet_env %>/modules/is/files/
+  cp ${product_binary} ${puppet_env}/modules/is/files/
 }
 
 # Check if user has a WSO2 subscription
 while :
 do
-  read -p "Do you have a WSO2 subscription? (Y/N)? " -n 1 -r
+  read -p "Do you have a WSO2 subscription? (Y/n) "
   echo
-  if [[ $REPLY =~ ^[Yy]$ ]]
+  if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z "$REPLY" ]]
   then
-    if [[ ! -f <%= @install_path %>/bin/update_linux ]]
+    if [[ ! -f ${install_path}/bin/update_linux ]]
     then
       echo "Update executable not found. Please download package for subscription users from website."
       exit 1
@@ -53,7 +62,7 @@ do
     fi
   elif [[ $REPLY =~ ^[Nn]$ ]]
   then
-    copy_to_agent
+    copy_to_agent "modified"
     exit 0
   else
     echo "Invalid input provided."
@@ -62,9 +71,9 @@ do
 done
 
 # Create updates directory if it doesn't exist
-if [[ ! -d <%= @distribution_path %>/updates ]]
+if [[ ! -d ${distribution_path}/updates ]]
 then
-  mkdir <%= @distribution_path %>/updates
+  mkdir ${distribution_path}/updates
 fi
 
 # Getting update status
@@ -73,22 +82,22 @@ fi
 # 2 - In-place has been updated
 # 3 - conflicts encountered in last update
 status=0
-if [[ -f <%= @distribution_path %>/updates/status ]]
+if [[ -f ${distribution_path}/updates/status ]]
 then
-  status=$(cat <%= @distribution_path %>/updates/status)
+  status=$(cat ${distribution_path}/updates/status)
 fi
 
 # Move into binaries of installation directory
-cd <%= @install_path %>/bin
+cd ${install_path}/bin
 
 # Run in-place update
 if [[ ${status} -eq 0 ]] || [[ ${status} -eq 1 ]] || [[ ${status} -eq 2 ]]
 then
-  ./update_linux --verbose 2>&1 | tee <%= @install_path %>/bin/output.txt
+  ./update_linux --verbose 2>&1 | tee ${install_path}/bin/output.txt
   update_status=${PIPESTATUS[0]}
 elif [[ ${status} -eq 3 ]]
 then
-  ./update_linux --verbose --continue 2>&1 | tee <%= @install_path %>/bin/output.txt
+  ./update_linux --verbose --continue 2>&1 | tee ${install_path}/bin/output.txt
   update_status=${PIPESTATUS[0]}
 
   # Handle user running update script without resolving conflicts
@@ -103,12 +112,12 @@ else
 fi
 
 # Update status
-echo ${update_status} > <%= @distribution_path %>/updates/status
+echo ${update_status} > ${distribution_path}/updates/status
 if [[ ${update_status} -eq 0 ]]
 then
   echo
   echo "Update completed successfully."
-  copy_to_agent
+  copy_to_agent "updated"
 elif [[ ${update_status} -eq 3 ]]
 then
   echo "Conflicts encountered. Please resolve conflicts and run the update script again."
@@ -120,25 +129,25 @@ fi
 # Get list of merged files
 if [[ ${update_status} -eq 0 ]] # If update is successful
 then
-  sed -n '/files./,/Successfully/p' <%= @install_path %>/bin/output.txt > <%= @install_path %>/bin/merged_files.txt
+  sed -n '/files./,/Successfully/p' ${install_path}/bin/output.txt > ${install_path}/bin/merged_files.txt
 elif [[ ${update_status} -eq 3 ]] # If conflicts were encountered during update
 then
-  sed -n '/files./,/Merging/p' <%= @install_path %>/bin/output.txt > <%= @install_path %>/bin/merged_files.txt
+  sed -n '/files./,/Merging/p' ${install_path}/bin/output.txt > ${install_path}/bin/merged_files.txt
 fi
 
-if [[ -s <%= @install_path %>/bin/merged_files.txt ]]
+if [[ -s ${install_path}/bin/merged_files.txt ]]
 then
-  sed -i '1d' <%= @install_path %>/bin/merged_files.txt # Remove first line from file
-  sed -i '$ d' <%= @install_path %>/bin/merged_files.txt # Remove last line from file
+  sed -i '1d' ${install_path}/bin/merged_files.txt # Remove first line from file
+  sed -i '$ d' ${install_path}/bin/merged_files.txt # Remove last line from file
 
   while read -r line; do
-    filepath=${line##*<%= @product %>-<%= @product_version %>/}
-    template_file=<%= @puppet_env %>/modules/is_master/templates/carbon-home/${filepath}.erb
+    filepath=${line##*${product}-${product_version}/}
+    template_file=${puppet_env}/modules/is_master/templates/carbon-home/${filepath}.erb
     if [[ -f ${template_file} ]]
     then
       updated_templates+=(${template_file})
     fi
-  done < <%= @install_path %>/bin/merged_files.txt
+  done < ${install_path}/bin/merged_files.txt
 
   # Display template files to be changed
   if [[ -n ${updated_templates} ]]
@@ -146,10 +155,10 @@ then
     DATE=`date +%Y-%m-%d`
     update_file_name="update_${DATE}.log"
     echo
-    echo "Update has made changes to the following files. Please update the templates accordingly before running the next update." | tee -a <%= @distribution_path %>/updates/${update_file_name}
-    printf '%s\n' "${updated_templates[@]}" | tee -a <%= @distribution_path %>/updates/${update_file_name}
+    echo "Update has made changes to the following files. Please update the templates accordingly before running the next update." | tee -a ${distribution_path}/updates/${update_file_name}
+    printf '%s\n' "${updated_templates[@]}" | tee -a ${distribution_path}/updates/${update_file_name}
   fi
 fi
 
 # Clean files
-rm <%= @install_path %>/bin/output.txt <%= @install_path %>/bin/merged_files.txt
+rm ${install_path}/bin/output.txt ${install_path}/bin/merged_files.txt

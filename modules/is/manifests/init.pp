@@ -32,6 +32,33 @@ class is inherits is::params {
     system => true,
   }
 
+  /*
+  * Java Distribution
+  */
+
+  # Copy JDK distrubution path
+  file { "${$lib_dir}":
+    ensure => directory
+  }
+
+  # Copy JDK to Java distribution path
+  file { "jdk-distribution":
+    path  =>  "${java_home}.tar.gz",
+    source => "puppet:///modules/${module_name}/${jdk_name}.tar.gz",
+  }
+
+  # Unzip distribution
+  exec { "unpack-jdk":
+    command     => "tar -zxvf ${java_home}.tar.gz",
+    path        => "/bin/",
+    cwd         => "${lib_dir}",
+    onlyif      => "/usr/bin/test ! -d ${java_home}",
+  }
+
+  /*
+  * WSO2 Distribution
+  */
+
   # Create distribution path
   file { [  "${products_dir}",
     "${products_dir}/${product}" ]:
@@ -75,11 +102,12 @@ class is inherits is::params {
   }
 
   # Delete existing setup
-  file { "detele-pack":
-    path    => $install_path,
-    ensure  => absent,
-    recurse => true,
-    force   => true
+  exec { "detele-pack":
+    command     =>  "rm -rf ${install_path}",
+    path        =>  "/bin/",
+    onlyif      => "/usr/bin/test -d ${install_path}",
+    subscribe   => File["binary"],
+    refreshonly => true,
   }
 
   # Install the "unzip" package
@@ -97,6 +125,15 @@ class is inherits is::params {
     subscribe   => File["binary"],
     refreshonly => true,
     require     => Package['unzip'],
+  }
+
+  # Copy wso2server.sh to installed directory
+  file { "${install_path}/${start_script_template}":
+    ensure  => file,
+    owner  => $user,
+    group  => $user_group,
+    mode    => '0754',
+    content => template("${module_name}/carbon-home/${start_script_template}.erb")
   }
 
   # Copy the Unit file required to deploy the server as a service
