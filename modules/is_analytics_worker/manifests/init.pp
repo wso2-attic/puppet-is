@@ -45,16 +45,16 @@ class is_analytics_worker inherits is_analytics_worker::params {
 
   # Copy JDK to Java distribution path
   file { "jdk-distribution":
-    path  =>  "${java_home}.tar.gz",
+    path   => "${java_home}.tar.gz",
     source => "puppet:///modules/${module_name}/${jdk_name}.tar.gz",
   }
 
   # Unzip distribution
   exec { "unpack-jdk":
-    command     => "tar -zxvf ${java_home}.tar.gz",
-    path        => "/bin/",
-    cwd         => "${lib_dir}",
-    onlyif      => "/usr/bin/test ! -d ${java_home}",
+    command => "tar -zxvf ${java_home}.tar.gz",
+    path    => "/bin/",
+    cwd     => "${lib_dir}",
+    onlyif  => "/usr/bin/test ! -d ${java_home}",
   }
 
   /*
@@ -106,8 +106,8 @@ class is_analytics_worker inherits is_analytics_worker::params {
 
   # Delete existing setup
   exec { "detele-pack":
-    command     =>  "rm -rf ${install_path}",
-    path        =>  "/bin/",
+    command     => "rm -rf ${install_path}",
+    path        => "/bin/",
     onlyif      => "/usr/bin/test -d ${install_path}",
     subscribe   => File["binary"],
     refreshonly => true,

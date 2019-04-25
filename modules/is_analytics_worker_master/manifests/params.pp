@@ -14,7 +14,7 @@
 #  limitations under the License.
 # ----------------------------------------------------------------------------
 
-# Claas is_analytics_worker::params
+# Class is_analytics_worker::params
 # This class includes all the necessary parameters.
 class is_analytics_worker_master::params {
   $user = 'wso2carbon'
@@ -29,7 +29,7 @@ class is_analytics_worker_master::params {
     'conf/worker/deployment.yaml'
   ]
 
-  # -------------- Deploymeny.yaml Config -------------- #
+  # -------------- Deployment.yaml Config -------------- #
 
   # Carbon Configuration Parameters
   $ports_offset = 0
