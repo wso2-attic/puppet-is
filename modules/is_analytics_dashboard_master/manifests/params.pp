@@ -14,7 +14,7 @@
 #  limitations under the License.
 # ----------------------------------------------------------------------------
 
-# Claas is_analytics_dashboard::params
+# Class is_analytics_dashboard::params
 # This class includes all the necessary parameters.
 class is_analytics_dashboard_master::params {
   $user = 'wso2carbon'

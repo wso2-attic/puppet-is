@@ -45,16 +45,16 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
 
   # Copy JDK to Java distribution path
   file { "jdk-distribution":
-    path  =>  "${java_home}.tar.gz",
+    path   => "${java_home}.tar.gz",
     source => "puppet:///modules/${module_name}/${jdk_name}.tar.gz",
   }
 
   # Unzip distribution
   exec { "unpack-jdk":
-    command     => "tar -zxvf ${java_home}.tar.gz",
-    path        => "/bin/",
-    cwd         => "${lib_dir}",
-    onlyif      => "/usr/bin/test ! -d ${java_home}",
+    command => "tar -zxvf ${java_home}.tar.gz",
+    path    => "/bin/",
+    cwd     => "${lib_dir}",
+    onlyif  => "/usr/bin/test ! -d ${java_home}",
   }
 
   /*
@@ -106,8 +106,8 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
 
   # Delete existing setup
   exec { "detele-pack":
-    command     =>  "rm -rf ${install_path}",
-    path        =>  "/bin/",
+    command     => "rm -rf ${install_path}",
+    path        => "/bin/",
     onlyif      => "/usr/bin/test -d ${install_path}",
     subscribe   => File["binary"],
     refreshonly => true,
@@ -133,8 +133,8 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
   # Copy wso2server.sh to installed directory
   file { "${install_path}/${start_script_template}":
     ensure  => file,
-    owner  => $user,
-    group  => $user_group,
+    owner   => $user,
+    group   => $user_group,
     mode    => '0754',
     content => template("${module_name}/carbon-home/${start_script_template}.erb")
   }
