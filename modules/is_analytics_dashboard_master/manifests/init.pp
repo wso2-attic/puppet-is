@@ -30,7 +30,7 @@ class is_analytics_dashboard_master inherits is_analytics_dashboard_master::para
   file { "binary":
     path   => "${distribution_path}/${product_binary}",
     mode   => '0644',
-    source => "puppet:///modules/${module_name}/${product_binary}",
+    source => "puppet:///modules/distributions/${product_binary}",
   }
 
   # Install the "unzip" package
