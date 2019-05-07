@@ -1,13 +1,53 @@
-# Puppet 5 Modules for WSO2 Identity Server 5.7.0
+# Puppet Modules for WSO2 Identity Server
+
+This repository contains the Puppet modules for WSO2 Identity Server and the profiles related to Identity Server Analytics.
+
+## Prerequisites
+The Puppetmaster should run a `puppet agent` command on itself. As a result, the hostname `puppet` must resolve within itself. To do so, "puppet" should be added as a host in `etc/hosts` before the build script is executed.
+
+Example: `192.168.112.26    puppetmaster    puppet`
 
 ## Quick Start Guide
-1. Download and copy the wso2is-linux-installer-x64-5.7.0.deb or wso2is-linux-installer-x64-5.7.0.rpm to the files folder in /etc/puppet/code/environments/dev/modules/is/files in the Puppetmaster.
-Dev refers to the sample environment that you can try this modules.
+1. Download wso2is-5.7.0.zip or wso2is-analytics-5.7.0.zip to the `<puppet_environment>/modules/common/files` directory in the **Puppetmaster**.
 
-2. Run the following commands in the Puppet agent
+2. Set up the JDK distribution as follows:
 
-```
-export FACTER_profile=is
+   The Puppet modules for WSO2 products use Amazon Coretto as the JDK distribution. However, you can use any [supported JDK distribution](https://docs.wso2.com/display/compatibility/Tested+Operating+Systems+and+JDKs).
+   1. Download Amazon Coretto for Linux x64 from [here](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html) and copy .tar into the `<puppet_environment>/modules/common/files` directory.
+   2. Reassign the *$jdk_name* variable in `<puppet_environment>/modules/<agent_module>/manifests/params.pp` to the name of the downloaded JDK distribution.
+3. Identify the absolute path of the Puppet environment in the build script by renaming the *puppet_env* variable in `<puppet_environment>/modules/<master_module>/build.sh`.
+4. Execute the build script.
 
-puppet agent -vt
-```
+    ```bash
+    ./build.sh
+    ```
+5. Run the relevant profile on the **Puppet agent**.
+    1. Default profile:
+        ```bash
+        export FACTER_profile=is
+        puppet agent -vt
+        ```
+    2. Analytics profile:
+        1. Dashboard:
+            ```bash
+            export FACTER_profile=is_analytics_dashboard
+            puppet agent -vt
+            ```
+        2. Worker:
+            ```bash
+            export FACTER_profile=is_analytics_worker
+            puppet agent -vt
+            ```
+
+## Manifests in a module
+The run stages for Puppet are described in `<puppet_environment>/manifests/site.pp`, and they are of the order Main -> Custom -> Final.
+
+Each Puppet module contains the following .pp files.
+* Main
+    * params.pp: Contains all the parameters necessary for the main configuration and template
+    * init.pp: Contains the main script of the module.
+* Custom
+    * custom.pp: Used to add custom configurations to the Puppet module.
+* Final
+    * startserver.pp: Runs at the end and starts the server as a linux service.
+    
