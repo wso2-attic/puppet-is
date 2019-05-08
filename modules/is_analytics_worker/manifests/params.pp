@@ -44,4 +44,11 @@ class is_analytics_worker::params {
   $product_binary = "${product}-${product_version}.zip"
   $distribution_path = "${products_dir}/${product}/${profile}/${product_version}"
   $install_path = "${distribution_path}/${product}-${product_version}"
+
+  # List of files that must contain agent specific configuraitons
+  # $config_file_list = [
+  #   { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
+  #   { "file" => "${install_path}/file2", "key" => "key2", "value" => "value2" },
+  #   { "file" => "${install_path}/file3", "key" => "key3", "value" => "value3" },
+  # ]
 }
