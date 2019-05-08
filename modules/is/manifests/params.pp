@@ -21,6 +21,7 @@ class is::params {
   $product = 'wso2is'
   $product_version = '5.7.0'
   $service_name = 'wso2is'
+  # $local_ip = $::ipaddress
 
   # JDK Distributions
   if $::osfamily == 'redhat' {
@@ -41,4 +42,11 @@ class is::params {
   $product_binary = "${product}-${product_version}.zip"
   $distribution_path = "${products_dir}/${product}/${product_version}"
   $install_path = "${distribution_path}/${product}-${product_version}"
+
+  # List of files that must contain agent specific configuraitons
+  # $config_file_list = [
+  #   { "file" => "${install_path}/repository/conf/axis2/axis2.xml", "key" => "local_ip", "value" => "${local_ip}" },
+  #   { "file" => "${install_path}/file2", "key" => "key2", "value" => "value2" },
+  #   { "file" => "${install_path}/file3", "key" => "key3", "value" => "value3" },
+  # ]
 }

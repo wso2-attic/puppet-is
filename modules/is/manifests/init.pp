@@ -43,16 +43,16 @@ class is inherits is::params {
 
   # Copy JDK to Java distribution path
   file { "jdk-distribution":
-    path  =>  "${java_home}.tar.gz",
+    path   => "${java_home}.tar.gz",
     source => "puppet:///modules/distributions/${jdk_name}.tar.gz",
   }
 
   # Unzip distribution
   exec { "unpack-jdk":
-    command     => "tar -zxvf ${java_home}.tar.gz",
-    path        => "/bin/",
-    cwd         => "${lib_dir}",
-    onlyif      => "/usr/bin/test ! -d ${java_home}",
+    command => "tar -zxvf ${java_home}.tar.gz",
+    path    => "/bin/",
+    cwd     => "${lib_dir}",
+    onlyif  => "/usr/bin/test ! -d ${java_home}",
   }
 
   /*
@@ -103,8 +103,8 @@ class is inherits is::params {
 
   # Delete existing setup
   exec { "detele-pack":
-    command     =>  "rm -rf ${install_path}",
-    path        =>  "/bin/",
+    command     => "rm -rf ${install_path}",
+    path        => "/bin/",
     onlyif      => "/usr/bin/test -d ${install_path}",
     subscribe   => File["binary"],
     refreshonly => true,
@@ -130,8 +130,8 @@ class is inherits is::params {
   # Copy wso2server.sh to installed directory
   file { "${install_path}/${start_script_template}":
     ensure  => file,
-    owner  => $user,
-    group  => $user_group,
+    owner   => $user,
+    group   => $user_group,
     mode    => '0754',
     content => template("${module_name}/carbon-home/${start_script_template}.erb")
   }
@@ -144,6 +144,13 @@ class is inherits is::params {
     mode    => '0754',
     content => template("${module_name}/${service_name}.service.erb"),
   }
+
+  # Add agent specific file configurations
+  # $config_file_list.each |$config_file| {
+  #   exec { "sed -i -e 's/${config_file['key']}/${config_file['value']}/g' ${config_file['file']}":
+  #     path => "/bin/",
+  #   }
+  # }
 
   /*
     Following script can be used to copy file to a given location.
