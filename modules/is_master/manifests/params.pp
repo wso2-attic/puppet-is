@@ -53,6 +53,9 @@ class is_master::params {
   $admin_username = 'admin'
   $admin_password = 'admin'
 
+  $clustering_enabled = 'false'
+  $clustering_membership_scheme = 'multicast'
+
   # Directories
   $products_dir = "/usr/local/wso2"
   $puppet_env = "/etc/puppet/code/environments/production"
