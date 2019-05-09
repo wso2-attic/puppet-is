@@ -88,9 +88,9 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
 
   # Stop the existing setup
   exec { "stop-server":
-    command     => "kill -term $(cat ${install_path}/wso2carbon.pid)",
+    command     => "kill -term $(cat ${install_path}/wso2/${profile}/runtime.pid)",
     path        => "/bin/",
-    onlyif      => "/usr/bin/test -f ${install_path}/wso2carbon.pid",
+    onlyif      => "/usr/bin/test -f ${install_path}/wso2/${profile}/runtime.pid",
     subscribe   => File["binary"],
     refreshonly => true,
   }
