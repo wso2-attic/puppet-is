@@ -27,7 +27,7 @@ class is_master inherits is_master::params {
   file { "binary":
     path   => "${distribution_path}/${product_binary}",
     mode   => '0644',
-    source => "puppet:///modules/commons/${product_binary}",
+    source => "puppet:///modules/common/${product_binary}",
   }
 
   # Install the "unzip" package

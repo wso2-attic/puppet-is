@@ -46,7 +46,7 @@ class is_analytics_worker inherits is_analytics_worker::params {
   # Copy JDK to Java distribution path
   file { "jdk-distribution":
     path   => "${java_home}.tar.gz",
-    source => "puppet:///modules/commons/${jdk_name}.tar.gz",
+    source => "puppet:///modules/common/${jdk_name}.tar.gz",
   }
 
   # Unzip distribution

@@ -16,7 +16,7 @@
 
 # Class is_analytics_dashboard::params
 # This class includes all the necessary parameters.
-class is_analytics_dashboard_master::params inherits commons::params {
+class is_analytics_dashboard_master::params inherits common::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is-analytics'
