@@ -16,7 +16,7 @@
 
 # Class is_analytics_worker::params
 # This class includes all the necessary parameters.
-class is_analytics_worker_master::params inherits commons::params {
+class is_analytics_worker_master::params inherits common::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is-analytics'

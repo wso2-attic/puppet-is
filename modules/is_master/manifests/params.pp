@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class is_master::params inherits commons::params {
+class is_master::params inherits common::params {
 
   $user = 'wso2carbon'
   $user_group = 'wso2'
