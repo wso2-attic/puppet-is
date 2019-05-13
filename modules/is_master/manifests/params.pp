@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class is_master::params {
+class is_master::params inherits commons::params {
 
   $user = 'wso2carbon'
   $user_group = 'wso2'
@@ -48,10 +48,6 @@ class is_master::params {
   $security_trust_store_location = '${carbon.home}/repository/resources/security/client-truststore.jks'
   $security_trust_store_type = 'JKS'
   $security_trust_store_password = 'wso2carbon'
-
-  # user-mgt.xml
-  $admin_username = 'admin'
-  $admin_password = 'admin'
 
   $clustering_enabled = 'false'
   $clustering_membership_scheme = 'multicast'
