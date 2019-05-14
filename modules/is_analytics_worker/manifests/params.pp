@@ -46,9 +46,19 @@ class is_analytics_worker::params {
   $install_path = "${distribution_path}/${product}-${product_version}"
 
   # List of files that must contain agent specific configuraitons
-  # $config_file_list = [
-  #   { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   { "file" => "${install_path}/file2", "key" => "key2", "value" => "value2" },
-  #   { "file" => "${install_path}/file3", "key" => "key3", "value" => "value3" },
-  # ]
+  # if $deployment == "dev" {
+  #   $config_file_list = [
+  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
+  #   ]
+  # }
+  # elsif $deployment == "staging" {
+  #   $config_file_list = [
+  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
+  #   ]
+  # }
+  # elsif $deployment == "production" {
+  #   $config_file_list = [
+  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
+  #   ]
+  # }
 }
