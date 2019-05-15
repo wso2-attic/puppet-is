@@ -32,6 +32,14 @@ class is_master::params inherits common::params {
 
   # carbon.xml configs
   $ports_offset = 0
+  /*
+     Host name or IP address of the machine hosting this server
+     e.g. www.wso2.org, 192.168.1.10
+     This is will become part of the End Point Reference of the
+     services deployed on this server instance.
+  */
+  $hostname = 'localhost'
+  $mgt_hostname = 'localhost'
 
   $security_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
   $security_keystore_type = 'JKS'
