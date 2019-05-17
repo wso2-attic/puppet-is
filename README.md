@@ -2,11 +2,6 @@
 
 This repository contains the Puppet modules for WSO2 Identity Server and the profiles related to Identity Server Analytics.
 
-## Prerequisites
-The Puppetmaster should run a `puppet agent` command on itself. As a result, the hostname `puppet` must resolve within itself. To do so, "puppet" should be added as a host in `etc/hosts` before the build script is executed.
-
-Example: `192.168.112.26    puppetmaster    puppet`
-
 ## Quick Start Guide
 1. Download wso2is-5.7.0.zip or wso2is-analytics-5.7.0.zip to the `<puppet_environment>/modules/common/files` directory in the **Puppetmaster**.
 
@@ -22,7 +17,7 @@ Example: `192.168.112.26    puppetmaster    puppet`
     ./build.sh
     ```
 5. Run the relevant profile on the **Puppet agent**.
-    1. Default profile:
+    1. Identity Server profile:
         ```bash
         export FACTER_profile=is
         puppet agent -vt
