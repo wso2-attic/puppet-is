@@ -20,7 +20,7 @@ class is_analytics_dashboard_master::params inherits common::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is-analytics'
-  $product_version = '5.7.0'
+  $product_version = '5.8.0'
   $profile = 'dashboard'
 
   # Define the template
