@@ -19,7 +19,7 @@ class is::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is'
-  $product_version = '5.7.0'
+  $product_version = '5.8.0'
   $service_name = 'wso2is'
   # $local_ip = $::ipaddress
 

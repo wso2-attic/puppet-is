@@ -36,7 +36,7 @@
     <!--
        Product Version
     -->
-    <Version>5.7.0</Version>
+    <Version>5.8.0</Version>
 
     <!--
        Host name or IP address of the machine hosting this server
@@ -260,6 +260,15 @@
                    <Include>*,!foo.com,!bar.com</Include>
             </EagerLoading>-->
         </LoadingPolicy>
+
+        <!-- Flag to enable or disable tenant deletion. By default tenant deletion is enabled-->
+        <TenantDelete>true</TenantDelete>
+
+        <!-- Configurations related to listener invocation by tenant admin service-->
+        <ListenerInvocationPolicy>
+            <!-- Flag to enable or disable listener invocation on tenant delete. This is disabled by default-->
+            <InvokeOnDelete>false</InvokeOnDelete>
+        </ListenerInvocationPolicy>
     </Tenant>
 
     <!--
@@ -269,7 +278,7 @@
         <!-- Default cache timeout in minutes -->
         <DefaultCacheTimeout>15</DefaultCacheTimeout>
         <!-- Force all caches to act as local -->
-        <ForceLocalCache>false</ForceLocalCache>
+        <ForceLocalCache>true</ForceLocalCache>
     </Cache>
 
     <!--
@@ -379,6 +388,7 @@
       Enable following config to allow Emails as usernames.
     -->
     <!--EnableEmailUserName>true</EnableEmailUserName-->
+    <!--EnablePasswordTrim>false</EnablePasswordTrim-->
 
     <!--
       Security configurations
@@ -696,25 +706,25 @@
     </FeatureRepository>
 
     <!--
-	Configure API Management
-   -->
-   <APIManagement>
+    Configure API Management
+     -->
+     <APIManagement>
 
-	<!--Uses the embedded Identity Server by default. If you want to use an external
-	Identity Server instance to manage APIs, configure below  externalAPIManager-->
+    <!--Uses the embedded Identity Server by default. If you want to use an external
+    Identity Server instance to manage APIs, configure below  externalAPIManager-->
 
-	<Enabled>true</Enabled>
+    <Enabled>true</Enabled>
 
-	<!--Uncomment and configure API Gateway and
-	Publisher URLs to use external Identity Server instance-->
+    <!--Uncomment and configure API Gateway and
+    Publisher URLs to use external Identity Server instance-->
 
-	<!--ExternalAPIManager>
+    <!--ExternalAPIManager>
 
-		<APIGatewayURL>http://localhost:8281</APIGatewayURL>
-		<APIPublisherURL>http://localhost:8281/publisher</APIPublisherURL>
+      <APIGatewayURL>http://localhost:8281</APIGatewayURL>
+      <APIPublisherURL>http://localhost:8281/publisher</APIPublisherURL>
 
-	</ExternalAPIManager-->
+    </ExternalAPIManager-->
 
-	<LoadAPIContextsInServerStartup>true</LoadAPIContextsInServerStartup>
+    <LoadAPIContextsInServerStartup>true</LoadAPIContextsInServerStartup>
    </APIManagement>
 </Server>
