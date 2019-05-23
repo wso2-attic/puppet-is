@@ -21,7 +21,7 @@
 
 # Build artifacts and versions
 : ${product:="wso2is"}
-: ${product_version:="5.7.0"}
+: ${product_version:="5.8.0"}
 : ${products_dir:="/usr/local/wso2"}
 : ${distribution_path:=${products_dir}"/"${product}"/"${product_version}}
 : ${install_path:=${distribution_path}"/"${product}"-"${product_version}}

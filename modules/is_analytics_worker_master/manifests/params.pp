@@ -20,7 +20,7 @@ class is_analytics_worker_master::params inherits common::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is-analytics'
-  $product_version = '5.7.0'
+  $product_version = '5.8.0'
   $profile = 'worker'
   $service_name = "${product}-${profile}"
 
@@ -39,6 +39,13 @@ class is_analytics_worker_master::params inherits common::params {
   $message_tracing_db_username = 'wso2carbon'
   $message_tracing_db_password = 'wso2carbon'
   $message_tracing_db_driver = 'org.h2.Driver'
+
+  # transport.http configuration
+  $default_listener_host = '0.0.0.0'
+  $msf4j_host = '0.0.0.0'
+  $msf4j_listener_keystore = '${carbon.home}/resources/security/wso2carbon.jks'
+  $msf4j_listener_keystore_password = 'wso2carbon'
+  $msf4j_listener_keystore_cert_pass = 'wso2carbon'
 
   # Directories
   $products_dir = "/usr/local/wso2"

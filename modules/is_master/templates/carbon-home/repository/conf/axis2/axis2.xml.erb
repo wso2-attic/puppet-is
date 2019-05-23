@@ -33,6 +33,9 @@
 
     <parameter name="EnableChildFirstClassLoading">${childfirstCL}</parameter>
 
+    <!--If this is set to true then elements that have the @IgnoreNullElement annotation will also be returned even the
+			    value is null. -->
+    <parameter name="forceIncludeNullElements">false</parameter>
     <!--
     The exposeServiceMetadata parameter decides whether the metadata (WSDL, schema, policy) of
     the services deployed on Axis2 should be visible when ?wsdl, ?wsdl2, ?xsd, ?policy requests
@@ -73,10 +76,10 @@
     <parameter name="ModulesDirectory">axis2modules</parameter>
 
     <parameter name="userAgent" locked="true">
-        WSO2 Identity Server-5.7.0
+        WSO2 Identity Server-5.8.0
     </parameter>
     <parameter name="server" locked="true">
-        WSO2 Identity Server-5.7.0
+        WSO2 Identity Server-5.8.0
     </parameter>
 
     <!-- ========================================================================-->
