@@ -82,7 +82,7 @@ class is inherits is::params {
 
   # Stop the existing setup
   exec { "stop-server":
-    command     => "kill -term $(cat ${install_path}/wso2carbon.pid)",
+    command     => "sh ${install_path}/bin/wso2server.sh stop",
     path        => "/bin/",
     onlyif      => "/usr/bin/test -f ${install_path}/wso2carbon.pid",
     subscribe   => File["binary"],
