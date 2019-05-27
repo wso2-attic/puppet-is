@@ -61,15 +61,12 @@ class is_analytics_worker inherits is_analytics_worker::params {
   * WSO2 Distribution
   */
 
-  # Create distribution path
-  file { [  "${products_dir}",
-    "${products_dir}/${product}",
-    "${products_dir}/${product}/${profile}" ]:
-    ensure => 'directory',
-  }
-
   # Change the ownership of the installation directory to specified user & group
-  file { $distribution_path:
+  file { [ "${products_dir}",
+    "${products_dir}/${product}",
+    "${products_dir}/${product}/${profile}",
+    "${distribution_path}",
+    "${distribution_path}/backup" ]:
     ensure  => directory,
     owner   => $user,
     group   => $user_group,
@@ -104,9 +101,18 @@ class is_analytics_worker inherits is_analytics_worker::params {
     refreshonly => true,
   }
 
-  # Delete existing setup
-  exec { "detele-pack":
-    command     => "rm -rf ${install_path}",
+  # Delete previous backup
+  exec { "delete-backup":
+    command     => "rm -rf ${distribution_path}/backup/${product}-${product_version}",
+    path        => "/bin/",
+    onlyif      => "/usr/bin/test -d ${distribution_path}/backup/${product}-${product_version}",
+    subscribe   => File["binary"],
+    refreshonly => true,
+  }
+
+  # Create backup
+  exec { "create backup":
+    command     => "mv ${install_path} ${distribution_path}/backup",
     path        => "/bin/",
     onlyif      => "/usr/bin/test -d ${install_path}",
     subscribe   => File["binary"],
