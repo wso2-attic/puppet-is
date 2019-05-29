@@ -16,7 +16,7 @@
 
 # Claas is_analytics_dashboard::params
 # This class includes all the necessary parameters.
-class is_analytics_dashboard::params {
+class is_analytics_dashboard::params inherits common::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is-analytics'
@@ -37,6 +37,41 @@ class is_analytics_dashboard::params {
   # Define the template
   $start_script_template = "bin/${profile}.sh"
 
+  # Define the template
+  $template_list = [
+    'conf/dashboard/deployment.yaml'
+  ]
+
+  # -------------- Deploymeny.yaml Config -------------- #
+
+  # Carbon Configuration Parameters
+  $ports_offset = 2
+
+  # Data Sources Configuration
+  $business_rules_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/${sys:wso2.runtime}/database/BUSINESS_RULES_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;MVCC=TRUE'
+  $business_rules_db_username = 'wso2carbon'
+  $business_rules_db_password = 'wso2carbon'
+  $business_rules_db_driver = 'org.h2.Driver'
+
+  $status_dashboard_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/${sys:wso2.runtime}/database/wso2_status_dashboard;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;MVCC=TRUE'
+  $status_dashboard_db_username = 'wso2carbon'
+  $status_dashboard_db_password = 'wso2carbon'
+  $status_dashboard_db_driver = 'org.h2.Driver'
+
+  # wso2.business.rules.manager config
+  $business_rules_manager_username = 'admin'
+  $business_rules_manager_password = 'admin'
+
+  # wso2.status.dashboard config
+  $status_dashboard_username = 'admin'
+  $status_dashboard_password = 'admin'
+
+  # transport.http configuration
+  $default_host = '0.0.0.0'
+  $default_listener_keystore = '${carbon.home}/resources/security/wso2carbon.jks'
+  $default_listener_keystore_password = 'wso2carbon'
+  $default_listener_keystore_cert_pass = 'wso2carbon'
+
   # Directories
   $products_dir = "/usr/local/wso2"
 
@@ -45,20 +80,14 @@ class is_analytics_dashboard::params {
   $distribution_path = "${products_dir}/${product}/${profile}/${product_version}"
   $install_path = "${distribution_path}/${product}-${product_version}"
 
-  # List of files that must contain agent specific configuraitons
+  # Deployment specific parameters
   # if $deployment == "dev" {
-  #   $config_file_list = [
-  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   ]
+  #   $deployment_var = "value 1"
   # }
   # elsif $deployment == "staging" {
-  #   $config_file_list = [
-  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   ]
+  #   $deployment_var = "value 2"
   # }
   # elsif $deployment == "production" {
-  #   $config_file_list = [
-  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   ]
+  #   $deployment_var = "value 3"
   # }
 }
