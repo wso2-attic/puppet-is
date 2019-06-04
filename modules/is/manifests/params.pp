@@ -16,32 +16,34 @@
 
 class is::params inherits common::params {
 
-  $user = 'wso2carbon'
-  $user_group = 'wso2'
-  $product = 'wso2is'
-  $product_version = '5.8.0'
-  $service_name = 'wso2is'
-  $local_ip = $::ipaddress
-
-  # JDK Distributions
-  if $::osfamily == 'redhat' {
-    $lib_dir = "/usr/lib64/wso2"
-  }
-  elsif $::osfamily == 'debian' {
-    $lib_dir = "/usr/lib/wso2"
-  }
-  $jdk_name = 'amazon-corretto-8.202.08.2-linux-x64'
-  $java_home = "${lib_dir}/${jdk_name}"
-
   $start_script_template = 'bin/wso2server.sh'
 
   $template_list = [
-    'repository/conf/carbon.xml',
-    'repository/conf/user-mgt.xml',
     'repository/conf/datasources/master-datasources.xml',
+    'repository/conf/carbon.xml',
+    # 'repository/conf/cipher-standalone-config.properties',
     'repository/conf/axis2/axis2.xml',
+    'repository/conf/user-mgt.xml',
+    # 'repository/conf/registry.xml',
+    # 'repository/conf/tomcat/catalina-server.xml',
     'repository/conf/identity/identity.xml',
+    # 'repository/conf/security/authenticators.xml',
+    # 'repository/conf/security/secret-conf.properties',
   ]
+
+  # Define file list
+  $file_list = [
+    # 'password-tmp',
+    # 'XMLInputFactory.properties',
+    # 'repository/conf/jms.properties',
+    # 'repository/resources/security',
+    # 'repository/conf/security/cipher-text.properties',
+    # 'repository/conf/security/cipher-tool.properties',
+    # 'lib',
+  ]
+
+  # Define remove file list
+  $file_removelist = []
 
   # carbon.xml configs
   $ports_offset = 0
@@ -72,23 +74,4 @@ class is::params inherits common::params {
 
   $clustering_enabled = 'false'
   $clustering_membership_scheme = 'multicast'
-
-  # Directories
-  $products_dir = "/usr/local/wso2"
-
-  # Product and installation information
-  $product_binary = "${product}-${product_version}.zip"
-  $distribution_path = "${products_dir}/${product}/${product_version}"
-  $install_path = "${distribution_path}/${product}-${product_version}"
-
-  # Deployment specific parameters
-  # if $deployment == "dev" {
-  #   $deployment_var = "value 1"
-  # }
-  # elsif $deployment == "staging" {
-  #   $deployment_var = "value 2"
-  # }
-  # elsif $deployment == "production" {
-  #   $deployment_var = "value 3"
-  # }
 }

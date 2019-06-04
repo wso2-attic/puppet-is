@@ -5,9 +5,9 @@ class is::startserver inherits is::params {
     path    => "/bin/",
   }
 
-  service { $service_name:
+  service { $profile:
     enable => true,
     ensure => running,
-    subscribe => File["binary"],
+    subscribe => File["wso2-binary"],
   }
 }

@@ -17,30 +17,19 @@
 # Claas is_analytics_worker::params
 # This class includes all the necessary parameters.
 class is_analytics_worker::params inherits common::params {
-  $user = 'wso2carbon'
-  $user_group = 'wso2'
-  $product = 'wso2is-analytics'
-  $product_version = '5.8.0'
-  $profile = 'worker'
-  $service_name = "${product}-${profile}"
-
-  # JDK Distributions
-  if $::osfamily == 'redhat' {
-    $lib_dir = "/usr/lib64/wso2"
-  }
-  elsif $::osfamily == 'debian' {
-    $lib_dir = "/usr/lib/wso2"
-  }
-  $jdk_name = 'amazon-corretto-8.202.08.2-linux-x64'
-  $java_home = "${lib_dir}/${jdk_name}"
-
   # Define the template
-  $start_script_template = "bin/${profile}.sh"
+  $start_script_template = "bin/worker.sh"
 
   # Define the template
   $template_list = [
     'conf/worker/deployment.yaml'
   ]
+
+  # Define file list
+  $file_list = []
+
+  # Define remove file list
+  $file_removelist = []
 
   # -------------- Deployment.yaml Config -------------- #
 
@@ -59,23 +48,4 @@ class is_analytics_worker::params inherits common::params {
   $msf4j_listener_keystore = '${carbon.home}/resources/security/wso2carbon.jks'
   $msf4j_listener_keystore_password = 'wso2carbon'
   $msf4j_listener_keystore_cert_pass = 'wso2carbon'
-
-  # Directories
-  $products_dir = "/usr/local/wso2"
-
-  # Product and installation information
-  $product_binary = "${product}-${product_version}.zip"
-  $distribution_path = "${products_dir}/${product}/${profile}/${product_version}"
-  $install_path = "${distribution_path}/${product}-${product_version}"
-
-  # Deployment specific parameters
-  # if $deployment == "dev" {
-  #   $deployment_var = "value 1"
-  # }
-  # elsif $deployment == "staging" {
-  #   $deployment_var = "value 2"
-  # }
-  # elsif $deployment == "production" {
-  #   $deployment_var = "value 3"
-  # }
 }

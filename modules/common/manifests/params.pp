@@ -16,6 +16,50 @@
 
 class common::params {
 
+  $packages = ["unzip"]
+
+  $user = 'wso2carbon'
+  $user_group = 'wso2'
+  $user_id = 802
+  $user_group_id = 802
+
+  # JDK Distributions
+  $java_dir = "/opt"
+  $java_symlink = "${java_dir}/java"
+  $jdk_name = 'amazon-corretto-8.202.08.2-linux-x64'
+  $java_home = "${java_dir}/${jdk_name}"
+
+  $pack = $pack
+  $profile = $profile
+
+  # Directories
+  $target = "/mnt"
+  $product_dir = "${target}/${profile}"
+  $carbon_home = "${product_dir}/${pack}"
+  $pack_dir = "${target}/packs"
+  $product_binary = "${pack}.zip"
+
+  # Server stop retry configs
+  $try_count = 5
+  $try_sleep = 5
+
+
+  # ----- Profile configs -----
+  case $profile {
+    'is_analytics_dashboard': {
+      $server_script_path = "${carbon_home}/bin/dashboard.sh"
+      $pid_file_path = "${carbon_home}/wso2/dashboard/runtime.pid"
+    }
+    'is_analytics_worker': {
+      $server_script_path = "${carbon_home}/bin/worker.sh"
+      $pid_file_path = "${carbon_home}/wso2/worker/runtime.pid"
+    }
+    default: {
+      $server_script_path = "${carbon_home}/bin/wso2server.sh"
+      $pid_file_path = "${carbon_home}/wso2carbon.pid"
+    }
+  }
+
   # ----- Master-datasources config params -----
   $wso2am_db_url = 'jdbc:h2:repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE'
   $wso2am_db_username = 'wso2carbon'
@@ -61,7 +105,8 @@ class common::params {
   $metrics_db_password = 'wso2carbon'
   $metrics_db_driver = 'org.h2.Driver'
 
-  $permission_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/${sys:wso2.runtime}/database/PERMISSION_DB;IFEXISTS=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;MVCC=TRUE'
+  $permission_db_url =
+    'jdbc:h2:${sys:carbon.home}/wso2/${sys:wso2.runtime}/database/PERMISSION_DB;IFEXISTS=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;MVCC=TRUE'
   $permission_db_username = 'wso2carbon'
   $permission_db_password = 'wso2carbon'
   $permission_db_driver = 'org.h2.Driver'

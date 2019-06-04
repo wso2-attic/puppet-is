@@ -24,9 +24,9 @@ class is_analytics_dashboard::startserver inherits is_analytics_dashboard::param
   }
 
   # Start the service
-  service { $service_name:
+  service { $profile:
     enable => true,
     ensure => running,
-    subscribe => File["binary"],
+    subscribe => File["wso2-binary"],
   }
 }
