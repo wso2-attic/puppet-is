@@ -16,7 +16,7 @@
 
 # Claas is_analytics_worker::params
 # This class includes all the necessary parameters.
-class is_analytics_worker::params {
+class is_analytics_worker::params inherits common::params {
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $product = 'wso2is-analytics'
@@ -37,6 +37,29 @@ class is_analytics_worker::params {
   # Define the template
   $start_script_template = "bin/${profile}.sh"
 
+  # Define the template
+  $template_list = [
+    'conf/worker/deployment.yaml'
+  ]
+
+  # -------------- Deployment.yaml Config -------------- #
+
+  # Carbon Configuration Parameters
+  $ports_offset = 0
+
+  # Data Sources Configuration
+  $message_tracing_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/dashboard/database/MESSAGE_TRACING_DB;AUTO_SERVER=TRUE'
+  $message_tracing_db_username = 'wso2carbon'
+  $message_tracing_db_password = 'wso2carbon'
+  $message_tracing_db_driver = 'org.h2.Driver'
+
+  # transport.http configuration
+  $default_listener_host = '0.0.0.0'
+  $msf4j_host = '0.0.0.0'
+  $msf4j_listener_keystore = '${carbon.home}/resources/security/wso2carbon.jks'
+  $msf4j_listener_keystore_password = 'wso2carbon'
+  $msf4j_listener_keystore_cert_pass = 'wso2carbon'
+
   # Directories
   $products_dir = "/usr/local/wso2"
 
@@ -44,21 +67,4 @@ class is_analytics_worker::params {
   $product_binary = "${product}-${product_version}.zip"
   $distribution_path = "${products_dir}/${product}/${profile}/${product_version}"
   $install_path = "${distribution_path}/${product}-${product_version}"
-
-  # List of files that must contain agent specific configuraitons
-  # if $deployment == "dev" {
-  #   $config_file_list = [
-  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   ]
-  # }
-  # elsif $deployment == "staging" {
-  #   $config_file_list = [
-  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   ]
-  # }
-  # elsif $deployment == "production" {
-  #   $config_file_list = [
-  #     { "file" => "${install_path}/file1", "key" => "key1", "value" => "value1" },
-  #   ]
-  # }
 }
