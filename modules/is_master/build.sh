@@ -149,7 +149,7 @@ then
 
   while read -r line; do
     filepath=${line##*${product}-${product_version}/}
-    template_file=${puppet_env}/modules/is_master/templates/carbon-home/${filepath}.erb
+    template_file=${puppet_env}/modules/is/templates/carbon-home/${filepath}.erb
     if [[ -f ${template_file} ]]
     then
       updated_templates+=(${template_file})
