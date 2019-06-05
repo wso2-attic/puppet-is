@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class common::params {
+class is_common::params {
 
   $packages = ["unzip"]
 
@@ -32,7 +32,7 @@ class common::params {
   $profile = $profile
   $target = "/mnt"
   $product_dir = "${target}/${profile}"
-  $pack_dir = "${target}/packs"
+  $pack_dir = "${target}/${profile}/packs"
 
   # ----- Profile configs -----
   case $profile {

@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class common inherits common::params {
+class is_common inherits is_common::params {
 
   # Install system packages
   package { $packages:

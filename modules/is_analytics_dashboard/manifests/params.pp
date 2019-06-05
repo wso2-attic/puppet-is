@@ -16,7 +16,7 @@
 
 # Claas is_analytics_dashboard::params
 # This class includes all the necessary parameters.
-class is_analytics_dashboard::params inherits common::params {
+class is_analytics_dashboard::params inherits is_common::params {
   # Define the template
   $start_script_template = "bin/dashboard.sh"
 
