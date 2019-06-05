@@ -16,6 +16,51 @@
 
 class common::params {
 
+  $packages = ["unzip"]
+
+  $user = 'wso2carbon'
+  $user_group = 'wso2'
+  $user_id = 802
+  $user_group_id = 802
+
+  # JDK Distributions
+  $java_dir = "/opt"
+  $java_symlink = "${java_dir}/java"
+  $jdk_name = 'amazon-corretto-8.202.08.2-linux-x64'
+  $java_home = "${java_dir}/${jdk_name}"
+
+  $profile = $profile
+  $target = "/mnt"
+  $product_dir = "${target}/${profile}"
+  $pack_dir = "${target}/packs"
+
+  # ----- Profile configs -----
+  case $profile {
+    'is_analytics_dashboard': {
+      $pack = "wso2is-analytics-5.8.0"
+      $server_script_path = "${product_dir}/${pack}/bin/dashboard.sh"
+      $pid_file_path = "${product_dir}/${pack}/wso2/dashboard/runtime.pid"
+    }
+    'is_analytics_worker': {
+      $pack = "wso2is-analytics-5.8.0"
+      $server_script_path = "${product_dir}/${pack}/bin/worker.sh"
+      $pid_file_path = "${product_dir}/${pack}/wso2/worker/runtime.pid"
+    }
+    default: {
+      $pack = "wso2is-5.8.0"
+      $server_script_path = "${product_dir}/${pack}/bin/wso2server.sh"
+      $pid_file_path = "${product_dir}/${pack}/wso2carbon.pid"
+    }
+  }
+
+  # Pack Directories
+  $carbon_home = "${product_dir}/${pack}"
+  $product_binary = "${pack}.zip"
+
+  # Server stop retry configs
+  $try_count = 5
+  $try_sleep = 5
+
   # ----- Master-datasources config params -----
   $wso2am_db_url = 'jdbc:h2:repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE'
   $wso2am_db_username = 'wso2carbon'
