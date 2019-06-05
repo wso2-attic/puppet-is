@@ -16,7 +16,7 @@
 
 # Claas is_analytics_worker::params
 # This class includes all the necessary parameters.
-class is_analytics_worker::params inherits common::params {
+class is_analytics_worker::params inherits is_common::params {
   # Define the template
   $start_script_template = "bin/worker.sh"
 

@@ -16,7 +16,7 @@
 
 class is inherits is::params {
 
-  include common
+  include is_common
 
   # Copy configuration changes to the installed directory
   $template_list.each |String $template| {
@@ -25,7 +25,7 @@ class is inherits is::params {
       mode    => '0644',
       content => template("${module_name}/carbon-home/${template}.erb"),
       notify  => Service["${profile}"],
-      require => Class["common"]
+      require => Class["is_common"]
     }
   }
 
@@ -39,7 +39,7 @@ class is inherits is::params {
       mode => '0755',
       source => "puppet:///modules/${module_name}/${file}",
       notify  => Service["${profile}"],
-      require => Class["common"]
+      require => Class["is_common"]
     }
   }
 
@@ -50,7 +50,7 @@ class is inherits is::params {
       owner => $user,
       group => $user_group,
       notify  => Service["${profile}"],
-      require => Class["common"]
+      require => Class["is_common"]
     }
   }
 
@@ -62,7 +62,7 @@ class is inherits is::params {
     mode    => '0754',
     content => template("${module_name}/carbon-home/${start_script_template}.erb"),
     notify  => Service["${profile}"],
-    require => Class["common"]
+    require => Class["is_common"]
   }
 
   /*
