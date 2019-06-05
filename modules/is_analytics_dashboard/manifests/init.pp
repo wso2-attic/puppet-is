@@ -18,7 +18,7 @@
 # Init class of Identity Server Analytics - Dashboard profile
 class is_analytics_dashboard inherits is_analytics_dashboard::params {
 
-  include common
+  include is_common
 
   # Copy configuration changes to the installed directory
   $template_list.each |String $template| {
@@ -27,7 +27,7 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
       mode    => '0644',
       content => template("${module_name}/carbon-home/${template}.erb"),
       notify  => Service["${profile}"],
-      require => Class["common"]
+      require => Class["is_common"]
     }
   }
 
@@ -41,7 +41,7 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
       mode => '0755',
       source => "puppet:///modules/${module_name}/${file}",
       notify  => Service["${profile}"],
-      require => Class["common"]
+      require => Class["is_common"]
     }
   }
 
@@ -52,7 +52,7 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
       owner => $user,
       group => $user_group,
       notify  => Service["${profile}"],
-      require => Class["common"]
+      require => Class["is_common"]
     }
   }
 

@@ -14,7 +14,7 @@
 #  limitations under the License.
 #----------------------------------------------------------------------------
 
-class is::params inherits common::params {
+class is::params inherits is_common::params {
 
   $start_script_template = 'bin/wso2server.sh'
   $jvmxms = '256m'
