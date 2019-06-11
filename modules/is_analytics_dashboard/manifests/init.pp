@@ -62,7 +62,8 @@ class is_analytics_dashboard inherits is_analytics_dashboard::params {
     owner   => $user,
     group   => $user_group,
     mode    => '0754',
-    content => template("${module_name}/carbon-home/${start_script_template}.erb")
+    content => template("${module_name}/carbon-home/${start_script_template}.erb"),
+    require => Class["is_common"]
   }
 
   /*
