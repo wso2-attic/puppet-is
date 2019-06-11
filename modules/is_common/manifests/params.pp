@@ -17,6 +17,7 @@
 class is_common::params {
 
   $packages = ["unzip"]
+  $version = "5.8.0"
 
   $user = 'wso2carbon'
   $user_group = 'wso2'
@@ -37,17 +38,17 @@ class is_common::params {
   # ----- Profile configs -----
   case $profile {
     'is_analytics_dashboard': {
-      $pack = "wso2is-analytics-5.8.0"
+      $pack = "wso2is-analytics-${version}"
       $server_script_path = "${product_dir}/${pack}/bin/dashboard.sh"
       $pid_file_path = "${product_dir}/${pack}/wso2/dashboard/runtime.pid"
     }
     'is_analytics_worker': {
-      $pack = "wso2is-analytics-5.8.0"
+      $pack = "wso2is-analytics-${version}"
       $server_script_path = "${product_dir}/${pack}/bin/worker.sh"
       $pid_file_path = "${product_dir}/${pack}/wso2/worker/runtime.pid"
     }
     default: {
-      $pack = "wso2is-5.8.0"
+      $pack = "wso2is-${version}"
       $server_script_path = "${product_dir}/${pack}/bin/wso2server.sh"
       $pid_file_path = "${product_dir}/${pack}/wso2carbon.pid"
     }
