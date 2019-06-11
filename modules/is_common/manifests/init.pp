@@ -16,6 +16,8 @@
 
 class is_common inherits is_common::params {
 
+  include '::is_common::service'
+
   # Install system packages
   package { $packages:
     ensure => installed
@@ -118,11 +120,17 @@ class is_common inherits is_common::params {
   }
 
   # Copy the unit file required to deploy the server as a service
-  file { "/etc/systemd/system/${profile}.service":
+  file { "/etc/systemd/system/${wso2_service_name}.service":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0754',
     content => template("${module_name}/carbon.service.erb"),
+  }
+
+  exec { 'systemctl daemon-reload':
+    path    =>  '/bin/:/sbin/:/usr/bin/:/usr/sbin/',
+    subscribe => File["/etc/systemd/system/${wso2_service_name}.service"],
+    refreshonly => true,
   }
 }
