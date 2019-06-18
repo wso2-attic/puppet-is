@@ -1,6 +1,4 @@
-# Scripts for Puppet Resources for WSO2 Identity Server
-
-## update.sh
+# Continuous Update Delivery for WSO2 Identity Server
 
 The update script is to be used by WSO2 subscription users such that products packs can be updated. If you do not have a WSO2 subscription, you can sign up for a [free trial](https://wso2.com/subscription/free-trial).
 
