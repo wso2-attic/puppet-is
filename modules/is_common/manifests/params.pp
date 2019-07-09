@@ -19,6 +19,11 @@ class is_common::params {
   $packages = ["unzip"]
   $version = "5.8.0"
 
+  # Set the location the product packages should reside in (eg: "local" in the /files directory, "remote" in a remote location)
+  $pack_location = "local"
+  # $pack_location = "remote"
+  # $remote_jdk = "<URL_TO_JDK_FILE>"
+
   $user = 'wso2carbon'
   $user_group = 'wso2'
   $user_id = 802
@@ -40,16 +45,19 @@ class is_common::params {
   case $profile {
     'is_analytics_dashboard': {
       $pack = "wso2is-analytics-${version}"
+      # $remote_pack = "<URL_TO_IS_ANALYTICS_WORKER_PACK>"
       $server_script_path = "${product_dir}/${pack}/bin/dashboard.sh"
       $pid_file_path = "${product_dir}/${pack}/wso2/dashboard/runtime.pid"
     }
     'is_analytics_worker': {
       $pack = "wso2is-analytics-${version}"
+      # $remote_pack = "<URL_TO_IS_ANALYTICS_WORKER_PACK>"
       $server_script_path = "${product_dir}/${pack}/bin/worker.sh"
       $pid_file_path = "${product_dir}/${pack}/wso2/worker/runtime.pid"
     }
     default: {
       $pack = "wso2is-${version}"
+      # $remote_pack = "<URL_TO_IS_PACK>"
       $server_script_path = "${product_dir}/${pack}/bin/wso2server.sh"
       $pid_file_path = "${product_dir}/${pack}/wso2carbon.pid"
     }
