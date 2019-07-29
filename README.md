@@ -2,6 +2,8 @@
 
 This repository contains the Puppet modules for WSO2 Identity Server and the profiles related to Identity Server Analytics.
 
+These modules are supported for Puppet 5.4.0
+
 ## Quick Start Guide
 1. Download a product package. Product packages can be downloaded and copied to a local directory, or downloaded from a remote location.
    * **Local**: Download a wso2is-5.8.0.zip or wso2is-analytics-5.8.0.zip to your preferred deployment pattern and copy it to the `<puppet_environment>/modules/is_common/files/packs` directory in the **Puppetmaster**.
