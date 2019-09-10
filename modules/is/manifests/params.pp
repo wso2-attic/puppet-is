@@ -21,16 +21,7 @@ class is::params inherits is_common::params {
   $jvmxmx = '1024m'
 
   $template_list = [
-    'repository/conf/datasources/master-datasources.xml',
-    'repository/conf/carbon.xml',
-    # 'repository/conf/cipher-standalone-config.properties',
-    'repository/conf/axis2/axis2.xml',
-    'repository/conf/user-mgt.xml',
-    # 'repository/conf/registry.xml',
-    # 'repository/conf/tomcat/catalina-server.xml',
-    'repository/conf/identity/identity.xml',
-    # 'repository/conf/security/authenticators.xml',
-    # 'repository/conf/security/secret-conf.properties',
+    'repository/conf/deployment.toml'
   ]
 
   # Define file list
@@ -58,19 +49,35 @@ class is::params inherits is_common::params {
   $hostname = 'localhost'
   $mgt_hostname = 'localhost'
 
-  $security_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
+  # ----- Database config params -----
+  $identity_db_type = 'h2'
+  $identity_db_url = 'jdbc:h2:./repository/database/WSO2IDENTITY_DB;DB_CLOSE_ON_EXIT=FALSE'
+  $identity_db_username = 'wso2carbon'
+  $identity_db_password = 'wso2carbon'
+  $identity_db_driver = 'org.h2.Driver'
+  $identity_db_validation_query = 'SELECT 1'
+
+  $shared_db_type = 'h2'
+  $shared_db_url = 'jdbc:h2:./repository/database/WSO2SHARED_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000'
+  $shared_db_username = 'wso2carbon'
+  $shared_db_password = 'wso2carbon'
+  $shared_db_driver = 'org.h2.Driver'
+  $shared_db_validation_query = 'SELECT 1'
+
+  # ----- Security config params -----
+  $security_keystore_location = 'wso2carbon.jks'
   $security_keystore_type = 'JKS'
   $security_keystore_password = 'wso2carbon'
   $security_keystore_key_alias = 'wso2carbon'
   $security_keystore_key_password = 'wso2carbon'
 
-  $security_internal_keystore_location = '${carbon.home}/repository/resources/security/wso2carbon.jks'
+  $security_internal_keystore_location = 'wso2carbon.jks'
   $security_internal_keystore_type = 'JKS'
   $security_internal_keystore_password = 'wso2carbon'
   $security_internal_keystore_key_alias = 'wso2carbon'
   $security_internal_keystore_key_password = 'wso2carbon'
 
-  $security_trust_store_location = '${carbon.home}/repository/resources/security/client-truststore.jks'
+  $security_trust_store_location = 'client-truststore.jks'
   $security_trust_store_type = 'JKS'
   $security_trust_store_password = 'wso2carbon'
 
