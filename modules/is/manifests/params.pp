@@ -64,6 +64,18 @@ class is::params inherits is_common::params {
   $shared_db_driver = 'org.h2.Driver'
   $shared_db_validation_query = 'SELECT 1'
 
+  $bps_db_url = 'jdbc:h2:file:./repository/database/jpadb;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE'
+  $bps_db_username = 'wso2carbon'
+  $bps_db_password = 'wso2carbon'
+  $bps_db_driver = 'org.h2.Driver'
+  $bps_db_validation_query = 'SELECT 1'
+
+  $consent_db_url = 'dbc:h2:./repository/database/WSO2IDENTITY_DB;DB_CLOSE_ON_EXIT=FALSE'
+  $consent_db_username = 'wso2carbon'
+  $consent_db_password = 'wso2carbon'
+  $consent_db_driver = 'org.h2.Driver'
+  $consent_db_validation_query = 'SELECT 1'
+
   # ----- Security config params -----
   $security_keystore_location = 'wso2carbon.jks'
   $security_keystore_type = 'JKS'

@@ -52,6 +52,29 @@ driver = "<%= @shared_db_driver %>"
 [database.shared_db.pool_options]
 validationQuery="<%= @shared_db_validation_query %>"
 
+[database.bps_database]
+url = "<%= @bps_db_url %>"
+username = "<%= @bps_db_username %>"
+password = "<%= @bps_db_password %>"
+driver = "<%= @bps_db_driver %>"
+[database.bps_database.pool_options]
+validationQuery = "<%= @bps_db_validation_query %>"
+
+[[datasource]]
+id = "WSO2ConsentDS"
+url = "<%= @consent_db_url %>"
+username = "<%= @consent_db_username %>"
+password = "<%= @consent_db_password %>"
+driver = "<%= @consent_db_driver %>"
+pool_options.validationQuery= "<%= @consent_db_validation_query %>"
+pool_options.maxActive=50
+pool_options.maxWait = 60000 # wait in milliseconds
+pool_options.testOnBorrow = true
+pool_options.jmxEnabled = false
+
+[authentication.consent]
+data_source="jdbc/WSO2ConsentDS"
+
 [keystore.tls]
 password = "<%= @security_keystore_password %>"
 file_name = "<%= @security_keystore_location %>"
