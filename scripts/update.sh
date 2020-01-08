@@ -22,7 +22,8 @@
 set -e
 
 # Build artifacts and versions
-: ${version:="5.8.0"}
+: ${version:="5.10.0"}
+: ${analytics_version:="5.8.0"}
 : ${packs_dir:=$(pwd)/../modules/is_common/files/packs/}
 
 usage() { echo "Usage: $0 -p <profile_name>" 1>&2; exit 1; }
@@ -68,11 +69,11 @@ fi
 # Set variables relevant to each profile
 case "${profile}" in
     is_analytics_dashboard)
-        pack="wso2is-analytics-"${version}
+        pack="wso2is-analytics-"${analytics_version}
         updated_modules=("is_analytics_dashboard" "is_analytics_worker")
         ;;
     is_analytics_worker)
-        pack="wso2is-analytics-"${version}
+        pack="wso2is-analytics-"${analytics_version}
         updated_modules=("is_analytics_dashboard" "is_analytics_worker")
         ;;
     is)
