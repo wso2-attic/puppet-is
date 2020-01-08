@@ -28,7 +28,7 @@ password = "<%= @admin_password %>"
 create_admin_account = true
 
 [user_store]
-type = "read_write_ldap"
+type = "read_write_ldap_unique_id"
 connection_url = "ldap://localhost:${Ports.EmbeddedLDAP.LDAPServerPort}"
 connection_name = "uid=<%= @admin_username %>,ou=system"
 connection_password = "<%= @admin_password %>"
