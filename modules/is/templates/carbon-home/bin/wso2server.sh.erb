@@ -283,9 +283,13 @@ echo "Using Java memory options: $JVM_MEM_OPTS"
 
 JAVA_VER_BASED_OPTS=""
 
+NASHRON_ARGS=""
+
 if [ $java_version_formatted -ge 1100 ]; then
-    JAVA_VER_BASED_OPTS="--add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED"
+ NASHRON_ARGS="--no-deprecation-warning"
+    JAVA_VER_BASED_OPTS="--add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED"
 fi
+
 
 while [ "$status" = "$START_EXIT_STATUS" ]
 do
@@ -324,6 +328,7 @@ do
     -DenableCorrelationLogs=false \
     -Dhttpclient.hostnameVerifier="DefaultAndLocalhost" \
  -Dorg.apache.xml.security.ignoreLineBreaks=false \
+ -Dnashorn.args="$NASHRON_ARGS" \
     -Dcarbon.new.config.dir.path="$CARBON_HOME/repository/resources/conf" \
     org.wso2.carbon.bootstrap.Bootstrap $*
     status=$?
