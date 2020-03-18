@@ -18,7 +18,6 @@ class is_common::params {
 
   $packages = ["unzip"]
   $version = "5.10.0"
-  $analytics_version = "5.8.0"
 
   # Set the location the product packages should reside in (eg: "local" in the /files directory, "remote" in a remote location)
   $pack_location = "local"
@@ -50,26 +49,10 @@ class is_common::params {
   $wso2_service_name = "wso2${profile}"
 
   # ----- Profile configs -----
-  case $profile {
-    'is_analytics_dashboard': {
-      $pack = "wso2is-analytics-${analytics_version}"
-      # $remote_pack = "<URL_TO_IS_ANALYTICS_WORKER_PACK>"
-      $server_script_path = "${product_dir}/${pack}/bin/dashboard.sh"
-      $pid_file_path = "${product_dir}/${pack}/wso2/dashboard/runtime.pid"
-    }
-    'is_analytics_worker': {
-      $pack = "wso2is-analytics-${analytics_version}"
-      # $remote_pack = "<URL_TO_IS_ANALYTICS_WORKER_PACK>"
-      $server_script_path = "${product_dir}/${pack}/bin/worker.sh"
-      $pid_file_path = "${product_dir}/${pack}/wso2/worker/runtime.pid"
-    }
-    default: {
-      $pack = "wso2is-${version}"
-      # $remote_pack = "<URL_TO_IS_PACK>"
-      $server_script_path = "${product_dir}/${pack}/bin/wso2server.sh"
-      $pid_file_path = "${product_dir}/${pack}/wso2carbon.pid"
-    }
-  }
+  $pack = "wso2is-${version}"
+  # $remote_pack = "<URL_TO_IS_PACK>"
+  $server_script_path = "${product_dir}/${pack}/bin/wso2server.sh"
+  $pid_file_path = "${product_dir}/${pack}/wso2carbon.pid"
 
   # Pack Directories
   $carbon_home = "${product_dir}/${pack}"
@@ -82,39 +65,4 @@ class is_common::params {
   # user-mgt.xml
   $admin_username = 'admin'
   $admin_password = 'admin'
-
-  # -------------- Deployment.yaml Config -------------- #
-
-  # Configuration used for the databridge communication
-  $databridge_keystore = '${sys:carbon.home}/resources/security/wso2carbon.jks'
-  $databridge_keystore_password = 'wso2carbon'
-  $binary_data_receiver_hostname = '0.0.0.0'
-
-  # Configuration of the Data Agents - to publish events through
-  $thrift_agent_trust_store = '${sys:carbon.home}/resources/security/client-truststore.jks'
-  $thrift_agent_trust_store_password = 'wso2carbon'
-  $binary_agent_trust_store = '${sys:carbon.home}/resources/security/client-truststore.jks'
-  $binary_agent_trust_store_password = 'wso2carbon'
-
-  # Secure Vault Configuration
-  $securevault_key_store = '${sys:carbon.home}/resources/security/securevault.jks'
-  $securevault_private_key_alias = 'wso2carbon'
-  $securevault_secret_properties_file = '${sys:carbon.home}/conf/${sys:wso2.runtime}/secrets.properties'
-  $securevault_master_key_reader_file = '${sys:carbon.home}/conf/${sys:wso2.runtime}/master-keys.yaml'
-
-  # Data Sources Configuration
-  $metrics_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/dashboard/database/metrics;AUTO_SERVER=TRUE'
-  $metrics_db_username = 'wso2carbon'
-  $metrics_db_password = 'wso2carbon'
-  $metrics_db_driver = 'org.h2.Driver'
-
-  $permission_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/${sys:wso2.runtime}/database/PERMISSION_DB;IFEXISTS=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;MVCC=TRUE'
-  $permission_db_username = 'wso2carbon'
-  $permission_db_password = 'wso2carbon'
-  $permission_db_driver = 'org.h2.Driver'
-
-  $is_analytics_db_url = 'jdbc:h2:${sys:carbon.home}/wso2/worker/database/IS_ANALYTICS_DB;AUTO_SERVER=TRUE'
-  $is_analytics_db_username = 'wso2carbon'
-  $is_analytics_db_password = 'wso2carbon'
-  $is_analytics_db_driver = 'org.h2.Driver'
 }
