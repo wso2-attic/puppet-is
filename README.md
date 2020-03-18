@@ -8,7 +8,7 @@ This repository contains the Puppet modules for WSO2 Identity Server and the pro
 
 ## Quick Start Guide
 1. Download a product package. Product packages can be downloaded and copied to a local directory, or downloaded from a remote location.
-   * **Local**: Download a wso2is-5.10.0.zip or wso2is-analytics-5.8.0.zip to your preferred deployment pattern and copy it to the `<puppet_environment>/modules/is_common/files/packs` directory in the **Puppetmaster**.
+   * **Local**: Download a wso2is-5.10.0.zip to your preferred deployment pattern and copy it to the `<puppet_environment>/modules/is_common/files/packs` directory in the **Puppetmaster**.
    * **Remote**: 
        1. Change the value *$pack_location* variable in `<puppet_environment>/modules/is_common/manifests/params.pp` to `remote`.
        2. Change the value *$remote_pack* variable of the relevant profile in `<puppet_environment>/modules/is_common/manifests/params.pp` to the URL in which the package should be downloaded from, and remove it as a comment.
@@ -26,17 +26,6 @@ This repository contains the Puppet modules for WSO2 Identity Server and the pro
         export FACTER_profile=is
         puppet agent -vt
         ```
-    2. Analytics profile:
-        1. Dashboard:
-            ```bash
-            export FACTER_profile=is_analytics_dashboard
-            puppet agent -vt
-            ```
-        2. Worker:
-            ```bash
-            export FACTER_profile=is_analytics_worker
-            puppet agent -vt
-            ```
 ## Performance Tuning
 System configurations can be changed through Puppet to optimize OS level performance. Performance tuning can be enabled by changing `$enable_performance_tuning` in `<puppet_environment>/modules/is_common/manifests/params.pp` to `true`.
 
