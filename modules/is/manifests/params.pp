@@ -95,4 +95,7 @@ class is::params inherits is_common::params {
 
   $clustering_enabled = 'false'
   $clustering_membership_scheme = 'multicast'
+
+  $acc_recovery_endpoint_hash = '66cd9688a2ae068244ea01e70f0e230f5623b7fa4cdecb65070a09ec06452262'
+  $auth_endpoint_app_password = 'dashboard'
 }
