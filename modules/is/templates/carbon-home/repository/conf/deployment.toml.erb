@@ -95,3 +95,9 @@ key_password = "<%= @security_internal_keystore_key_password %>"
 file_name = "<%= @security_trust_store_location %>"
 type = "<%= @security_trust_store_type %>"
 password = "<%= @security_trust_store_password %>"
+
+[account_recovery.endpoint.auth]
+hash= "<%= @acc_recovery_endpoint_hash %>"
+
+[identity.auth_framework.endpoint]
+app_password= "<%= @auth_endpoint_app_password %>"
