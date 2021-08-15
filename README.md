@@ -1,3 +1,9 @@
+#### ⚠️ DISCLAIMER
+
+Use these artefacts as a reference to build your deployment artefacts. Existing artefacts only developed to demonstrate a reference deployment and should not be used as is in production
+
+------------------------------------------------------------------
+
 # Puppet Modules for WSO2 Identity Server
 
 This repository contains the Puppet modules for WSO2 Identity Server and the profiles related to Identity Server Analytics.
